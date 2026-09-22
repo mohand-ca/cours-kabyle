@@ -5,8 +5,8 @@
 ---
 
 ## Statut général
-**Phase : MVP — Phase 2 terminée (Espace enseignant)**
-34/34 tests passent.
+**Phase : MVP — Phase 5 terminée (Paiements Stripe)**
+68/68 tests passent.
 
 ---
 
@@ -23,105 +23,159 @@
 ### Décisions de conception validées
 - **Rôles** : `admin` / `teacher` / `learner` (pas de rôle `parent`)
 - **Modèle compte/apprenant** : table `users` (le compte) + table `learners` (les profils)
-  - `learners.relationship` : self / child / spouse / other (pas de table `guardians`)
+  - `learners.relationship` : self / child / spouse / other
   - `learners.notification_email` : email additionnel optionnel par apprenant
-- **Disponibilités** : deux tables — `availability_patterns` (règle récurrente, V2) + `availability_slots` (créneaux réels, création manuelle pour le MVP)
-- **Paiements** : Stripe en USD via Laravel Cashier — checkout one-time par paquet (pas de subscription)
-- **Google Meet** : lien statique du prof copié dans chaque booking
-- **`LessonSession`** (pas `Session`) pour éviter le conflit avec la façade `Session::` de Laravel
+- **Disponibilités** : `availability_patterns` (règle récurrente, V2) + `availability_slots` (créneaux réels, manuel pour MVP)
+- **Paiements** : Stripe USD via Cashier — checkout one-time par paquet (pas de subscription)
+- **Séance** : `LessonSession` (pas `Session` — conflit avec la façade Laravel)
+- **Annulation** : toujours re-crédit pour le MVP (politique >24h en V2)
 - **`Review` model → PAS dans le MVP** (reporté en V2)
-- **Code en anglais** : variables, méthodes, colonnes, routes, clés de config — tout en anglais
-- **Traduction dès le début** : chaque chaîne visible dans une vue passe par `__('clé')` — fichiers dans `lang/fr/` et `lang/en/`
+- **Code en anglais** : variables, méthodes, colonnes, routes — tout en anglais
+- **Traduction dès le début** : toutes les chaînes via `__('clé')` — `lang/fr/` + `lang/en/`
 
-### Installation
-- Laravel 13.32.0 ✅
-- Livewire 4.4.6 ✅
-- Filament 5.8.4 + panel admin initialisé ✅
-- Spatie Permission 8.3.0 ✅
-- Laravel Cashier 16.8.0 ✅
-- Spatie MediaLibrary 11.23.8 ✅
-- DomPDF 3.1.2 ✅
-- Spatie ActivityLog 4.12.3 ✅
-- Laravel Boost 2.9.1 ✅
+### Installation (packages)
+- Laravel 13, Livewire 4, Filament 5, Spatie Permission 8, Laravel Cashier 16 ✅
+- Spatie MediaLibrary 11, DomPDF 3, Spatie ActivityLog 4, Laravel Boost 2 ✅
 
 ---
 
-### Phase 1 — Auth + Rôles ✅
+### Phase 1 — Auth + Rôles ✅ (19 tests)
 
-**Migrations :**
-- `add_role_timezone_to_users_table` — colonnes `role` (enum) + `timezone` sur `users` ✅
-- `create_learners_table` — `user_id`, `first_name`, `last_name`, `date_of_birth`, `relationship`, `notification_email`, `points` ✅
-
-**Models :**
-- `User` — traits `HasRoles` + `Billable` + interfaces `FilamentUser` + `MustVerifyEmail` ✅
-- `Learner` — relation `user()`, méthode `notificationAddresses()`, factory avec états `self()` / `child()` ✅
-
-**Auth :**
-- `Livewire\Auth\Register` + `RegisterForm` — inscription → crée User + Learner(self) + rôle Spatie ✅
-- `Livewire\Auth\Login` — connexion → redirection admin `/admin`, teacher `teacher.dashboard`, learner `/dashboard` ✅
-- Email de vérification (Laravel `Registered` event) — après vérification, teacher → `teacher.dashboard` ✅
-- Layout auth violet/indigo ✅
-
-**Filament :**
-- Panel admin couleur Violet ✅
-- `canAccessPanel()` → `hasRole('admin') && hasVerifiedEmail()` ✅
-
-**Routes :** `/register`, `/login`, `/dashboard` (role:learner), `/logout`, email verify ✅
-
-**Seeders :** `RoleSeeder` — rôles `admin` / `teacher` / `learner` + compte `admin@thamazight.com` ✅
-
-**Tests : 19/19** ✅
-- `RegisterTest` (6 tests), `LoginTest` (4 tests), `AdminPanelAccessTest` (5 tests) + 4 Phase 2
+- `users` table : colonne `role` (enum) + `timezone`
+- `learners` table : `user_id`, `first_name`, `last_name`, `date_of_birth` (raw string, pas de cast Carbon), `relationship`, `notification_email`, `points`
+- `User` : `HasRoles` + `Billable` + `FilamentUser` + `MustVerifyEmail`
+- `Learner` : relation `user()`, `notificationAddresses()`, factory avec états `self()` / `child()`
+- Livewire : `Register`, `Login`, `TeacherRegister` + Form objects
+- Login redirige vers `learner.dashboard` (pas `dashboard`)
+- `RoleSeeder` : rôles + `admin@thamazight.com` / `password`
+- Panel Filament violet, accès admin + email vérifié
 
 ---
 
-### Phase 2 — Espace enseignant ✅
+### Phase 2 — Espace enseignant ✅ (15 tests)
+
+- `teacher_profiles` : `bio`, `levels` JSON, `languages` JSON, `meet_link`, `status` enum, `submitted_at`
+- `availability_patterns` : `day_of_week`, `start_time`, `end_time` UTC, `is_active`
+- `availability_slots` : `starts_at`, `ends_at` UTC, `status` (available/booked/cancelled)
+- `AvailabilitySlot::book()` → met status à 'booked' ; `scopeAvailable()` → future + available
+- Livewire : `Teacher\Dashboard`, `Teacher\ProfileSetup`, `Teacher\AvailabilityCalendar`
+- Filament : `TeacherProfileResource` avec actions approve/suspend
+- Routes enseignant sous `prefix('teacher')` + `role:teacher`
+
+---
+
+### Phase 3 — Design ✅ (Claude Design)
+
+- Projet Claude Design créé sur claude.ai (privé, account Samir)
+- 11 composants HTML générés : foundations/colors, foundations/typography, components/buttons, components/forms, components/badges, components/cards, learner/teacher-card, learner/session-card, learner/dashboard, public/hero, public/how-it-works
+- Palette : violet-600 primaire, indigo-500 accent, fond blanc app / fond `#1e1b4b` vitrine
+- Typographie : Inter, gradient headline violet-400→indigo-300
+- Inspiration : SavvyCal (layout bold dark hero, minimaliste) — couleurs violet/indigo propres au projet
+
+---
+
+### Phase 4 — Espace apprenant + réservations ✅ (25 tests)
 
 **Migrations :**
-- `create_teacher_profiles_table` — `user_id` unique FK, `bio`, `levels` JSON, `languages` JSON, `meet_link`, `status` enum (pending/approved/suspended), `submitted_at` ✅
-- `create_availability_patterns_table` — `teacher_profile_id`, `day_of_week`, `start_time`, `end_time`, `is_active` ✅
-- `create_availability_slots_table` — `teacher_profile_id`, `availability_pattern_id` nullable, `starts_at`, `ends_at`, `status` enum, index composite ✅
+- `create_lesson_sessions_table` : `availability_slot_id` unique (anti double-booking), `learner_id`, `teacher_profile_id`, `purchase_id` nullable, `status` enum (confirmed/cancelled)
 
 **Models :**
-- `TeacherProfile` — méthodes `isPending()`, `isApproved()`, `isSuspended()`, `submit()`, `approve()`, `suspend()` ; factory avec états `approved()`, `submitted()`, `suspended()` ✅
-- `AvailabilityPattern` — factory + méthode `dayName()` ✅
-- `AvailabilitySlot` — scope `scopeAvailable()`, méthodes `isAvailable()`, `isBooked()` ; factory avec états `booked()`, `cancelled()` ✅
+- `LessonSession` : `scopeUpcoming()`, `isConfirmed()`, `cancel()` (met cancelled + libère slot)
+- `AvailabilitySlot` : `lessonSession()` HasOne, `book()` helper
+- `Learner` : `lessonSessions()` HasMany
 
-**Auth enseignant :**
-- `Livewire\Auth\TeacherRegister` + `TeacherRegisterForm` — inscription séparée `/become-a-teacher`, crée User(role=teacher) + TeacherProfile vierge ✅
+**Livewire apprenant :**
+- `Learner\Dashboard` : séances à venir via `scopeUpcoming`, annulation avec re-crédit, `sessionsRemaining`
+- `Learner\ManageLearners` : CRUD apprenants (protégé par `user_id`), pas de suppression du profil `self`
+- `Learner\TeacherCatalog` : filtres niveau/langue, expansion créneaux par prof, flow réservation inline
 
-**Livewire enseignant :**
-- `Teacher\Dashboard` — statut profil + créneaux réservés à venir ✅
-- `Teacher\ProfileSetup` — bio, niveaux, langues, Meet link, soumission pour validation ✅
-- `Teacher\AvailabilityCalendar` — ajout de créneaux (vérifie approbation + chevauchement, stocke en UTC), annulation ✅
+**Flow réservation :**
+1. Ouvrir créneaux du prof (`toggleSlots`)
+2. Cliquer "Réserver" sur un créneau (`selectSlot`)
+3. Choisir un apprenant
+4. Confirmer (`book`) → vérifie purchase actif, DB transaction + `lockForUpdate`, décrément `sessions_remaining`
 
-**Filament admin :**
-- `TeacherProfileResource` — liste, édition, actions approve/suspend, badge statut coloré ✅
+**Routes :** `/dashboard`, `/learners`, `/teachers` sous `role:learner`
 
-**Routes enseignant :**
-- Groupe `prefix('teacher')`, middleware `role:teacher` : `teacher.dashboard`, `teacher.profile`, `teacher.availability` ✅
+**Traductions :** `lang/en/learner.php` + `lang/fr/learner.php` — sections `dashboard`, `learners`, `booking`, `catalog`
 
-**Tests : 15/15** ✅
-- `TeacherProfileTest` (7 tests), `AvailabilitySlotTest` (7 tests) + 1 repris en Phase 1
+**Tests :** `LearnerDashboardTest` (11), `TeacherCatalogTest` (6), `BookingTest` (8)
+
+---
+
+### Phase 5 — Paiements Stripe ✅ (9 tests)
+
+**Migrations Cashier publiées :**
+- `create_customer_columns` : `stripe_id`, `pm_type`, `pm_last_four`, `trial_ends_at` sur `users`
+- `create_subscriptions_table` + `subscription_items` (Cashier standard)
+
+**Migrations custom :**
+- `create_packages_table` : `name`, `sessions_count`, `price_cents`, `stripe_price_id`, `is_active`
+- `create_purchases_table` : `user_id`, `package_id`, `stripe_session_id` unique, `sessions_total`, `sessions_remaining`, `status` enum
+- `add_purchase_foreign_to_lesson_sessions` : FK `purchase_id` → `purchases.id` nullOnDelete
+
+**Models :**
+- `SessionPackage` (table: `packages`) : `priceInDollars()`, `scopeActive()`
+- `Purchase` : `hasSessionsRemaining()`, `isCompleted()`
+- `User` : `purchases()` HasMany, `sessionsRemaining()` (sum sessions_remaining des purchases completed)
+
+**Flow paiement :**
+1. `/packages` → `Learner\PackageCatalog` — liste les packages actifs
+2. Clic "Acheter" → `GET /checkout/{package}` → `CheckoutController::create()` → `$user->checkout(...)` avec metadata `user_id` + `package_id`
+3. Stripe Checkout → succès → `/checkout/success` → redirect dashboard avec flash
+4. Webhook `checkout.session.completed` → `StripeEventListener` → `Purchase::firstOrCreate(...)` (idempotent)
+
+**Listener :** `StripeEventListener` écoute `WebhookReceived` — enregistré dans `AppServiceProvider`
+
+**CSRF :** `stripe/*` exclu dans `bootstrap/app.php`
+
+**Annulation session :** re-crédite `sessions_remaining` sur le `purchase_id` lié
+
+**⚠️ À configurer en prod :**
+```
+STRIPE_KEY=pk_live_...
+STRIPE_SECRET=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+```
+- Créer les 3 paquets dans le Stripe Dashboard, mettre les `stripe_price_id` via `PackageSeeder`
+- Enregistrer le webhook : `php artisan cashier:webhook`
+
+**Tests :** `PurchaseTest` (9) — webhook, idempotence, booking nécessite un purchase, décrément, re-crédit
 
 ---
 
 ### Standards et conventions ✅
 
-- **i18n** : toutes les chaînes passent par `__()` — `lang/fr/auth.php`, `lang/fr/teacher.php`, `lang/en/auth.php`, `lang/en/teacher.php` ✅
+- **i18n** : toutes les chaînes via `__()` — `lang/fr/auth.php`, `lang/fr/teacher.php`, `lang/fr/learner.php` ✅
 - **`APP_LOCALE=fr`** dans `.env` ✅
-- **Règles AI** enregistrées dans `.ai/rules/` : code en anglais, traductions obligatoires ✅
+- **Règles AI** dans `.ai/rules/` : code en anglais, traductions obligatoires ✅
+- **Pint** : lancé après chaque phase — `vendor/bin/pint --dirty --format agent`
+
+---
+
+## Pièges techniques à retenir
+
+| Problème | Solution |
+|---|---|
+| `$slots` en Blade Livewire | Nom réservé par Livewire pour les named slots → utiliser `$availableSlots` |
+| `LearnerForm::fill()` | Conflit avec `Form::fill()` de la base Livewire → renommer en `populate()` |
+| `assertSessionHas` en Livewire 4 | Ne fonctionne pas → utiliser `assertDatabaseHas` / `assertDatabaseMissing` |
+| `expectException` dans Livewire | Ne capture pas les exceptions de composant → asserter l'état DB |
+| `date_of_birth` | Pas de cast Carbon sur `Learner` → raw string, pas de `->format()` |
+| Nom de la route dashboard | `learner.dashboard` (pas `dashboard`) |
+| Ordre des routes checkout | `/checkout/success` avant `/checkout/{package}` pour éviter le conflit de param |
+| `make:livewire` Livewire 4 | Peut placer le fichier dans `views/components/` → écrire les fichiers manuellement si nécessaire |
 
 ---
 
 ## Ce qui reste à faire (MVP)
 
-- [ ] **Phase 3** — Design avec Claude Design : maquettes écrans apprenant (dashboard, catalogue, sélection enseignant/créneau, confirmation booking) + système de design
-- [ ] **Phase 4** — Catalogue + paiement Stripe : `Package`, `Purchase`, Cashier one-time checkout, webhook `checkout.session.completed`
-- [ ] **Phase 5** — Réservation : `LessonSession`/`Booking`, emails confirmation + rappels (24h / 1h), politique annulation
-- [ ] **Phase 6** — Points + récompenses : `PointTransaction`, `Reward`, dashboard apprenant
-- [ ] **Phase 7** — Admin Filament complet + site vitrine + intégration design sur toutes les vues
-- [ ] Configurer MySQL en production (Laravel Cloud)
+- [ ] **Phase 6** — Emails : confirmation réservation (apprenant + prof), rappel 24h avant, email bienvenue enseignant approuvé
+- [ ] **Phase 7** — Admin Filament complet : gestion paquets, vue bookings/purchases, stats revenus/séances
+- [ ] **Phase 8** — Site vitrine : homepage, "Devenir enseignant", FAQ, pricing, RGPD/PIPEDA
+- [ ] **Phase 9** — Intégration design sur toutes les vues (auth + enseignant + apprenant)
+- [ ] Configurer Stripe (clés + webhook) en production
+- [ ] Déployer sur Laravel Cloud (EU)
 
 ---
 
@@ -129,17 +183,16 @@
 
 - **Samir** : développeur web senior, Kabyle, basé au Canada, travaille pour GlobalLingua
 - **Associé** : responsable marketing, a reçu `pitch.md`
-- **Enseignant coordinateur** : déjà identifié en Algérie, gère la qualité pédagogique
+- **Enseignant coordinateur** : déjà identifié en Algérie
 - **Marché** : diaspora kabyle/amazigh — France, Canada, USA, monde entier
 - **Nom de la plateforme** : pas encore décidé
 - **Script Tamazight** : Latin
 
 ---
 
-## Dernière session — 21 septembre 2026
+## Dernière session — 22 septembre 2026
 
-- **Phase 2 complétée** : espace enseignant (TeacherProfile, disponibilités, Filament admin) — 34 tests passent
-- **Bug corrigé** : `TeacherRegister` utilisait `RegisterForm` (qui requiert firstName/lastName), remplacé par `TeacherRegisterForm` dédié
-- **Bug corrigé** : route `/dashboard` non protégée par rôle — ajout de `role:learner`
-- **i18n mis en place** : toutes les chaînes hardcodées migrées vers `lang/fr/` et `lang/en/`, règles AI enregistrées
-- Prochaine étape : **Phase 3** — Catalogue de paquets + paiement Stripe
+- **Phase 3 complétée** : design system Claude Design (11 composants), palette violet/indigo, hero dark `#1e1b4b`
+- **Phase 4 complétée** : espace apprenant (Dashboard, ManageLearners, TeacherCatalog), réservations (`LessonSession`, flow inline, annulation) — 34 tests passaient
+- **Phase 5 complétée** : paiements Stripe (`SessionPackage`, `Purchase`, Cashier Checkout, webhook listener, re-crédit annulation) — 68 tests passent
+- **Prochain** : Phase 6 — Emails (confirmation, rappels, bienvenue enseignant)

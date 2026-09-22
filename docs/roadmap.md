@@ -18,51 +18,57 @@ Périmètre volontairement réduit — livrer vite, apprendre du marché.
 - [x] Calendrier de disponibilités (créneaux manuels, stockés en UTC)
 - [x] Validation / suspension via Filament admin
 
-### Phase 3 — Design (Claude Design)
-Créer les maquettes des écrans apprenant avant de coder les phases suivantes.
-Les écrans auth et enseignant (Phases 1–2) sont fonctionnels mais non designés — ils seront alignés lors de l'intégration.
+### Phase 3 — Design ✅
+- [x] Projet Claude Design créé (privé, account Samir)
+- [x] 11 composants HTML : foundations, components, learner, public
+- [x] Palette violet/indigo définie, hero dark `#1e1b4b`, fond blanc app
+- [x] Typographie Inter, gradients, système de badges et cards
 
-- [ ] Dashboard apprenant (crédits restants, prochain cours, liste des apprenants du compte)
-- [ ] Page catalogue / choix de paquet (5, 10, 20 séances + essai)
-- [ ] Page sélection enseignant + créneau disponible
-- [ ] Page confirmation de réservation
-- [ ] Design système : composants réutilisables, typographie, couleurs (base : violet/indigo, inspiration SavvyCal)
-- [ ] *(Vitrine — à la fin de cette phase ou en Phase 7)* : homepage, "Devenir enseignant", FAQ, pricing
+### Phase 4 — Espace apprenant + réservations ✅
+- [x] Dashboard apprenant (séances à venir, apprenants, sessions restantes)
+- [x] Gestion des apprenants (CRUD, relation self/child/spouse/other)
+- [x] Catalogue enseignants approuvés avec filtres niveau/langue
+- [x] `LessonSession` : lié à un créneau, un purchase, un apprenant
+- [x] Flow réservation inline (sélection créneau → choix apprenant → confirmation)
+- [x] DB transaction + `lockForUpdate` (anti double-booking)
+- [x] Annulation → libère le créneau + re-crédite le purchase
 
-### Phase 4 — Catalogue et paiement
-- [ ] `Package` : paquet de séances (stripe_price_id, sessions_count, price_usd)
-- [ ] `Purchase` : achat lié à un apprenant (sessions_total, sessions_remaining, stripe_session_id)
-- [ ] Page publique des paquets (5, 10, 20 séances + séance d'essai)
-- [ ] Paiement Stripe via Cashier one-time checkout
-- [ ] Webhook `checkout.session.completed` → création du Purchase
-- [ ] Historique des achats (dashboard apprenant)
+### Phase 5 — Paiements Stripe ✅
+- [x] `SessionPackage` (table packages) : nom, sessions_count, price_cents, stripe_price_id
+- [x] `Purchase` : sessions_total, sessions_remaining, stripe_session_id, status
+- [x] Page packages (`/packages`) avec prix et bouton achat
+- [x] Stripe Checkout one-time via `$user->checkout()`
+- [x] Webhook `checkout.session.completed` → `StripeEventListener` → crée `Purchase` (idempotent)
+- [x] Booking exige un `Purchase` actif avec `sessions_remaining > 0`
+- [x] Décrément `sessions_remaining` à la réservation, re-crédit à l'annulation
+- [x] CSRF exclu pour `stripe/*`
 
-### Phase 5 — Réservation
-- [ ] `LessonSession` / `Booking` : lié à un créneau, un Purchase, un apprenant
-- [ ] Recherche et sélection d'un enseignant
-- [ ] Sélection d'un créneau disponible
-- [ ] Confirmation de booking (email apprenant + prof — dual email si `notification_email` défini)
-- [ ] Rappel automatique 24h avant et 1h avant la séance
-- [ ] Politique d'annulation (>24h = re-crédit, <24h = décompté)
-- [ ] Suivi des séances enseignant (à venir, passées)
-- [ ] Marquer une séance comme complétée / no-show
+### Phase 6 — Emails ← PROCHAINE ÉTAPE
+- [ ] Email de confirmation réservation : apprenant (+ `notification_email` si défini) + enseignant
+- [ ] Rappel automatique 24h avant la séance (job planifié)
+- [ ] Email de bienvenue enseignant après approbation admin
+- [ ] Choix provider : Mailgun ou Resend (à décider — Resend recommandé pour sa DX)
 
-### Phase 6 — Points et récompenses
-- [ ] `PointTransaction` : attribution de points à chaque séance complétée
-- [ ] `Reward` : objectif défini par le parent
-- [ ] Tableau de bord apprenant (points, progression vers l'objectif)
-- [ ] Notification parent quand l'objectif est atteint
-
-### Phase 7 — Admin complet + site vitrine
-- [ ] Filament : gestion des utilisateurs (tous rôles)
-- [ ] Filament : gestion des paquets (prix, nombre de séances)
-- [ ] Filament : vue des bookings et purchases
+### Phase 7 — Admin Filament complet
+- [ ] Filament : gestion des paquets (créer/modifier prix + stripe_price_id)
+- [ ] Filament : vue des bookings (LessonSessions) avec filtres
+- [ ] Filament : vue des purchases avec statut
 - [ ] Filament : statistiques basiques (revenus, séances, inscriptions)
+- [ ] Filament : gestion des utilisateurs (tous rôles)
+
+### Phase 8 — Site vitrine
 - [ ] Page d'accueil (hero, problème, solution, comment ça marche, tarifs)
 - [ ] Page "Devenir enseignant"
 - [ ] Page FAQ
 - [ ] Page politique de confidentialité + mentions légales (RGPD / PIPEDA)
-- [ ] Intégration design sur toutes les vues Livewire (auth + enseignant + apprenant)
+- [ ] Remplace `welcome.blade.php`
+
+### Phase 9 — Intégration design + déploiement
+- [ ] Appliquer le design Claude Design sur toutes les vues (auth, enseignant, apprenant)
+- [ ] Configurer Stripe en prod (clés + `php artisan cashier:webhook`)
+- [ ] Configurer MySQL 8 sur Laravel Cloud (EU)
+- [ ] Variables d'env prod : `APP_URL`, `STRIPE_KEY`, `STRIPE_SECRET`, `STRIPE_WEBHOOK_SECRET`
+- [ ] `PackageSeeder` avec les vrais `stripe_price_id` du dashboard Stripe
 
 ---
 
@@ -70,12 +76,14 @@ Les écrans auth et enseignant (Phases 1–2) sont fonctionnels mais non design�
 *Priorités définies après validation du MVP avec les premiers utilisateurs.*
 
 - Système de notation bidirectionnel prof / apprenant
+- Points et récompenses (`PointTransaction`, `Reward`, objectifs définis par le parent)
 - Messagerie interne pour éviter le bypass de la plateforme
 - Programme de parrainage
 - Cartes cadeaux
 - Génération automatique de liens Google Meet
 - Disponibilités récurrentes (génération depuis `availability_patterns`)
 - Suivi pédagogique par apprenant
+- Politique d'annulation >24h re-crédit / <24h décompté
 
 ---
 
@@ -89,18 +97,19 @@ Les écrans auth et enseignant (Phases 1–2) sont fonctionnels mais non design�
 
 ---
 
-## Jalons cibles
+## Jalons cibles (révisés)
 
 | Jalon | Objectif |
 |---|---|
 | Semaine 1–2 | Documentation + installation ✅ |
 | Semaine 3–4 | Phase 1 Auth + Phase 2 Enseignant ✅ |
-| Semaine 5 | Phase 3 — Design (Claude Design) |
-| Semaine 6–7 | Phase 4 — Catalogue + Paiement Stripe |
-| Semaine 8–9 | Phase 5 — Réservation + emails + rappels |
-| Semaine 10 | Phase 6 — Points + récompenses |
-| Semaine 11–12 | Phase 7 — Admin complet + site vitrine + intégration design |
-| Semaine 13 | Tests internes + corrections |
-| Semaine 14 | Lancement beta fermé (5–10 profs, 20–30 familles) |
+| Semaine 5 | Phase 3 Design + Phase 4 Espace apprenant ✅ |
+| Semaine 6 | Phase 5 Paiements Stripe ✅ |
+| Semaine 7 | Phase 6 Emails |
+| Semaine 8 | Phase 7 Admin Filament complet |
+| Semaine 9 | Phase 8 Site vitrine |
+| Semaine 10 | Phase 9 Intégration design + déploiement Cloud |
+| Semaine 11 | Tests internes + corrections |
+| Semaine 12 | Lancement beta fermé (5–10 profs, 20–30 familles) |
 | Mois 4 | Lancement public + campagne marketing associé |
 | Mois 6 | Bilan MVP → priorisation V2 |
