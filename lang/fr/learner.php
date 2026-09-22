@@ -13,6 +13,7 @@ return [
         'add_learner' => 'Ajouter un apprenant',
         'sessions_remaining' => 'Séances restantes',
         'buy_sessions' => 'Acheter des séances',
+        'subtitle' => 'Voici un aperçu de ton apprentissage.',
     ],
     'learners' => [
         'title' => 'Mes apprenants',

@@ -24,6 +24,7 @@ return [
     ],
     'dashboard' => [
         'title' => 'Tableau de bord',
+        'subtitle' => 'Gérez votre profil et vos disponibilités.',
         'profile_pending' => 'Votre profil est en attente de validation. Nous vous contactons sous 48h.',
         'profile_incomplete' => 'Complétez votre profil pour commencer à enseigner.',
         'complete_profile' => 'Compléter mon profil →',

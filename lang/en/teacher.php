@@ -24,6 +24,7 @@ return [
     ],
     'dashboard' => [
         'title' => 'Dashboard',
+        'subtitle' => 'Manage your profile and availability.',
         'profile_pending' => 'Your profile is pending review. We will contact you within 48h.',
         'profile_incomplete' => 'Complete your profile to start teaching.',
         'complete_profile' => 'Complete my profile →',

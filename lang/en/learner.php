@@ -13,6 +13,7 @@ return [
         'add_learner' => 'Add a learner',
         'sessions_remaining' => 'Sessions remaining',
         'buy_sessions' => 'Buy sessions',
+        'subtitle' => 'Here\'s an overview of your learning journey.',
     ],
     'learners' => [
         'title' => 'My learners',

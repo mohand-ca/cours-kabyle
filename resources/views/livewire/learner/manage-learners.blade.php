@@ -1,6 +1,6 @@
 <div>
-    <div class="mb-6 flex items-center justify-between">
-        <h1 class="text-xl font-semibold text-gray-900">{{ __('learner.learners.title') }}</h1>
+    <div class="mb-8 flex items-center justify-between">
+        <h1 class="text-2xl font-bold text-gray-900">{{ __('learner.learners.title') }}</h1>
         @if(!$showForm)
             <button wire:click="startAdd"
                 class="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700 focus:outline-none">
