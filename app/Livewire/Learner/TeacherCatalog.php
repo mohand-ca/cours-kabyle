@@ -134,6 +134,6 @@ class TeacherCatalog extends Component
             'teachers' => $teachers,
             'availableSlots' => $availableSlots,
             'learners' => $learners,
-        ])->layout('components.layouts.auth');
+        ])->layout('components.layouts.app');
     }
 }

@@ -96,6 +96,6 @@ class ManageLearners extends Component
     {
         return view('livewire.learner.manage-learners', [
             'learners' => Auth::user()->learners()->orderBy('relationship')->get(),
-        ])->layout('components.layouts.auth');
+        ])->layout('components.layouts.app');
     }
 }

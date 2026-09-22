@@ -16,6 +16,6 @@ class PackageCatalog extends Component
         return view('livewire.learner.package-catalog', [
             'packages' => $packages,
             'sessionsRemaining' => $sessionsRemaining,
-        ])->layout('components.layouts.auth');
+        ])->layout('components.layouts.app');
     }
 }

@@ -90,7 +90,7 @@ class AvailabilityCalendar extends Component
         return view('livewire.teacher.availability-calendar', [
             'slots' => $slots ?? collect(),
             'profile' => $teacher,
-        ])->layout('components.layouts.auth');
+        ])->layout('components.layouts.app');
     }
 
     private function teacherProfile(): ?TeacherProfile

@@ -74,6 +74,6 @@ class ProfileSetup extends Component
     {
         return view('livewire.teacher.profile-setup', [
             'profile' => Auth::user()->teacherProfile,
-        ])->layout('components.layouts.auth');
+        ])->layout('components.layouts.app');
     }
 }

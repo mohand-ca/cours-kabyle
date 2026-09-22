@@ -55,6 +55,6 @@ class Dashboard extends Component
             'totalPoints' => $learners->sum('points'),
             'upcomingSessions' => $upcomingSessions,
             'sessionsRemaining' => $user->sessionsRemaining(),
-        ])->layout('components.layouts.auth');
+        ])->layout('components.layouts.app');
     }
 }

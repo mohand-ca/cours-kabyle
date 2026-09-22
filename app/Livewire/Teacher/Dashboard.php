@@ -19,6 +19,6 @@ class Dashboard extends Component
                 ->orderBy('starts_at')
                 ->limit(5)
                 ->get() ?? collect(),
-        ])->layout('components.layouts.auth');
+        ])->layout('components.layouts.app');
     }
 }
