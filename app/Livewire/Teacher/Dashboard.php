@@ -19,6 +19,10 @@ class Dashboard extends Component
                 ->orderBy('starts_at')
                 ->limit(5)
                 ->get() ?? collect(),
+            'availableSlotsCount' => $profile?->availabilitySlots()
+                ->where('status', 'available')
+                ->where('starts_at', '>', now())
+                ->count() ?? 0,
         ])->layout('components.layouts.app');
     }
 }

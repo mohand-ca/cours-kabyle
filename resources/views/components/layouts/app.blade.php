@@ -10,10 +10,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="min-h-screen bg-gray-50 font-sans antialiased" style="font-family: 'Inter', system-ui, sans-serif;">
+<body class="min-h-screen bg-gray-50 antialiased" style="font-family: 'Inter', system-ui, sans-serif;">
 
     {{-- Top navbar --}}
-    <nav class="sticky top-0 z-50 bg-white border-b border-gray-100 px-6 py-0 flex items-center justify-between h-14">
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 px-6 flex items-center justify-between h-14">
         <div class="flex items-center gap-2">
             <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-500 flex-shrink-0"></div>
             <span class="font-semibold text-gray-900 text-sm">{{ config('app.name') }}</span>
@@ -47,12 +47,16 @@
         </div>
 
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
-                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
+                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                </div>
+                <span class="text-sm font-medium text-gray-700 hidden sm:block">{{ auth()->user()->name }}</span>
             </div>
+            <div class="w-px h-4 bg-gray-200"></div>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="text-xs font-medium text-gray-500 hover:text-gray-800 transition-colors">
+                <button type="submit" class="text-xs font-medium text-gray-400 hover:text-gray-700 transition-colors">
                     {{ __('nav.logout') }}
                 </button>
             </form>
