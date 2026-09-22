@@ -51,9 +51,21 @@ class TeacherCatalog extends Component
         $user = Auth::user();
         $learner = $user->learners()->findOrFail($this->selectedLearnerId);
 
+        $purchase = $user->purchases()
+            ->where('status', 'completed')
+            ->where('sessions_remaining', '>', 0)
+            ->oldest()
+            ->first();
+
+        if (! $purchase) {
+            $this->addError('selectedLearnerId', __('learner.packages.no_sessions_remaining'));
+
+            return;
+        }
+
         $slotTaken = false;
 
-        DB::transaction(function () use ($learner, &$slotTaken) {
+        DB::transaction(function () use ($learner, $purchase, &$slotTaken) {
             $slot = AvailabilitySlot::lockForUpdate()->findOrFail($this->selectedSlotId);
 
             if (! $slot->isAvailable()) {
@@ -66,10 +78,12 @@ class TeacherCatalog extends Component
                 'availability_slot_id' => $slot->id,
                 'learner_id' => $learner->id,
                 'teacher_profile_id' => $slot->teacher_profile_id,
+                'purchase_id' => $purchase->id,
                 'status' => 'confirmed',
             ]);
 
             $slot->book();
+            $purchase->decrement('sessions_remaining');
         });
 
         if ($slotTaken) {

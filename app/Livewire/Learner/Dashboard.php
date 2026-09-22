@@ -3,6 +3,7 @@
 namespace App\Livewire\Learner;
 
 use App\Models\LessonSession;
+use App\Models\Purchase;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -30,6 +31,10 @@ class Dashboard extends Component
 
         $session->cancel();
 
+        if ($session->purchase_id) {
+            Purchase::find($session->purchase_id)?->increment('sessions_remaining');
+        }
+
         $this->cancelSessionId = null;
         session()->flash('message', __('learner.booking.session_cancelled'));
     }
@@ -49,6 +54,7 @@ class Dashboard extends Component
             'learners' => $learners,
             'totalPoints' => $learners->sum('points'),
             'upcomingSessions' => $upcomingSessions,
+            'sessionsRemaining' => $user->sessionsRemaining(),
         ])->layout('components.layouts.auth');
     }
 }

@@ -10,7 +10,7 @@
     @endif
 
     {{-- Stats --}}
-    <div class="mb-6 grid grid-cols-3 gap-4">
+    <div class="mb-6 grid grid-cols-4 gap-4">
         <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
             <p class="text-xs font-medium uppercase tracking-widest text-gray-400">{{ __('learner.dashboard.learners') }}</p>
             <p class="mt-2 text-3xl font-bold text-gray-900">{{ $learners->count() }}</p>
@@ -22,6 +22,15 @@
         <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
             <p class="text-xs font-medium uppercase tracking-widest text-gray-400">{{ __('learner.dashboard.upcoming_sessions') }}</p>
             <p class="mt-2 text-3xl font-bold text-gray-900">{{ $upcomingSessions->count() }}</p>
+        </div>
+        <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+            <p class="text-xs font-medium uppercase tracking-widest text-gray-400">{{ __('learner.dashboard.sessions_remaining') }}</p>
+            <p class="mt-2 text-3xl font-bold text-indigo-600">{{ $sessionsRemaining }}</p>
+            @if($sessionsRemaining === 0)
+                <a href="{{ route('learner.packages') }}" class="mt-1 block text-xs font-medium text-violet-600 hover:text-violet-700">
+                    {{ __('learner.dashboard.buy_sessions') }} →
+                </a>
+            @endif
         </div>
     </div>
 

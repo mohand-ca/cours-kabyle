@@ -38,6 +38,19 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         return $this->hasOne(TeacherProfile::class);
     }
 
+    public function purchases(): HasMany
+    {
+        return $this->hasMany(Purchase::class);
+    }
+
+    public function sessionsRemaining(): int
+    {
+        return $this->purchases()
+            ->where('status', 'completed')
+            ->where('sessions_remaining', '>', 0)
+            ->sum('sessions_remaining');
+    }
+
     /**
      * @return array<string, string>
      */

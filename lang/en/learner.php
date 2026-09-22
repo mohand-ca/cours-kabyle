@@ -11,6 +11,8 @@ return [
         'find_teacher' => 'Find a teacher →',
         'manage_learners' => 'Manage learners →',
         'add_learner' => 'Add a learner',
+        'sessions_remaining' => 'Sessions remaining',
+        'buy_sessions' => 'Buy sessions',
     ],
     'learners' => [
         'title' => 'My learners',
@@ -52,6 +54,16 @@ return [
         'session_cancelled' => 'Lesson cancelled.',
         'no_slots' => 'No available slots',
         'with' => 'with',
+    ],
+    'packages' => [
+        'title' => 'Buy sessions',
+        'subtitle' => 'Choose a package that fits your learning rhythm.',
+        'buy' => 'Buy',
+        'sessions' => ':count session|:count sessions',
+        'per_session' => 'per session',
+        'no_sessions_remaining' => 'You have no sessions remaining. Please buy a package first.',
+        'purchase_pending' => 'Payment received! Your sessions will be available shortly.',
+        'remaining_sessions' => ':count session remaining|:count sessions remaining',
     ],
     'catalog' => [
         'title' => 'Find a teacher',

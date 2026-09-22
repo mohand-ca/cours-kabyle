@@ -11,6 +11,8 @@ return [
         'find_teacher' => 'Trouver un enseignant →',
         'manage_learners' => 'Gérer mes apprenants →',
         'add_learner' => 'Ajouter un apprenant',
+        'sessions_remaining' => 'Séances restantes',
+        'buy_sessions' => 'Acheter des séances',
     ],
     'learners' => [
         'title' => 'Mes apprenants',
@@ -52,6 +54,16 @@ return [
         'session_cancelled' => 'Séance annulée.',
         'no_slots' => 'Aucun créneau disponible',
         'with' => 'avec',
+    ],
+    'packages' => [
+        'title' => 'Acheter des séances',
+        'subtitle' => 'Choisissez un forfait adapté à votre rythme d\'apprentissage.',
+        'buy' => 'Acheter',
+        'sessions' => ':count séance|:count séances',
+        'per_session' => 'par séance',
+        'no_sessions_remaining' => 'Vous n\'avez plus de séances. Veuillez acheter un forfait.',
+        'purchase_pending' => 'Paiement reçu ! Vos séances seront disponibles dans quelques instants.',
+        'remaining_sessions' => ':count séance restante|:count séances restantes',
     ],
     'catalog' => [
         'title' => 'Trouver un enseignant',

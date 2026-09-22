@@ -7,6 +7,7 @@ use App\Livewire\Learner\TeacherCatalog;
 use App\Models\AvailabilitySlot;
 use App\Models\Learner;
 use App\Models\LessonSession;
+use App\Models\Purchase;
 use App\Models\TeacherProfile;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
@@ -47,6 +48,7 @@ class BookingTest extends TestCase
         $user = $this->learnerUser();
         $learner = $user->learners()->first();
         [$profile, $slot] = $this->approvedTeacherWithSlot();
+        Purchase::factory()->create(['user_id' => $user->id, 'sessions_remaining' => 1]);
 
         Livewire::actingAs($user)
             ->test(TeacherCatalog::class)
@@ -89,6 +91,7 @@ class BookingTest extends TestCase
         $user = $this->learnerUser();
         $learner = $user->learners()->first();
         [$profile, $slot] = $this->approvedTeacherWithSlot();
+        Purchase::factory()->create(['user_id' => $user->id, 'sessions_remaining' => 1]);
 
         $slot->update(['status' => 'booked']);
 

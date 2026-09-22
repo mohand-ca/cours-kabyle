@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\CheckoutController;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\TeacherRegister;
 use App\Livewire\Learner\Dashboard as LearnerDashboard;
 use App\Livewire\Learner\ManageLearners;
+use App\Livewire\Learner\PackageCatalog;
 use App\Livewire\Learner\TeacherCatalog;
 use App\Livewire\Teacher\AvailabilityCalendar;
 use App\Livewire\Teacher\Dashboard as TeacherDashboard;
@@ -31,6 +33,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', LearnerDashboard::class)->name('dashboard');
         Route::get('/learners', ManageLearners::class)->name('learners');
         Route::get('/teachers', TeacherCatalog::class)->name('teachers');
+        Route::get('/packages', PackageCatalog::class)->name('packages');
+        Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+        Route::get('/checkout/{package}', [CheckoutController::class, 'create'])->name('checkout');
     });
 
     Route::post('/logout', function () {
