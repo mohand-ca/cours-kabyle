@@ -3,6 +3,7 @@
 return [
     'login' => [
         'title' => 'Se connecter',
+        'subtitle' => 'Bon retour sur la plateforme.',
         'email' => 'Adresse e-mail',
         'password' => 'Mot de passe',
         'remember' => 'Se souvenir de moi',
@@ -13,6 +14,7 @@ return [
     ],
     'register' => [
         'title' => 'Créer un compte',
+        'subtitle' => 'Apprenez le kabyle avec des enseignants natifs.',
         'display_name' => 'Nom d\'affichage',
         'first_name' => 'Prénom',
         'last_name' => 'Nom',

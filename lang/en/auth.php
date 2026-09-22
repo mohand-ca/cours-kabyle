@@ -3,6 +3,7 @@
 return [
     'login' => [
         'title' => 'Sign in',
+        'subtitle' => 'Welcome back to the platform.',
         'email' => 'Email address',
         'password' => 'Password',
         'remember' => 'Remember me',
@@ -13,6 +14,7 @@ return [
     ],
     'register' => [
         'title' => 'Create an account',
+        'subtitle' => 'Learn Kabyle with native teachers.',
         'display_name' => 'Display name',
         'first_name' => 'First name',
         'last_name' => 'Last name',
