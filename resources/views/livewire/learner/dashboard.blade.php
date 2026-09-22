@@ -1,7 +1,13 @@
 <div>
     <h1 class="mb-6 text-xl font-semibold text-gray-900">
-        {{ __('learner.dashboard.greeting') }}, {{ Auth::user()->name }} 👋
+        {{ __('learner.dashboard.greeting') }}, {{ Auth::user()->name }}
     </h1>
+
+    @if(session('message'))
+        <div class="mb-4 rounded-lg bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+            {{ session('message') }}
+        </div>
+    @endif
 
     {{-- Stats --}}
     <div class="mb-6 grid grid-cols-3 gap-4">
@@ -15,7 +21,7 @@
         </div>
         <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
             <p class="text-xs font-medium uppercase tracking-widest text-gray-400">{{ __('learner.dashboard.upcoming_sessions') }}</p>
-            <p class="mt-2 text-3xl font-bold text-gray-900">0</p>
+            <p class="mt-2 text-3xl font-bold text-gray-900">{{ $upcomingSessions->count() }}</p>
         </div>
     </div>
 
@@ -28,9 +34,42 @@
                     {{ __('learner.dashboard.find_teacher') }}
                 </a>
             </div>
-            <div class="px-6 py-8 text-center text-sm text-gray-400">
-                {{ __('learner.dashboard.no_sessions') }}
-            </div>
+
+            @forelse($upcomingSessions as $session)
+                <div class="flex items-center justify-between border-b border-gray-50 px-6 py-4 last:border-b-0">
+                    <div class="min-w-0">
+                        <p class="text-sm font-medium text-gray-900">
+                            {{ $session->availabilitySlot->starts_at->translatedFormat('D j M Y, H:i') }}
+                        </p>
+                        <p class="mt-0.5 text-xs text-gray-400">
+                            {{ __('learner.booking.with') }} {{ $session->teacherProfile->user->name }}
+                            · {{ $session->learner->first_name }}
+                        </p>
+                    </div>
+
+                    @if($cancelSessionId === $session->id)
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-gray-500">{{ __('learner.booking.cancel_session_confirm') }}</span>
+                            <button wire:click="cancelSession"
+                                class="rounded-lg bg-red-600 px-3 py-1 text-xs font-medium text-white hover:bg-red-700 transition-colors">
+                                {{ __('learner.booking.cancel_session') }}
+                            </button>
+                            <button wire:click="dismissCancel" class="text-xs text-gray-400 hover:text-gray-600">
+                                {{ __('learner.booking.cancel') }}
+                            </button>
+                        </div>
+                    @else
+                        <button wire:click="confirmCancel({{ $session->id }})"
+                            class="rounded-lg border border-gray-200 px-3 py-1 text-xs font-medium text-gray-500 hover:border-red-200 hover:text-red-600 transition-colors">
+                            {{ __('learner.booking.cancel_session') }}
+                        </button>
+                    @endif
+                </div>
+            @empty
+                <div class="px-6 py-8 text-center text-sm text-gray-400">
+                    {{ __('learner.dashboard.no_sessions') }}
+                </div>
+            @endforelse
         </div>
 
         {{-- Learners --}}

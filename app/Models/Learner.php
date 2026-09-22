@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['user_id', 'first_name', 'last_name', 'date_of_birth', 'relationship', 'notification_email', 'points'])]
 class Learner extends Model
@@ -17,6 +18,11 @@ class Learner extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function lessonSessions(): HasMany
+    {
+        return $this->hasMany(LessonSession::class);
     }
 
     /**

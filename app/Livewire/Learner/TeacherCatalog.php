@@ -2,7 +2,11 @@
 
 namespace App\Livewire\Learner;
 
+use App\Models\AvailabilitySlot;
+use App\Models\LessonSession;
 use App\Models\TeacherProfile;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class TeacherCatalog extends Component
@@ -11,22 +15,79 @@ class TeacherCatalog extends Component
 
     public string $filterLanguage = '';
 
+    public ?int $expandedTeacherId = null;
+
+    public ?int $selectedSlotId = null;
+
+    public ?int $selectedLearnerId = null;
+
     public const LEVEL_OPTIONS = ['beginner', 'intermediate', 'advanced'];
 
     public const LANGUAGE_OPTIONS = ['kabyle', 'french', 'english', 'arabic', 'other'];
 
-    public function updatedFilterLevel(): void
+    public function toggleSlots(int $teacherId): void
     {
-        // Reactivity handled by Livewire re-render
+        $this->expandedTeacherId = ($this->expandedTeacherId === $teacherId) ? null : $teacherId;
+        $this->selectedSlotId = null;
+        $this->selectedLearnerId = null;
     }
 
-    public function updatedFilterLanguage(): void
+    public function selectSlot(int $slotId): void
     {
-        // Reactivity handled by Livewire re-render
+        $this->selectedSlotId = $slotId;
+        $this->selectedLearnerId = null;
+    }
+
+    public function cancelBooking(): void
+    {
+        $this->selectedSlotId = null;
+        $this->selectedLearnerId = null;
+    }
+
+    public function book(): void
+    {
+        $this->validate(['selectedLearnerId' => 'required|integer']);
+
+        $user = Auth::user();
+        $learner = $user->learners()->findOrFail($this->selectedLearnerId);
+
+        $slotTaken = false;
+
+        DB::transaction(function () use ($learner, &$slotTaken) {
+            $slot = AvailabilitySlot::lockForUpdate()->findOrFail($this->selectedSlotId);
+
+            if (! $slot->isAvailable()) {
+                $slotTaken = true;
+
+                return;
+            }
+
+            LessonSession::create([
+                'availability_slot_id' => $slot->id,
+                'learner_id' => $learner->id,
+                'teacher_profile_id' => $slot->teacher_profile_id,
+                'status' => 'confirmed',
+            ]);
+
+            $slot->book();
+        });
+
+        if ($slotTaken) {
+            $this->addError('selectedSlotId', __('learner.booking.slot_taken'));
+
+            return;
+        }
+
+        $this->expandedTeacherId = null;
+        $this->selectedSlotId = null;
+        $this->selectedLearnerId = null;
+        session()->flash('message', __('learner.booking.booked'));
     }
 
     public function render()
     {
+        $user = Auth::user();
+
         $query = TeacherProfile::query()
             ->where('status', 'approved')
             ->with('user')
@@ -46,8 +107,19 @@ class TeacherCatalog extends Component
 
         $teachers = $query->orderByDesc('available_slots_count')->get();
 
+        $availableSlots = $this->expandedTeacherId
+            ? AvailabilitySlot::where('teacher_profile_id', $this->expandedTeacherId)
+                ->available()
+                ->orderBy('starts_at')
+                ->get()
+            : collect();
+
+        $learners = $user->learners()->orderBy('relationship')->get();
+
         return view('livewire.learner.teacher-catalog', [
             'teachers' => $teachers,
+            'availableSlots' => $availableSlots,
+            'learners' => $learners,
         ])->layout('components.layouts.auth');
     }
 }

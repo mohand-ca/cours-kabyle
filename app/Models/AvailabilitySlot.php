@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Fillable(['teacher_profile_id', 'availability_pattern_id', 'starts_at', 'ends_at', 'status'])]
 class AvailabilitySlot extends Model
@@ -31,6 +32,16 @@ class AvailabilitySlot extends Model
     public function availabilityPattern(): BelongsTo
     {
         return $this->belongsTo(AvailabilityPattern::class);
+    }
+
+    public function lessonSession(): HasOne
+    {
+        return $this->hasOne(LessonSession::class);
+    }
+
+    public function book(): void
+    {
+        $this->update(['status' => 'booked']);
     }
 
     public function scopeAvailable(Builder $query): Builder
