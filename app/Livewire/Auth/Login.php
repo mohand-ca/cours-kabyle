@@ -42,7 +42,7 @@ class Login extends Component
             return;
         }
 
-        $this->redirect(route('dashboard'), navigate: true);
+        $this->redirect(route('learner.dashboard'), navigate: true);
     }
 
     public function render()

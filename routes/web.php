@@ -3,6 +3,9 @@
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\TeacherRegister;
+use App\Livewire\Learner\Dashboard as LearnerDashboard;
+use App\Livewire\Learner\ManageLearners;
+use App\Livewire\Learner\TeacherCatalog;
 use App\Livewire\Teacher\AvailabilityCalendar;
 use App\Livewire\Teacher\Dashboard as TeacherDashboard;
 use App\Livewire\Teacher\ProfileSetup;
@@ -23,9 +26,12 @@ Route::middleware('guest')->group(function () {
 
 // Authenticated + verified
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return 'Dashboard apprenant — à venir (Phase 3)';
-    })->middleware('role:learner')->name('dashboard');
+    // Espace apprenant
+    Route::middleware('role:learner')->name('learner.')->group(function () {
+        Route::get('/dashboard', LearnerDashboard::class)->name('dashboard');
+        Route::get('/learners', ManageLearners::class)->name('learners');
+        Route::get('/teachers', TeacherCatalog::class)->name('teachers');
+    });
 
     Route::post('/logout', function () {
         auth()->logout();
@@ -55,7 +61,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
     return $user->hasRole('teacher')
         ? redirect()->route('teacher.dashboard')
-        : redirect()->route('dashboard');
+        : redirect()->route('learner.dashboard');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
