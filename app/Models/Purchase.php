@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['user_id', 'package_id', 'stripe_session_id', 'sessions_total', 'sessions_remaining', 'status'])]
+#[Fillable(['user_id', 'package_key', 'stripe_session_id', 'sessions_total', 'sessions_remaining', 'status'])]
 class Purchase extends Model
 {
     /** @use HasFactory<PurchaseFactory> */
@@ -20,14 +20,15 @@ class Purchase extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function package(): BelongsTo
-    {
-        return $this->belongsTo(SessionPackage::class, 'package_id');
-    }
-
     public function lessonSessions(): HasMany
     {
         return $this->hasMany(LessonSession::class);
+    }
+
+    /** @return array<string, mixed> */
+    public function packageConfig(): array
+    {
+        return config('packages.'.$this->package_key, []);
     }
 
     public function hasSessionsRemaining(): bool

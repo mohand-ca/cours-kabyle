@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\CheckoutController;
+use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
+use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\TeacherRegister;
 use App\Livewire\Learner\Dashboard as LearnerDashboard;
 use App\Livewire\Learner\ManageLearners;
@@ -32,6 +34,8 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', Register::class)->name('register');
     Route::get('/login', Login::class)->name('login');
     Route::get('/become-a-teacher', TeacherRegister::class)->name('teacher.register');
+    Route::get('/forgot-password', ForgotPassword::class)->name('password.request');
+    Route::get('/reset-password/{token}', ResetPassword::class)->name('password.reset');
 });
 
 // Authenticated + verified
@@ -43,7 +47,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/teachers', TeacherCatalog::class)->name('teachers');
         Route::get('/packages', PackageCatalog::class)->name('packages');
         Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
-        Route::get('/checkout/{package}', [CheckoutController::class, 'create'])->name('checkout');
+        Route::get('/checkout/{key}', [CheckoutController::class, 'create'])->name('checkout');
     });
 
     Route::post('/logout', function () {
@@ -64,7 +68,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // Email verification
 Route::get('/email/verify', function () {
-    return 'Vérification email — vérifie ta boîte mail.';
+    return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {

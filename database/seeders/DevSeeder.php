@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\AvailabilitySlot;
 use App\Models\Learner;
 use App\Models\Purchase;
-use App\Models\SessionPackage;
 use App\Models\TeacherProfile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -38,7 +37,6 @@ class DevSeeder extends Seeder
                 'submitted_at' => now()->subDays(2),
             ]);
 
-            // Quelques créneaux disponibles dans les prochains jours
             foreach (range(1, 5) as $day) {
                 $startsAt = Carbon::now()->addDays($day)->setHour(14)->setMinute(0)->setSecond(0);
                 AvailabilitySlot::create([
@@ -50,7 +48,7 @@ class DevSeeder extends Seeder
             }
         }
 
-        // Learner de test — avec un profil self + un package acheté
+        // Learner de test — avec un profil self + un achat de test
         $learner = User::firstOrCreate(
             ['email' => 'learner@thamazight.com'],
             [
@@ -71,20 +69,10 @@ class DevSeeder extends Seeder
             ]);
         }
 
-        // Package + Purchase de test (5 séances restantes)
-        $package = SessionPackage::firstOrCreate(
-            ['sessions_count' => 5],
-            [
-                'name' => 'Pack 5 séances',
-                'price_cents' => 4900,
-                'is_active' => true,
-            ]
-        );
-
         if ($learner->purchases()->doesntExist()) {
             Purchase::create([
                 'user_id' => $learner->id,
-                'package_id' => $package->id,
+                'package_key' => 'starter',
                 'stripe_session_id' => 'cs_test_dev_seed',
                 'sessions_total' => 5,
                 'sessions_remaining' => 5,

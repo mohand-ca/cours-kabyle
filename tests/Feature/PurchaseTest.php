@@ -10,7 +10,6 @@ use App\Models\AvailabilitySlot;
 use App\Models\Learner;
 use App\Models\LessonSession;
 use App\Models\Purchase;
-use App\Models\SessionPackage;
 use App\Models\TeacherProfile;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
@@ -50,7 +49,6 @@ class PurchaseTest extends TestCase
     public function test_package_catalog_page_loads(): void
     {
         $user = $this->learnerUser();
-        SessionPackage::factory()->create(['sessions_count' => 5, 'name' => 'Pack 5 séances']);
 
         Livewire::actingAs($user)
             ->test(PackageCatalog::class)
@@ -74,7 +72,6 @@ class PurchaseTest extends TestCase
     public function test_webhook_creates_purchase_on_checkout_completed(): void
     {
         $user = $this->learnerUser();
-        $package = SessionPackage::factory()->create(['sessions_count' => 5]);
 
         $listener = new StripeEventListener;
         $listener->handle(new WebhookReceived([
@@ -85,7 +82,7 @@ class PurchaseTest extends TestCase
                     'payment_status' => 'paid',
                     'metadata' => [
                         'user_id' => $user->id,
-                        'package_id' => $package->id,
+                        'package_key' => 'starter',
                     ],
                 ],
             ],
@@ -93,7 +90,7 @@ class PurchaseTest extends TestCase
 
         $this->assertDatabaseHas('purchases', [
             'user_id' => $user->id,
-            'package_id' => $package->id,
+            'package_key' => 'starter',
             'stripe_session_id' => 'cs_test_abc123',
             'sessions_total' => 5,
             'sessions_remaining' => 5,
@@ -104,7 +101,6 @@ class PurchaseTest extends TestCase
     public function test_webhook_is_idempotent(): void
     {
         $user = $this->learnerUser();
-        $package = SessionPackage::factory()->create(['sessions_count' => 5]);
 
         $payload = new WebhookReceived([
             'type' => 'checkout.session.completed',
@@ -112,7 +108,7 @@ class PurchaseTest extends TestCase
                 'object' => [
                     'id' => 'cs_test_abc123',
                     'payment_status' => 'paid',
-                    'metadata' => ['user_id' => $user->id, 'package_id' => $package->id],
+                    'metadata' => ['user_id' => $user->id, 'package_key' => 'starter'],
                 ],
             ],
         ]);
@@ -127,7 +123,6 @@ class PurchaseTest extends TestCase
     public function test_webhook_ignores_unpaid_sessions(): void
     {
         $user = $this->learnerUser();
-        $package = SessionPackage::factory()->create();
 
         $listener = new StripeEventListener;
         $listener->handle(new WebhookReceived([
@@ -136,7 +131,7 @@ class PurchaseTest extends TestCase
                 'object' => [
                     'id' => 'cs_test_xyz',
                     'payment_status' => 'unpaid',
-                    'metadata' => ['user_id' => $user->id, 'package_id' => $package->id],
+                    'metadata' => ['user_id' => $user->id, 'package_key' => 'starter'],
                 ],
             ],
         ]));

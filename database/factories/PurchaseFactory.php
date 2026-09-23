@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Purchase;
-use App\Models\SessionPackage;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,14 +16,12 @@ class PurchaseFactory extends Factory
      */
     public function definition(): array
     {
-        $package = SessionPackage::factory()->create();
-
         return [
             'user_id' => User::factory(),
-            'package_id' => $package->id,
+            'package_key' => 'starter',
             'stripe_session_id' => 'cs_test_'.fake()->lexify('??????????????????????????'),
-            'sessions_total' => $package->sessions_count,
-            'sessions_remaining' => $package->sessions_count,
+            'sessions_total' => 5,
+            'sessions_remaining' => 5,
             'status' => 'completed',
         ];
     }

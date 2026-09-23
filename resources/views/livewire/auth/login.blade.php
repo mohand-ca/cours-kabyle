@@ -18,10 +18,13 @@
             @error('password') <p style="margin-top:6px;font-size:12px;color:#DC2626">{{ $message }}</p> @enderror
         </div>
 
-        <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:#57534E;cursor:pointer">
-            <input type="checkbox" wire:model="remember" style="width:16px;height:16px;accent-color:#9A6A00;margin:0">
-            {{ __('auth.login.remember') }}
-        </label>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+            <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:#57534E;cursor:pointer">
+                <input type="checkbox" wire:model="remember" style="width:16px;height:16px;accent-color:#9A6A00;margin:0">
+                {{ __('auth.login.remember') }}
+            </label>
+            <a href="{{ route('password.request') }}" style="font-size:13px;color:#9A6A00;font-weight:600;text-decoration:none">{{ __('auth.login.forgot_password') }}</a>
+        </div>
 
         <button type="submit"
             style="width:100%;background:#F2B81D;color:#1C1917;border:none;font:inherit;font-size:15px;font-weight:700;padding:13px;border-radius:12px;cursor:pointer;box-shadow:0 8px 20px -8px rgba(222,165,0,.6);margin-top:4px">
@@ -32,6 +35,6 @@
 
     <div style="border-top:1px solid #F1ECE6;margin-top:24px;padding-top:20px;display:flex;flex-direction:column;gap:8px;align-items:center;font-size:13.5px;color:#78716C">
         <div>{{ __('auth.login.no_account') }} <a href="{{ route('register') }}" style="font-weight:600;color:#9A6A00">{{ __('auth.login.register_link') }}</a></div>
-        <div>Vous êtes enseignant ? <a href="{{ route('teacher.register') }}" style="font-weight:600;color:#9A6A00">Créer un compte enseignant →</a></div>
+        <div>{{ __('auth.login.teacher_label') }} <a href="{{ route('teacher.register') }}" style="font-weight:600;color:#9A6A00">{{ __('auth.login.teacher_link') }}</a></div>
     </div>
 </div>

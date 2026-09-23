@@ -22,6 +22,7 @@ class TeacherRegister extends Component
             'email' => $this->form->email,
             'password' => $this->form->password,
             'role' => 'teacher',
+            'timezone' => $this->form->timezone,
         ]);
 
         $user->assignRole('teacher');

@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Models\Purchase;
-use App\Models\SessionPackage;
 use Laravel\Cashier\Events\WebhookReceived;
 
 class StripeEventListener
@@ -22,13 +21,13 @@ class StripeEventListener
 
         $metadata = $session['metadata'] ?? [];
         $userId = $metadata['user_id'] ?? null;
-        $packageId = $metadata['package_id'] ?? null;
+        $packageKey = $metadata['package_key'] ?? null;
 
-        if (! $userId || ! $packageId) {
+        if (! $userId || ! $packageKey) {
             return;
         }
 
-        $package = SessionPackage::find($packageId);
+        $package = config('packages.'.$packageKey);
         if (! $package) {
             return;
         }
@@ -37,9 +36,9 @@ class StripeEventListener
             ['stripe_session_id' => $session['id']],
             [
                 'user_id' => $userId,
-                'package_id' => $package->id,
-                'sessions_total' => $package->sessions_count,
-                'sessions_remaining' => $package->sessions_count,
+                'package_key' => $packageKey,
+                'sessions_total' => $package['sessions_count'],
+                'sessions_remaining' => $package['sessions_count'],
                 'status' => 'completed',
             ]
         );

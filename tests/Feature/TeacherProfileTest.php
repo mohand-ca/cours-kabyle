@@ -33,6 +33,7 @@ class TeacherProfileTest extends TestCase
             ->set('form.email', 'yidir@example.com')
             ->set('form.password', 'password123')
             ->set('form.password_confirmation', 'password123')
+            ->set('form.timezone', 'Africa/Algiers')
             ->call('register');
 
         $user = User::where('email', 'yidir@example.com')->first();
@@ -51,6 +52,7 @@ class TeacherProfileTest extends TestCase
             ->set('form.email', 'taziri@example.com')
             ->set('form.password', 'password123')
             ->set('form.password_confirmation', 'password123')
+            ->set('form.timezone', 'Africa/Algiers')
             ->call('register');
 
         $user = User::where('email', 'taziri@example.com')->first();
@@ -58,6 +60,36 @@ class TeacherProfileTest extends TestCase
         $this->assertNotNull($user->teacherProfile);
         $this->assertEquals('pending', $user->teacherProfile->status);
         $this->assertNull($user->teacherProfile->submitted_at);
+    }
+
+    public function test_teacher_registration_saves_timezone(): void
+    {
+        Event::fake([Registered::class]);
+
+        Livewire::test(TeacherRegister::class)
+            ->set('form.name', 'Amazigh Idir')
+            ->set('form.email', 'amazigh@example.com')
+            ->set('form.password', 'password123')
+            ->set('form.password_confirmation', 'password123')
+            ->set('form.timezone', 'Europe/Paris')
+            ->call('register');
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'amazigh@example.com',
+            'timezone' => 'Europe/Paris',
+        ]);
+    }
+
+    public function test_teacher_registration_requires_valid_timezone(): void
+    {
+        Livewire::test(TeacherRegister::class)
+            ->set('form.name', 'Test User')
+            ->set('form.email', 'test@example.com')
+            ->set('form.password', 'password123')
+            ->set('form.password_confirmation', 'password123')
+            ->set('form.timezone', 'Invalid/Timezone')
+            ->call('register')
+            ->assertHasErrors(['form.timezone']);
     }
 
     public function test_teacher_cannot_access_learner_dashboard(): void

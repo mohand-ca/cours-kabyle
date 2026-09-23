@@ -26,19 +26,19 @@
         @foreach($packages as $package)
             <div style="display:flex;flex-direction:column;background:#fff;border-radius:16px;border:1px solid #EAE4DD;padding:24px;box-shadow:0 1px 2px rgba(28,25,23,.04);transition:all .2s">
                 <div style="flex:1">
-                    <div style="font-size:15px;font-weight:700;color:#1C1917;margin-bottom:8px">{{ $package->name }}</div>
+                    <div style="font-size:15px;font-weight:700;color:#1C1917;margin-bottom:8px">{{ $package['name'] }}</div>
                     <div style="font-size:36px;font-weight:800;letter-spacing:-.04em;color:#9A6A00;line-height:1">
-                        ${{ $package->priceInDollars() }}
+                        ${{ number_format($package['price_cents'] / 100, 2) }}
                     </div>
                     <div style="font-size:13px;color:#A8A29E;margin-top:4px">
-                        ${{ number_format($package->price_cents / $package->sessions_count / 100, 2) }} {{ __('learner.packages.per_session') }}
+                        ${{ number_format($package['price_cents'] / $package['sessions_count'] / 100, 2) }} {{ __('learner.packages.per_session') }}
                     </div>
                     <div style="font-size:14px;color:#57534E;margin-top:16px">
-                        {{ trans_choice('learner.packages.sessions', $package->sessions_count, ['count' => $package->sessions_count]) }}
+                        {{ trans_choice('learner.packages.sessions', $package['sessions_count'], ['count' => $package['sessions_count']]) }}
                     </div>
                 </div>
 
-                <a href="{{ route('learner.checkout', $package) }}"
+                <a href="{{ route('learner.checkout', $package['key']) }}"
                     style="margin-top:20px;display:block;text-align:center;background:#F2B81D;color:#1C1917;font-size:14.5px;font-weight:700;padding:12px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.5);text-decoration:none">
                     {{ __('learner.packages.buy') }}
                 </a>
