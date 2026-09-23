@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\TeacherProfiles\Tables;
 
+use App\Mail\TeacherApprovedMail;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -9,6 +10,7 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Mail;
 
 class TeacherProfilesTable
 {
@@ -62,7 +64,10 @@ class TeacherProfilesTable
                     ->color('success')
                     ->requiresConfirmation()
                     ->visible(fn ($record) => ! $record->isApproved())
-                    ->action(fn ($record) => $record->approve()),
+                    ->action(function ($record) {
+                        $record->approve();
+                        Mail::to($record->user->email)->queue(new TeacherApprovedMail($record->load('user')));
+                    }),
 
                 Action::make('suspend')
                     ->label(__('teacher.filament.actions.suspend'))

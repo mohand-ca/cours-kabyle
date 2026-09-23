@@ -77,4 +77,14 @@ return [
         'view_slots' => 'View availability',
         'no_results' => 'No teachers match your filters.',
     ],
+
+    'mail' => [
+        'booking_confirmed_subject' => 'Your session is confirmed!',
+        'booking_confirmed_greeting' => 'Hello :name,',
+        'booking_confirmed_intro' => 'Your session with :teacher is confirmed.',
+        'booking_confirmed_date' => 'Date: :date from :start to :end',
+        'booking_confirmed_cta' => 'Join the session',
+        'reminder_subject' => 'Reminder — your session tomorrow at :time',
+        'reminder_intro' => 'Reminder: you have a session tomorrow with :teacher at :time.',
+    ],
 ];

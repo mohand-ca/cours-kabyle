@@ -77,4 +77,14 @@ return [
         'view_slots' => 'Voir les disponibilités',
         'no_results' => 'Aucun enseignant ne correspond à vos filtres.',
     ],
+
+    'mail' => [
+        'booking_confirmed_subject' => 'Votre séance est confirmée !',
+        'booking_confirmed_greeting' => 'Bonjour :name,',
+        'booking_confirmed_intro' => 'Votre séance avec :teacher est confirmée.',
+        'booking_confirmed_date' => 'Date : :date de :start à :end',
+        'booking_confirmed_cta' => 'Rejoindre la séance',
+        'reminder_subject' => 'Rappel — votre séance demain à :time',
+        'reminder_intro' => 'Rappel : vous avez une séance demain avec :teacher à :time.',
+    ],
 ];

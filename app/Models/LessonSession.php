@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['availability_slot_id', 'learner_id', 'teacher_profile_id', 'purchase_id', 'status'])]
+#[Fillable(['availability_slot_id', 'learner_id', 'teacher_profile_id', 'purchase_id', 'status', 'reminder_sent_at'])]
 class LessonSession extends Model
 {
     /** @use HasFactory<LessonSessionFactory> */
@@ -19,6 +19,7 @@ class LessonSession extends Model
     {
         return [
             'status' => 'string',
+            'reminder_sent_at' => 'datetime',
         ];
     }
 

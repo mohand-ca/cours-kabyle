@@ -2,11 +2,14 @@
 
 namespace App\Livewire\Learner;
 
+use App\Mail\BookingConfirmedMail;
+use App\Mail\BookingConfirmedTeacherMail;
 use App\Models\AvailabilitySlot;
 use App\Models\LessonSession;
 use App\Models\TeacherProfile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class TeacherCatalog extends Component
@@ -91,6 +94,18 @@ class TeacherCatalog extends Component
 
             return;
         }
+
+        $lessonSession = LessonSession::with(['availabilitySlot', 'teacherProfile.user', 'learner'])
+            ->where('availability_slot_id', $this->selectedSlotId)
+            ->latest()
+            ->first();
+
+        foreach ($learner->notificationAddresses() as $address) {
+            Mail::to($address)->queue(new BookingConfirmedMail($lessonSession));
+        }
+
+        Mail::to($lessonSession->teacherProfile->user->email)
+            ->queue(new BookingConfirmedTeacherMail($lessonSession));
 
         $this->expandedTeacherId = null;
         $this->selectedSlotId = null;

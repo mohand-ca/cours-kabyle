@@ -86,4 +86,15 @@ return [
             'suspend' => 'Suspendre',
         ],
     ],
+
+    'mail' => [
+        'approved_subject' => 'Votre profil est approuvé — bienvenue sur Thamazight !',
+        'approved_greeting' => 'Félicitations :name !',
+        'approved_intro' => 'Votre profil enseignant a été approuvé par notre équipe. Vous pouvez maintenant ajouter vos créneaux de disponibilité.',
+        'approved_cta' => 'Ajouter mes créneaux',
+        'booking_confirmed_subject' => 'Nouvelle séance réservée',
+        'booking_confirmed_greeting' => 'Bonjour :name,',
+        'booking_confirmed_intro' => ':learner a réservé un créneau avec vous.',
+        'booking_confirmed_date' => 'Date : :date de :start à :end',
+    ],
 ];

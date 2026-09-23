@@ -86,4 +86,15 @@ return [
             'suspend' => 'Suspend',
         ],
     ],
+
+    'mail' => [
+        'approved_subject' => 'Your profile is approved — welcome to Thamazight!',
+        'approved_greeting' => 'Congratulations :name!',
+        'approved_intro' => 'Your teacher profile has been approved by our team. You can now add your availability slots.',
+        'approved_cta' => 'Add my slots',
+        'booking_confirmed_subject' => 'New session booked',
+        'booking_confirmed_greeting' => 'Hello :name,',
+        'booking_confirmed_intro' => ':learner has booked a session with you.',
+        'booking_confirmed_date' => 'Date: :date from :start to :end',
+    ],
 ];
