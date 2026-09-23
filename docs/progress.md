@@ -5,8 +5,8 @@
 ---
 
 ## Statut général
-**Phase : MVP — Phase 5 terminée (Paiements Stripe)**
-68/68 tests passent.
+**Phase : MVP — Production Readiness (phases 6–7 partiellement couvertes)**
+68/68 tests passent. App nommée **Azul**.
 
 ---
 
@@ -26,12 +26,14 @@
   - `learners.relationship` : self / child / spouse / other
   - `learners.notification_email` : email additionnel optionnel par apprenant
 - **Disponibilités** : `availability_patterns` (règle récurrente, V2) + `availability_slots` (créneaux réels, manuel pour MVP)
-- **Paiements** : Stripe USD via Cashier — checkout one-time par paquet (pas de subscription)
+- **Paiements** : Stripe **CAD** via Cashier — checkout one-time par paquet (pas de subscription)
+- **Paquets** : config-based via `config/packages.php` (comme Laravel Spark) — pas de table `packages` / seeder
 - **Séance** : `LessonSession` (pas `Session` — conflit avec la façade Laravel)
 - **Annulation** : toujours re-crédit pour le MVP (politique >24h en V2)
 - **`Review` model → PAS dans le MVP** (reporté en V2)
 - **Code en anglais** : variables, méthodes, colonnes, routes — tout en anglais
 - **Traduction dès le début** : toutes les chaînes via `__('clé')` — `lang/fr/` + `lang/en/`
+- **Nom de la plateforme** : **Azul** ✅
 
 ### Installation (packages)
 - Laravel 13, Livewire 4, Filament 5, Spatie Permission 8, Laravel Cashier 16 ✅
@@ -110,18 +112,21 @@
 - `create_subscriptions_table` + `subscription_items` (Cashier standard)
 
 **Migrations custom :**
-- `create_packages_table` : `name`, `sessions_count`, `price_cents`, `stripe_price_id`, `is_active`
-- `create_purchases_table` : `user_id`, `package_id`, `stripe_session_id` unique, `sessions_total`, `sessions_remaining`, `status` enum
+- `create_purchases_table` : `user_id`, `package_key` (string), `stripe_session_id` unique, `sessions_total`, `sessions_remaining`, `status` enum
 - `add_purchase_foreign_to_lesson_sessions` : FK `purchase_id` → `purchases.id` nullOnDelete
 
+**Paquets (config-based, pas de table DB) :**
+- `config/packages.php` — source de vérité : `starter` (5 séances, 49$), `standard` (10 séances, 89$), `premium` (20 séances, 159$)
+- Prix en CAD (`CASHIER_CURRENCY=CAD`)
+- Price IDs Stripe dans `.env` : `STRIPE_PRICE_STARTER`, `STRIPE_PRICE_STANDARD`, `STRIPE_PRICE_PREMIUM`
+
 **Models :**
-- `SessionPackage` (table: `packages`) : `priceInDollars()`, `scopeActive()`
-- `Purchase` : `hasSessionsRemaining()`, `isCompleted()`
+- `Purchase` : `hasSessionsRemaining()`, `isCompleted()`, `packageConfig()` (lookup via config)
 - `User` : `purchases()` HasMany, `sessionsRemaining()` (sum sessions_remaining des purchases completed)
 
 **Flow paiement :**
-1. `/packages` → `Learner\PackageCatalog` — liste les packages actifs
-2. Clic "Acheter" → `GET /checkout/{package}` → `CheckoutController::create()` → `$user->checkout(...)` avec metadata `user_id` + `package_id`
+1. `/packages` → `Learner\PackageCatalog` — liste les packages depuis `config('packages')`
+2. Clic "Acheter" → `GET /checkout/{key}` → `CheckoutController::create()` → `$user->checkout(...)` avec metadata `user_id` + `package_key`
 3. Stripe Checkout → succès → `/checkout/success` → redirect dashboard avec flash
 4. Webhook `checkout.session.completed` → `StripeEventListener` → `Purchase::firstOrCreate(...)` (idempotent)
 
@@ -136,17 +141,71 @@
 STRIPE_KEY=pk_live_...
 STRIPE_SECRET=sk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_...
+STRIPE_PRICE_STARTER=price_...
+STRIPE_PRICE_STANDARD=price_...
+STRIPE_PRICE_PREMIUM=price_...
 ```
-- Créer les 3 paquets dans le Stripe Dashboard, mettre les `stripe_price_id` via `PackageSeeder`
+- Créer les 3 paquets dans le Stripe Dashboard, copier les `price_id` dans `.env`
 - Enregistrer le webhook : `php artisan cashier:webhook`
 
 **Tests :** `PurchaseTest` (9) — webhook, idempotence, booking nécessite un purchase, décrément, re-crédit
 
 ---
 
+### Phase 6 — Emails transactionnels ✅
+
+- `BookingConfirmed` : confirmation envoyée à l'apprenant et au prof après réservation
+- `LessonReminder` : rappel 24h avant la séance (planification via scheduler)
+- `TeacherApproved` : email de bienvenue envoyé à l'enseignant après approbation dans Filament
+- Vues Blade sous `resources/views/mail/`
+- Switcher langue FR/EN dans la barre de navigation ✅
+
+---
+
+### Phase 7 — Admin Filament ✅
+
+**Resources Filament :**
+- `UserResource` : liste, filtre par rôle, badge rôle, icône email vérifié, fuseau horaire
+- `PurchaseResource` : liste achats, nom du pack via `config('packages')`, sessions restantes en couleur
+- `TeacherProfileResource` (existant) : actions approve/suspend
+
+**Widgets dashboard admin :**
+- `StatsOverview` : 4 stats avec sparklines 7 jours (apprenants, profs approuvés, revenus CAD, séances) — polling 60s
+- `LatestBookings` : tableau des 10 dernières séances confirmées
+
+**Traductions :** `lang/fr/admin.php` + `lang/en/admin.php`
+
+---
+
+### Production Readiness ✅ (session 23 sept 2026)
+
+- **App renommée** : "Azul" (config, layouts, meta) ✅
+- **Vérification email** : vue `auth/verify-email.blade.php` propre avec bannière succès + logout ✅
+- **Mot de passe oublié** : `ForgotPassword` + `ResetPassword` Livewire, anti-énumération (toujours success) ✅
+  - ⚠️ Piège : `reset()` conflict avec `Livewire\Component::reset()` → méthode renommée `resetPassword()`
+- **Timezone enseignant** : champ select dans `TeacherRegisterForm` + validation `timezone:all` ✅
+- **Pages d'erreur** : `404.blade.php` + `500.blade.php` standalone, palette amber, logo ⵣ ✅
+- **Config packages** : `config/packages.php` remplace la table `packages` + `SessionPackage` model supprimé ✅
+- **Stripe CAD** : `CASHIER_CURRENCY=CAD`, clés test configurées localement ✅
+- **Tests** : `PasswordResetTest` (8), `TeacherProfileTest` mis à jour avec tests timezone ✅
+
+---
+
+### DemoSeeder ✅ (session 23 sept 2026)
+
+- `database/seeders/DemoSeeder.php` — données de démonstration réalistes
+- **5 enseignants** : 4 approuvés (Amina Oukaci, Ferhat Aït-Ali, Taziri Melloul, Massinissa Idir) + 1 en attente (Lynda Ath-Mansour), bios réalistes en français
+- **50 apprenants** : noms diaspora kabyle/française, ~17 comptes avec un 2ème profil enfant
+- **36 achats** (starter/standard/premium, statut completed)
+- **75 créneaux** (32 passés/réservés, 43 futurs/disponibles)
+- **32 séances** confirmées liées aux créneaux passés
+- Tous les mots de passe : `password` — emails : `prenom.nom@demo.com`
+
+---
+
 ### Standards et conventions ✅
 
-- **i18n** : toutes les chaînes via `__()` — `lang/fr/auth.php`, `lang/fr/teacher.php`, `lang/fr/learner.php` ✅
+- **i18n** : toutes les chaînes via `__()` — `lang/fr/auth.php`, `lang/fr/teacher.php`, `lang/fr/learner.php`, `lang/fr/admin.php` ✅
 - **`APP_LOCALE=fr`** dans `.env` ✅
 - **Règles AI** dans `.ai/rules/` : code en anglais, traductions obligatoires ✅
 - **Pint** : lancé après chaque phase — `vendor/bin/pint --dirty --format agent`
@@ -165,17 +224,20 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 | Nom de la route dashboard | `learner.dashboard` (pas `dashboard`) |
 | Ordre des routes checkout | `/checkout/success` avant `/checkout/{package}` pour éviter le conflit de param |
 | `make:livewire` Livewire 4 | Peut placer le fichier dans `views/components/` → écrire les fichiers manuellement si nécessaire |
+| `reset()` dans Livewire 4 | Conflict avec `Livewire\Component::reset()` → renommer la méthode (ex: `resetPassword()`) |
+| Apostrophes en PHP string | Bios en français avec `'` dans single-quoted strings → utiliser des double quotes `"` |
 
 ---
 
 ## Ce qui reste à faire (MVP)
 
-- [ ] **Phase 6** — Emails : confirmation réservation (apprenant + prof), rappel 24h avant, email bienvenue enseignant approuvé
-- [ ] **Phase 7** — Admin Filament complet : gestion paquets, vue bookings/purchases, stats revenus/séances
+- [x] ~~**Phase 6** — Emails : confirmation réservation, rappel 24h avant, bienvenue enseignant approuvé~~
+- [x] ~~**Phase 7** — Admin Filament : resources Users/Purchases, stats dashboard~~
 - [ ] **Phase 8** — Site vitrine : homepage, "Devenir enseignant", FAQ, pricing, RGPD/PIPEDA
 - [ ] **Phase 9** — Intégration design sur toutes les vues (auth + enseignant + apprenant)
 - [ ] Configurer Stripe (clés + webhook) en production
 - [ ] Déployer sur Laravel Cloud (EU)
+- [ ] Configurer un provider email en prod (Resend, Mailgun, SES)
 
 ---
 
@@ -185,14 +247,15 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 - **Associé** : responsable marketing, a reçu `pitch.md`
 - **Enseignant coordinateur** : déjà identifié en Algérie
 - **Marché** : diaspora kabyle/amazigh — France, Canada, USA, monde entier
-- **Nom de la plateforme** : pas encore décidé
+- **Nom de la plateforme** : **Azul** ✅
 - **Script Tamazight** : Latin
 
 ---
 
-## Dernière session — 22 septembre 2026
+## Dernière session — 23 septembre 2026
 
-- **Phase 3 complétée** : design system Claude Design (11 composants), palette violet/indigo, hero dark `#1e1b4b`
-- **Phase 4 complétée** : espace apprenant (Dashboard, ManageLearners, TeacherCatalog), réservations (`LessonSession`, flow inline, annulation) — 34 tests passaient
-- **Phase 5 complétée** : paiements Stripe (`SessionPackage`, `Purchase`, Cashier Checkout, webhook listener, re-crédit annulation) — 68 tests passent
-- **Prochain** : Phase 6 — Emails (confirmation, rappels, bienvenue enseignant)
+- **Production readiness** : renommage Azul, vérif email, mot de passe oublié, timezone enseignant, pages 404/500, config packages CAD
+- **Admin Filament** : UserResource, PurchaseResource, StatsOverview (sparklines), LatestBookings, traductions FR/EN
+- **DemoSeeder** : 50 apprenants + 5 enseignants avec créneaux, achats et séances — `php artisan migrate:fresh --seed`
+- **68/68 tests passent**
+- **Prochain** : Phase 8 — Site vitrine public (homepage, pricing, FAQ)
