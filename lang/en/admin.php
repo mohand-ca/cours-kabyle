@@ -47,4 +47,22 @@ return [
             'status' => 'Status',
         ],
     ],
+    'stats' => [
+        'learners' => 'Learners',
+        'teachers_approved' => 'Approved teachers',
+        'revenue' => 'Revenue',
+        'sessions_booked' => 'Confirmed bookings',
+        'new_this_month' => ':count new this month',
+        'pending_count' => ':count pending review',
+        'purchases_count' => ':count completed purchases',
+        'sessions_sold' => ':count sessions sold total',
+        'latest_bookings' => 'Latest bookings',
+        'columns' => [
+            'learner' => 'Learner',
+            'teacher' => 'Teacher',
+            'date' => 'Lesson date',
+            'status' => 'Status',
+            'booked_at' => 'Booked at',
+        ],
+    ],
 ];

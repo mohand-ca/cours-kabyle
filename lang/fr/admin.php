@@ -47,4 +47,22 @@ return [
             'status' => 'Statut',
         ],
     ],
+    'stats' => [
+        'learners' => 'Apprenants',
+        'teachers_approved' => 'Enseignants approuvés',
+        'revenue' => 'Revenus',
+        'sessions_booked' => 'Séances réservées',
+        'new_this_month' => ':count nouveaux ce mois',
+        'pending_count' => ':count en attente de validation',
+        'purchases_count' => ':count achats complétés',
+        'sessions_sold' => ':count séances vendues au total',
+        'latest_bookings' => 'Dernières réservations',
+        'columns' => [
+            'learner' => 'Apprenant',
+            'teacher' => 'Enseignant',
+            'date' => 'Date du cours',
+            'status' => 'Statut',
+            'booked_at' => 'Réservé le',
+        ],
+    ],
 ];
