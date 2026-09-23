@@ -1,33 +1,34 @@
 <div>
-    <div class="mb-8">
-        <h1 class="text-2xl font-bold text-gray-900">{{ __('teacher.dashboard.title') }}, {{ Auth::user()->name }}</h1>
-        <p class="text-sm text-gray-500 mt-1">{{ __('teacher.dashboard.subtitle') }}</p>
+    <div style="margin-bottom:28px">
+        <h1 style="font-size:30px;font-weight:800;letter-spacing:-.035em;margin:0;color:#1C1917">{{ __('teacher.dashboard.title') }}, {{ Auth::user()->name }}</h1>
+        <p style="font-size:15px;color:#78716C;margin:6px 0 0">{{ __('teacher.dashboard.subtitle') }}</p>
     </div>
 
     {{-- Status banner --}}
     @if(!$profile?->isApproved())
-        <div class="mb-6 rounded-xl border px-5 py-4 flex items-center gap-4
-            {{ $profile?->submitted_at ? 'border-amber-200 bg-amber-50' : 'border-violet-200 bg-violet-50' }}">
-            <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center
-                {{ $profile?->submitted_at ? 'bg-amber-100' : 'bg-violet-100' }}">
-                @if($profile?->submitted_at)
-                    <svg class="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        @php
+            $isPending = (bool) $profile?->submitted_at;
+        @endphp
+        <div style="margin-bottom:24px;border-radius:14px;border:1px solid {{ $isPending ? '#F1DDB4' : '#DDD1F0' }};background:{{ $isPending ? '#FBF1DE' : '#F3EEFA' }};padding:14px 18px;display:flex;align-items:center;gap:12px">
+            <div style="width:32px;height:32px;border-radius:9px;background:{{ $isPending ? '#FDF3D6' : '#E8DDF5' }};color:{{ $isPending ? '#9A6A00' : '#4B3380' }};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                @if($isPending)
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
                 @else
-                    <svg class="w-4 h-4 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
                 @endif
             </div>
-            <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium {{ $profile?->submitted_at ? 'text-amber-800' : 'text-violet-800' }}">
-                    @if($profile?->submitted_at)
+            <div style="flex:1;min-width:0">
+                <p style="font-size:14px;font-weight:500;color:{{ $isPending ? '#7A4F0C' : '#4B3380' }};margin:0">
+                    @if($isPending)
                         {{ __('teacher.dashboard.profile_pending') }}
                     @else
                         {{ __('teacher.dashboard.profile_incomplete') }}
                     @endif
                 </p>
             </div>
-            @if(!$profile?->submitted_at)
+            @if(!$isPending)
                 <a href="{{ route('teacher.profile') }}"
-                    class="flex-shrink-0 px-4 py-1.5 text-xs font-semibold text-white bg-violet-600 rounded-lg hover:bg-violet-700 transition-colors">
+                    style="flex-shrink:0;padding:7px 14px;font-size:12.5px;font-weight:700;color:#fff;background:#4B3380;border-radius:9px;text-decoration:none">
                     {{ __('teacher.dashboard.complete_profile') }}
                 </a>
             @endif
@@ -35,97 +36,98 @@
     @endif
 
     {{-- Stats --}}
-    <div class="grid grid-cols-3 gap-4 mb-6">
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm ring-1 ring-gray-100/50 p-5">
-            <div class="flex items-center justify-between mb-3">
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest">Séances à venir</p>
-                <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px">
+
+        <div style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#78716C">Séances à venir</div>
+                <div style="width:36px;height:36px;border-radius:10px;background:#FDF3D6;color:#9A6A00;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
                 </div>
             </div>
-            <p class="text-3xl font-bold text-gray-900">{{ $upcomingSlots->count() }}</p>
-            <p class="text-xs text-gray-400 mt-1">réservées par des apprenants</p>
+            <div style="font-size:32px;font-weight:800;letter-spacing:-.04em;margin-top:2px;color:#1C1917">{{ $upcomingSlots->count() }}</div>
+            <div style="font-size:12.5px;color:#A8A29E">réservées par des apprenants</div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm ring-1 ring-gray-100/50 p-5">
-            <div class="flex items-center justify-between mb-3">
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest">Créneaux libres</p>
-                <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#78716C">Créneaux libres</div>
+                <div style="width:36px;height:36px;border-radius:10px;background:{{ $availableSlotsCount > 0 ? '#E8F3EC' : '#F5F5F4' }};color:{{ $availableSlotsCount > 0 ? '#2F7D5B' : '#A8A29E' }};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
                 </div>
             </div>
-            <p class="text-3xl font-bold {{ $availableSlotsCount > 0 ? 'text-green-600' : 'text-gray-300' }}">{{ $availableSlotsCount }}</p>
-            <p class="text-xs text-gray-400 mt-1">disponibles à la réservation</p>
+            <div style="font-size:32px;font-weight:800;letter-spacing:-.04em;margin-top:2px;color:{{ $availableSlotsCount > 0 ? '#2F7D5B' : '#1C1917' }}">{{ $availableSlotsCount }}</div>
+            <div style="font-size:12.5px;color:#A8A29E">disponibles à la réservation</div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm ring-1 ring-gray-100/50 p-5">
-            <div class="flex items-center justify-between mb-3">
-                <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest">Profil</p>
-                <div class="w-8 h-8 rounded-lg {{ $profile?->isApproved() ? 'bg-green-50' : 'bg-gray-50' }} flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 {{ $profile?->isApproved() ? 'text-green-500' : 'text-gray-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        <div style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#78716C">Profil</div>
+                <div style="width:36px;height:36px;border-radius:10px;background:{{ $profile?->isApproved() ? '#E8F3EC' : '#F5F5F4' }};color:{{ $profile?->isApproved() ? '#2F7D5B' : '#A8A29E' }};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                 </div>
             </div>
             @if($profile?->isApproved())
-                <p class="text-lg font-bold text-green-600">Approuvé</p>
-                <p class="text-xs text-gray-400 mt-1">visible dans le catalogue</p>
+                <div style="font-size:20px;font-weight:800;letter-spacing:-.03em;margin-top:2px;color:#2F7D5B">Approuvé</div>
+                <div style="font-size:12.5px;color:#A8A29E">visible dans le catalogue</div>
             @elseif($profile?->submitted_at)
-                <p class="text-lg font-bold text-amber-600">En attente</p>
-                <p class="text-xs text-gray-400 mt-1">examen sous 48h</p>
+                <div style="font-size:20px;font-weight:800;letter-spacing:-.03em;margin-top:2px;color:#9A6A00">En attente</div>
+                <div style="font-size:12.5px;color:#A8A29E">examen sous 48h</div>
             @else
-                <p class="text-lg font-bold text-gray-400">Incomplet</p>
-                <p class="text-xs text-gray-400 mt-1">à compléter pour publier</p>
+                <div style="font-size:20px;font-weight:800;letter-spacing:-.03em;margin-top:2px;color:#A8A29E">Incomplet</div>
+                <div style="font-size:12.5px;color:#A8A29E">à compléter pour publier</div>
             @endif
         </div>
     </div>
 
     {{-- Quick links --}}
-    <div class="grid grid-cols-2 gap-4">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px">
         <a href="{{ route('teacher.profile') }}"
-            class="group bg-white rounded-2xl border border-gray-100 shadow-sm ring-1 ring-gray-100/50 p-6 hover:border-violet-200 hover:shadow-md transition-all flex items-center gap-4">
-            <div class="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center group-hover:bg-violet-100 transition-colors flex-shrink-0">
-                <svg class="w-5 h-5 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:16px;border:1px solid #EAE4DD;padding:24px;box-shadow:0 1px 2px rgba(28,25,23,.04);text-decoration:none;transition:all .2s">
+            <div style="width:40px;height:40px;border-radius:12px;background:#FDF3D6;color:#9A6A00;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
             </div>
-            <div>
-                <p class="text-sm font-semibold text-gray-900">{{ __('teacher.dashboard.my_profile') }}</p>
-                <p class="text-xs text-gray-400 mt-0.5">Bio, niveaux, langues, lien Meet</p>
+            <div style="flex:1;min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#1C1917">{{ __('teacher.dashboard.my_profile') }}</div>
+                <div style="font-size:13px;color:#A8A29E;margin-top:2px">Bio, niveaux, langues, lien Meet</div>
             </div>
-            <svg class="w-4 h-4 text-gray-300 ml-auto group-hover:text-violet-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A8A29E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"></path></svg>
         </a>
 
         <a href="{{ route('teacher.availability') }}"
-            class="group bg-white rounded-2xl border border-gray-100 shadow-sm ring-1 ring-gray-100/50 p-6 hover:border-violet-200 hover:shadow-md transition-all flex items-center gap-4">
-            <div class="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center group-hover:bg-violet-100 transition-colors flex-shrink-0">
-                <svg class="w-5 h-5 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:16px;border:1px solid #EAE4DD;padding:24px;box-shadow:0 1px 2px rgba(28,25,23,.04);text-decoration:none;transition:all .2s">
+            <div style="width:40px;height:40px;border-radius:12px;background:#FDF3D6;color:#9A6A00;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
             </div>
-            <div>
-                <p class="text-sm font-semibold text-gray-900">{{ __('teacher.dashboard.availability') }}</p>
-                <p class="text-xs text-gray-400 mt-0.5">Ajouter et gérer vos créneaux</p>
+            <div style="flex:1;min-width:0">
+                <div style="font-size:14px;font-weight:700;color:#1C1917">{{ __('teacher.dashboard.availability') }}</div>
+                <div style="font-size:13px;color:#A8A29E;margin-top:2px">Ajouter et gérer vos créneaux</div>
             </div>
-            <svg class="w-4 h-4 text-gray-300 ml-auto group-hover:text-violet-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A8A29E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"></path></svg>
         </a>
     </div>
 
     {{-- Upcoming sessions list --}}
     @if($upcomingSlots->isNotEmpty())
-        <div class="mt-6 bg-white rounded-2xl border border-gray-100 shadow-sm ring-1 ring-gray-100/50">
-            <div class="px-6 py-4 border-b border-gray-100">
-                <h2 class="text-sm font-semibold text-gray-900">Prochaines séances</h2>
+        <div style="background:#fff;border-radius:16px;border:1px solid #EAE4DD;overflow:hidden;box-shadow:0 1px 2px rgba(28,25,23,.04)">
+            <div style="padding:18px 20px;border-bottom:1px solid #F1ECE6">
+                <div style="font-size:15px;font-weight:700;color:#1C1917">Prochaines séances</div>
             </div>
             @foreach($upcomingSlots as $slot)
-                <div class="px-6 py-4 flex items-center gap-4 border-b border-gray-50 last:border-b-0">
-                    <div class="flex-shrink-0 text-center w-10">
-                        <p class="text-base font-bold text-violet-600">{{ $slot->starts_at->format('d') }}</p>
-                        <p class="text-xs text-gray-400 -mt-0.5">{{ $slot->starts_at->translatedFormat('M') }}</p>
+                <div style="display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid #F1ECE6">
+                    <div style="width:40px;text-align:center;flex-shrink:0">
+                        <div style="font-size:20px;font-weight:800;color:#9A6A00;line-height:1">{{ $slot->starts_at->format('d') }}</div>
+                        <div style="font-size:10.5px;color:#A8A29E;text-transform:uppercase;letter-spacing:.08em;margin-top:4px">{{ $slot->starts_at->translatedFormat('M') }}</div>
                     </div>
-                    <div class="w-px h-8 bg-gray-100 flex-shrink-0"></div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900">{{ $slot->starts_at->format('H:i') }} – {{ $slot->ends_at->format('H:i') }}</p>
+                    <div style="width:1px;height:28px;background:#EAE4DD;flex-shrink:0"></div>
+                    <div style="flex:1;min-width:0">
+                        <div style="font-size:14px;font-weight:600;color:#1C1917">{{ $slot->starts_at->format('H:i') }} – {{ $slot->ends_at->format('H:i') }}</div>
                         @if($slot->lessonSession?->learner)
-                            <p class="text-xs text-gray-500 mt-0.5">{{ $slot->lessonSession->learner->first_name }}</p>
+                            <div style="font-size:12.5px;color:#78716C;margin-top:2px">{{ $slot->lessonSession->learner->first_name }}</div>
                         @endif
                     </div>
-                    <span class="flex-shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-blue-50 text-blue-700 rounded-full border border-blue-100">
-                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    <span style="flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:4px 10px;font-size:12px;font-weight:600;background:#EEF2FF;color:#4338CA;border-radius:99px;border:1px solid #C7D2FE">
+                        <span style="width:6px;height:6px;border-radius:99px;background:#6366F1;flex-shrink:0"></span>
                         Réservée
                     </span>
                 </div>

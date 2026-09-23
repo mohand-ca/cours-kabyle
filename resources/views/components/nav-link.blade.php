@@ -1,6 +1,6 @@
 @props(['href', 'active' => false])
 
 <a href="{{ $href }}"
-    class="px-3 py-1.5 text-sm font-medium rounded-lg transition-colors {{ $active ? 'text-violet-700 bg-violet-50' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' }}">
+    style="padding:7px 13px;border-radius:999px;font-size:14px;font-weight:600;text-decoration:none;transition:background .15s;white-space:nowrap;{{ $active ? 'background:#F1ECE6;color:#1C1917' : 'background:transparent;color:#57534E' }}">
     {{ $slot }}
 </a>

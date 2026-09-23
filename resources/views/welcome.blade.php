@@ -4,326 +4,261 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name') }} — Apprenez le kabyle avec des natifs</title>
-    <meta name="description" content="Plateforme d'apprentissage du kabyle. Cours particuliers en ligne avec des enseignants natifs basés en Algérie.">
+    <meta name="description" content="Cours particuliers de kabyle en ligne avec des enseignants natifs basés en Algérie.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     @if (file_exists(public_path('build/manifest.json')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
     <style>
-        body { font-family: 'Inter', system-ui, sans-serif; }
-        .hero-glow {
-            position: absolute;
-            top: -200px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 900px;
-            height: 600px;
-            background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.12) 0%, rgba(99, 102, 241, 0.06) 40%, transparent 70%);
-            pointer-events: none;
-        }
-        .grid-pattern {
-            background-image: linear-gradient(rgba(139, 92, 246, 0.04) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(139, 92, 246, 0.04) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Geist',system-ui,sans-serif;background:#FAF8F5;color:#1C1917;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+        a{color:#9A6A00;text-decoration:none}
+        @keyframes thzFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes thzPing{0%{transform:scale(1);opacity:.7}80%,100%{transform:scale(2.6);opacity:0}}
     </style>
 </head>
-<body class="bg-white antialiased overflow-x-hidden">
+<body>
 
-    {{-- Navbar --}}
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100/80 h-14 flex items-center px-6 justify-between">
-        <div class="flex items-center gap-2">
-            <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-500 flex-shrink-0 shadow-sm shadow-violet-200"></div>
-            <span class="font-bold text-gray-900 text-sm tracking-tight">{{ config('app.name') }}</span>
-        </div>
-        <div class="hidden md:flex items-center gap-6">
-            <a href="#features" class="text-sm text-gray-500 hover:text-gray-900 transition-colors">Fonctionnalités</a>
-            <a href="#how" class="text-sm text-gray-500 hover:text-gray-900 transition-colors">Comment ça marche</a>
-            <a href="{{ route('teacher.register') }}" class="text-sm text-gray-500 hover:text-gray-900 transition-colors">Enseigner</a>
-        </div>
-        <div class="flex items-center gap-2">
+{{-- Navbar --}}
+<header style="position:sticky;top:0;z-index:40;background:rgba(250,248,245,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #EAE4DD">
+    <div style="max-width:1160px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:24px">
+        <a href="{{ route('welcome') }}" style="display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0">
+            <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#F2B81D,#F9D55C);display:flex;align-items:center;justify-content:center;color:#1C1917;font-size:18px;font-weight:700;box-shadow:0 4px 12px -4px rgba(222,165,0,.6)">ⵣ</div>
+            <span style="font-size:17px;font-weight:700;letter-spacing:-.02em;color:#1C1917">{{ config('app.name') }}</span>
+        </a>
+        <nav style="display:flex;gap:4px;flex:1">
+            <a href="#features" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E;transition:background .15s">Fonctionnalités</a>
+            <a href="#how" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E;transition:background .15s">Comment ça marche</a>
+            <a href="{{ route('teacher.register') }}" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E;transition:background .15s">Enseigner</a>
+        </nav>
+        <div style="display:flex;gap:8px;align-items:center">
             @auth
-                <a href="{{ url('/dashboard') }}"
-                    class="px-4 py-1.5 text-sm font-semibold text-white bg-violet-600 rounded-lg hover:bg-violet-700 transition-colors shadow-sm shadow-violet-200">
-                    Mon espace →
-                </a>
+                <a href="{{ url('/dashboard') }}" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">Mon espace →</a>
             @else
-                <a href="{{ route('login') }}"
-                    class="px-3 py-1.5 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">
-                    Se connecter
-                </a>
-                <a href="{{ route('register') }}"
-                    class="px-4 py-1.5 text-sm font-semibold text-white bg-violet-600 rounded-lg hover:bg-violet-700 transition-colors shadow-sm shadow-violet-200">
-                    Commencer gratuitement
-                </a>
+                <a href="{{ route('login') }}" style="background:transparent;border:1px solid #E2DBD3;color:#44403C;font-size:14px;font-weight:600;padding:8px 14px;border-radius:12px">Se connecter</a>
+                <a href="{{ route('register') }}" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">Commencer</a>
             @endauth
         </div>
-    </nav>
+    </div>
+</header>
 
-    {{-- Hero --}}
-    <section class="relative pt-32 pb-24 overflow-hidden grid-pattern">
-        <div class="hero-glow"></div>
-        <div class="relative max-w-4xl mx-auto px-6 text-center">
+{{-- Hero --}}
+<section style="position:relative;overflow:hidden">
+    <div style="position:absolute;right:-60px;top:-40px;font-size:520px;line-height:1;color:#9A6A00;opacity:.035;font-weight:700;pointer-events:none;user-select:none">ⵣ</div>
+    <div style="max-width:1160px;margin:0 auto;padding:72px 24px 64px;display:flex;flex-wrap:wrap;gap:56px;align-items:center;position:relative">
 
-            <div class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-violet-700 bg-violet-50 border border-violet-200/60 rounded-full mb-8 shadow-sm">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
+        {{-- Left col --}}
+        <div style="flex:1 1 440px;min-width:0">
+            <div style="display:inline-flex;align-items:center;gap:10px;padding:6px 12px 6px 10px;border-radius:999px;background:#fff;border:1px solid #EAE4DD;font-size:13px;font-weight:500;color:#44403C;box-shadow:0 1px 2px rgba(28,25,23,.04)">
+                <span style="position:relative;width:10px;height:10px;flex-shrink:0">
+                    <span style="position:absolute;inset:0;border-radius:999px;background:#F2B81D;opacity:.7;animation:thzPing 1.5s ease-out infinite"></span>
+                    <span style="position:relative;width:10px;height:10px;border-radius:999px;background:#E0A800;display:block"></span>
                 </span>
-                Enseignants disponibles maintenant
+                <span><b style="font-weight:700;color:#1C1917">23 enseignants</b> ont des créneaux disponibles cette semaine</span>
             </div>
 
-            <h1 class="text-5xl sm:text-6xl font-black text-gray-900 tracking-tighter leading-none mb-6">
-                Apprenez le<br>
-                <span class="bg-gradient-to-r from-violet-600 to-indigo-500 bg-clip-text text-transparent">kabyle</span><br>
-                avec un natif
+            <h1 style="font-size:clamp(40px,6vw,64px);line-height:1.02;letter-spacing:-.045em;font-weight:800;margin:24px 0 20px;text-wrap:balance">
+                Parlez <span style="background:linear-gradient(120deg,#A87200,#D39B12);-webkit-background-clip:text;background-clip:text;color:transparent">kabyle</span><br>avec ceux qui ont grandi avec.
             </h1>
 
-            <p class="text-lg text-gray-500 max-w-lg mx-auto leading-relaxed mb-10">
-                Des cours particuliers en ligne avec des enseignants basés en Algérie.
-                Réservation en 2 clics, paiement sécurisé, annulation libre.
+            <p style="font-size:18px;line-height:1.55;color:#78716C;font-weight:400;margin:0 0 32px;max-width:520px;text-wrap:pretty">
+                Cours particuliers en ligne avec des enseignants natifs en Algérie. Réservez un créneau en quelques secondes, apprenez sur Google Meet.
             </p>
 
-            <div class="flex items-center justify-center gap-3 mb-16">
-                <a href="{{ route('register') }}"
-                    class="group px-6 py-3 text-sm font-bold text-white bg-violet-600 rounded-xl hover:bg-violet-700 transition-all shadow-lg shadow-violet-200 hover:shadow-violet-300 hover:scale-105">
+            <div style="display:flex;flex-wrap:wrap;gap:12px">
+                <a href="{{ route('register') }}" style="background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:14px 22px;border-radius:12px;box-shadow:0 10px 24px -8px rgba(222,165,0,.6);display:flex;align-items:center;gap:8px;text-decoration:none">
                     Commencer gratuitement
-                    <span class="ml-1 group-hover:translate-x-0.5 inline-block transition-transform">→</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg>
                 </a>
-                <a href="{{ route('teacher.register') }}"
-                    class="px-6 py-3 text-sm font-semibold text-gray-600 bg-white border border-gray-200 rounded-xl hover:border-violet-300 hover:text-violet-700 transition-all shadow-sm">
-                    Je suis enseignant
-                </a>
+                <a href="{{ route('teacher.register') }}" style="background:#fff;border:1px solid #E2DBD3;color:#1C1917;font-size:15px;font-weight:600;padding:14px 22px;border-radius:12px;text-decoration:none">Je suis enseignant</a>
             </div>
 
-            {{-- Social proof --}}
-            <div class="flex items-center justify-center gap-2 text-sm text-gray-400">
-                <div class="flex -space-x-2">
-                    @foreach(['A','B','C','D'] as $i => $letter)
-                        @php $colors = ['from-violet-400 to-indigo-500', 'from-indigo-400 to-blue-500', 'from-blue-400 to-cyan-500', 'from-cyan-400 to-teal-500']; @endphp
-                        <div class="w-7 h-7 rounded-full bg-gradient-to-br {{ $colors[$i] }} border-2 border-white flex items-center justify-center text-white text-xs font-bold">{{ $letter }}</div>
-                    @endforeach
+            <div style="display:flex;align-items:center;gap:14px;margin-top:36px">
+                <div style="display:flex">
+                    <div style="width:34px;height:34px;border-radius:999px;border:2px solid #FAF8F5;background:linear-gradient(135deg,#F2B81D,#F9D55C);color:#1C1917;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">SM</div>
+                    <div style="width:34px;height:34px;border-radius:999px;border:2px solid #FAF8F5;margin-left:-10px;background:linear-gradient(135deg,#3F6E5E,#8BAE7C);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">AK</div>
+                    <div style="width:34px;height:34px;border-radius:999px;border:2px solid #FAF8F5;margin-left:-10px;background:linear-gradient(135deg,#5B4B8A,#A77BB5);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">NB</div>
+                    <div style="width:34px;height:34px;border-radius:999px;border:2px solid #FAF8F5;margin-left:-10px;background:linear-gradient(135deg,#7A5C3E,#C49A6C);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">YT</div>
                 </div>
-                <span>Rejoignez des dizaines d'apprenants de la diaspora</span>
+                <div style="font-size:13px;color:#78716C;line-height:1.4"><b style="color:#1C1917;font-weight:600">2 400+ apprenants</b> dans 31 pays<br>qui se reconnectent à leur langue</div>
             </div>
         </div>
 
-        {{-- UI mockup --}}
-        <div class="relative max-w-3xl mx-auto mt-16 px-6">
-            <div class="bg-white rounded-2xl border border-gray-200 shadow-2xl shadow-gray-200/80 overflow-hidden">
-                {{-- Fake browser chrome --}}
-                <div class="bg-gray-50 border-b border-gray-200 px-4 py-3 flex items-center gap-3">
-                    <div class="flex gap-1.5">
-                        <div class="w-3 h-3 rounded-full bg-red-300"></div>
-                        <div class="w-3 h-3 rounded-full bg-amber-300"></div>
-                        <div class="w-3 h-3 rounded-full bg-green-300"></div>
-                    </div>
-                    <div class="flex-1 bg-white border border-gray-200 rounded-md px-3 py-1 text-xs text-gray-400 max-w-xs mx-auto text-center">
-                        app.thamazight.com/dashboard
-                    </div>
+        {{-- Right col — UI mockup --}}
+        <div style="flex:1 1 400px;min-width:0;position:relative;padding:20px 8px">
+            <div style="background:#fff;border:1px solid #EAE4DD;border-radius:20px;box-shadow:0 30px 60px -24px rgba(28,25,23,.22),0 0 0 6px rgba(255,255,255,.6);overflow:hidden">
+                <div style="display:flex;align-items:center;gap:6px;padding:12px 16px;border-bottom:1px solid #F1ECE6">
+                    <div style="width:9px;height:9px;border-radius:99px;background:#E7E0D8"></div>
+                    <div style="width:9px;height:9px;border-radius:99px;background:#E7E0D8"></div>
+                    <div style="width:9px;height:9px;border-radius:99px;background:#E7E0D8"></div>
+                    <div style="margin-left:12px;height:8px;width:120px;border-radius:99px;background:#F1ECE6"></div>
                 </div>
-                {{-- Fake dashboard content --}}
-                <div class="p-5 bg-gray-50">
-                    <div class="mb-4">
-                        <div class="h-6 w-48 bg-gray-200 rounded-lg mb-2"></div>
-                        <div class="h-3 w-64 bg-gray-100 rounded"></div>
+                <div style="padding:18px;display:flex;flex-direction:column;gap:12px">
+                    <div style="display:flex;gap:8px">
+                        <div style="height:30px;flex:1;border-radius:10px;border:1px solid #EAE4DD"></div>
+                        <div style="height:30px;width:90px;border-radius:10px;border:1px solid #EAE4DD"></div>
                     </div>
-                    <div class="grid grid-cols-4 gap-3 mb-4">
-                        @foreach(['violet', 'violet', 'amber', 'blue'] as $color)
-                            <div class="bg-white rounded-xl border border-gray-100 p-4">
-                                <div class="flex justify-between mb-3">
-                                    <div class="h-2.5 w-16 bg-gray-100 rounded"></div>
-                                    <div class="w-6 h-6 rounded-lg bg-{{ $color }}-50"></div>
-                                </div>
-                                <div class="h-7 w-10 bg-gray-200 rounded mb-1"></div>
-                                <div class="h-2 w-20 bg-gray-100 rounded"></div>
+                    <div style="border:1px solid #EAE4DD;border-radius:14px;padding:14px;display:flex;gap:12px;align-items:flex-start">
+                        <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#F2B81D,#F9D55C);color:#1C1917;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">KA</div>
+                        <div style="flex:1;display:flex;flex-direction:column;gap:7px">
+                            <div style="display:flex;justify-content:space-between;align-items:center">
+                                <div style="font-size:13px;font-weight:700">Kahina Aït Ali</div>
+                                <div style="font-size:10px;font-weight:600;color:#2F7D5B;background:#E8F3EC;padding:2px 8px;border-radius:99px">4 créneaux</div>
                             </div>
-                        @endforeach
-                    </div>
-                    <div class="grid grid-cols-5 gap-3">
-                        <div class="col-span-3 bg-white rounded-xl border border-gray-100 p-4">
-                            <div class="h-3 w-32 bg-gray-200 rounded mb-4"></div>
-                            @foreach([1,2,3] as $_)
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="w-8 h-8 rounded-lg bg-violet-50"></div>
-                                    <div class="flex-1">
-                                        <div class="h-2.5 w-24 bg-gray-100 rounded mb-1.5"></div>
-                                        <div class="h-2 w-32 bg-gray-50 rounded"></div>
-                                    </div>
-                                    <div class="h-5 w-16 bg-blue-50 rounded-full"></div>
-                                </div>
-                            @endforeach
-                        </div>
-                        <div class="col-span-2 bg-white rounded-xl border border-gray-100 p-4">
-                            <div class="h-3 w-24 bg-gray-200 rounded mb-4"></div>
-                            @foreach([1,2] as $_)
-                                <div class="flex items-center gap-3 mb-3">
-                                    <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-100 to-indigo-100"></div>
-                                    <div>
-                                        <div class="h-2.5 w-16 bg-gray-100 rounded mb-1.5"></div>
-                                        <div class="h-2 w-12 bg-gray-50 rounded"></div>
-                                    </div>
-                                </div>
-                            @endforeach
+                            <div style="height:6px;width:90%;border-radius:99px;background:#F1ECE6"></div>
+                            <div style="height:6px;width:65%;border-radius:99px;background:#F1ECE6"></div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- Stats bar --}}
-    <section class="border-y border-gray-100 bg-gray-50/50 py-8">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="grid grid-cols-4 gap-8 text-center">
-                <div>
-                    <p class="text-2xl font-black text-gray-900 tracking-tight">100%</p>
-                    <p class="text-xs text-gray-500 mt-1">natifs kabyle</p>
-                </div>
-                <div>
-                    <p class="text-2xl font-black text-gray-900 tracking-tight">60 min</p>
-                    <p class="text-xs text-gray-500 mt-1">par séance</p>
-                </div>
-                <div>
-                    <p class="text-2xl font-black text-gray-900 tracking-tight">En ligne</p>
-                    <p class="text-xs text-gray-500 mt-1">depuis partout</p>
-                </div>
-                <div>
-                    <p class="text-2xl font-black text-gray-900 tracking-tight">Libre</p>
-                    <p class="text-xs text-gray-500 mt-1">annulation sans frais</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- Features --}}
-    <section id="features" class="max-w-4xl mx-auto px-6 py-20">
-        <div class="text-center mb-14">
-            <p class="text-xs font-semibold text-violet-600 uppercase tracking-widest mb-3">Fonctionnalités</p>
-            <h2 class="text-3xl font-black text-gray-900 tracking-tight">Tout ce qu'il vous faut<br>pour apprendre</h2>
-        </div>
-        <div class="grid grid-cols-3 gap-6">
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:border-violet-200 hover:shadow-md transition-all group">
-                <div class="w-11 h-11 rounded-xl bg-violet-50 flex items-center justify-center mb-5 group-hover:bg-violet-100 transition-colors">
-                    <svg class="w-5 h-5 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                </div>
-                <h3 class="text-sm font-bold text-gray-900 mb-2">Enseignants vérifiés</h3>
-                <p class="text-xs text-gray-500 leading-relaxed">Chaque enseignant est examiné par notre équipe avant d'être publié sur la plateforme.</p>
-            </div>
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:border-violet-200 hover:shadow-md transition-all group">
-                <div class="w-11 h-11 rounded-xl bg-indigo-50 flex items-center justify-center mb-5 group-hover:bg-indigo-100 transition-colors">
-                    <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                </div>
-                <h3 class="text-sm font-bold text-gray-900 mb-2">Réservation en 2 clics</h3>
-                <p class="text-xs text-gray-500 leading-relaxed">Consultez les disponibilités en temps réel et réservez un créneau sans aller-retour email.</p>
-            </div>
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:border-violet-200 hover:shadow-md transition-all group">
-                <div class="w-11 h-11 rounded-xl bg-green-50 flex items-center justify-center mb-5 group-hover:bg-green-100 transition-colors">
-                    <svg class="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                </div>
-                <h3 class="text-sm font-bold text-gray-900 mb-2">Paiement sécurisé</h3>
-                <p class="text-xs text-gray-500 leading-relaxed">Achetez des forfaits de séances via Stripe. Vos séances sont créditées immédiatement.</p>
-            </div>
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:border-violet-200 hover:shadow-md transition-all group">
-                <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center mb-5 group-hover:bg-blue-100 transition-colors">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                </div>
-                <h3 class="text-sm font-bold text-gray-900 mb-2">Cours via Google Meet</h3>
-                <p class="text-xs text-gray-500 leading-relaxed">Chaque enseignant partage son lien Meet. Aucune installation requise.</p>
-            </div>
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:border-violet-200 hover:shadow-md transition-all group">
-                <div class="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center mb-5 group-hover:bg-amber-100 transition-colors">
-                    <svg class="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                </div>
-                <h3 class="text-sm font-bold text-gray-900 mb-2">Profils famille</h3>
-                <p class="text-xs text-gray-500 leading-relaxed">Gérez les profils de toute votre famille (enfants, conjoint) depuis un seul compte.</p>
-            </div>
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 hover:border-violet-200 hover:shadow-md transition-all group">
-                <div class="w-11 h-11 rounded-xl bg-rose-50 flex items-center justify-center mb-5 group-hover:bg-rose-100 transition-colors">
-                    <svg class="w-5 h-5 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                </div>
-                <h3 class="text-sm font-bold text-gray-900 mb-2">Annulation libre</h3>
-                <p class="text-xs text-gray-500 leading-relaxed">Annulez une séance et récupérez votre crédit instantanément. Sans question.</p>
-            </div>
-        </div>
-    </section>
-
-    {{-- How it works --}}
-    <section id="how" class="bg-gray-50/60 border-y border-gray-100 py-20">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="text-center mb-14">
-                <p class="text-xs font-semibold text-violet-600 uppercase tracking-widest mb-3">Processus</p>
-                <h2 class="text-3xl font-black text-gray-900 tracking-tight">De zéro à votre premier cours<br>en moins de 5 minutes</h2>
-            </div>
-            <div class="grid grid-cols-3 gap-10 relative">
-                <div class="absolute top-6 left-[22%] right-[22%] h-px bg-gradient-to-r from-violet-200 via-indigo-200 to-violet-200 hidden md:block"></div>
-                <div class="text-center relative">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center mx-auto mb-5 shadow-lg shadow-violet-200">
-                        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    <div style="border-radius:12px;background:#FCFAF8;border:1px solid #F1ECE6;overflow:hidden">
+                        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px">
+                            <div style="text-align:center;width:28px">
+                                <div style="font-size:14px;font-weight:700;color:#9A6A00;line-height:1">24</div>
+                                <div style="font-size:9px;color:#A8A29E;text-transform:uppercase">Sep</div>
+                            </div>
+                            <div style="width:1px;height:22px;background:#EAE4DD"></div>
+                            <div style="flex:1;font-size:12px;font-weight:600">18:00 – 19:00</div>
+                            <div style="font-size:11px;font-weight:700;color:#1C1917;background:#F2B81D;padding:5px 10px;border-radius:8px">Réserver</div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-top:1px solid #F1ECE6">
+                            <div style="text-align:center;width:28px">
+                                <div style="font-size:14px;font-weight:700;color:#9A6A00;line-height:1">26</div>
+                                <div style="font-size:9px;color:#A8A29E;text-transform:uppercase">Sep</div>
+                            </div>
+                            <div style="width:1px;height:22px;background:#EAE4DD"></div>
+                            <div style="flex:1;font-size:12px;font-weight:600">10:00 – 11:00</div>
+                            <div style="font-size:11px;font-weight:600;color:#57534E;border:1px solid #E2DBD3;padding:4px 10px;border-radius:8px">Réserver</div>
+                        </div>
                     </div>
-                    <h3 class="text-sm font-bold text-gray-900 mb-2">1. Créez votre compte</h3>
-                    <p class="text-xs text-gray-500 leading-relaxed">Inscrivez-vous et ajoutez les profils des apprenants de votre famille.</p>
-                </div>
-                <div class="text-center relative">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center mx-auto mb-5 shadow-lg shadow-indigo-200">
-                        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <div style="border:1px solid #EAE4DD;border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;opacity:.6">
+                        <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#3F6E5E,#8BAE7C);flex-shrink:0"></div>
+                        <div style="flex:1;display:flex;flex-direction:column;gap:7px">
+                            <div style="height:7px;width:40%;border-radius:99px;background:#E7E0D8"></div>
+                            <div style="height:6px;width:80%;border-radius:99px;background:#F1ECE6"></div>
+                        </div>
                     </div>
-                    <h3 class="text-sm font-bold text-gray-900 mb-2">2. Choisissez un enseignant</h3>
-                    <p class="text-xs text-gray-500 leading-relaxed">Parcourez les profils, filtrez par niveau, et réservez un créneau disponible.</p>
-                </div>
-                <div class="text-center relative">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mx-auto mb-5 shadow-lg shadow-blue-200">
-                        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    </div>
-                    <h3 class="text-sm font-bold text-gray-900 mb-2">3. Apprenez</h3>
-                    <p class="text-xs text-gray-500 leading-relaxed">Rejoignez le cours via Google Meet à l'heure convenue. C'est tout.</p>
                 </div>
             </div>
-        </div>
-    </section>
 
-    {{-- CTA enseignant --}}
-    <section class="max-w-4xl mx-auto px-6 py-20">
-        <div class="relative overflow-hidden bg-gradient-to-br from-violet-600 via-violet-600 to-indigo-600 rounded-3xl px-10 py-14 text-center">
-            <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px); background-size: 30px 30px;"></div>
-            <div class="relative">
-                <div class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-violet-200 bg-white/10 border border-white/20 rounded-full mb-6">
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                    Pour les enseignants
+            {{-- Floating badge --}}
+            <div style="position:absolute;left:-12px;bottom:-4px;background:#fff;border:1px solid #EAE4DD;border-radius:14px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 16px 32px -12px rgba(28,25,23,.25);animation:thzFloat 5s ease-in-out infinite">
+                <div style="width:30px;height:30px;border-radius:9px;background:#E8F3EC;color:#2F7D5B;display:flex;align-items:center;justify-content:center">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
                 </div>
-                <h2 class="text-3xl font-black text-white tracking-tight mb-4">Vous parlez kabyle couramment ?</h2>
-                <p class="text-violet-200 text-sm max-w-md mx-auto leading-relaxed mb-8">
-                    Rejoignez notre équipe d'enseignants. Définissez vos propres disponibilités,
-                    enseignez depuis chez vous, et aidez la diaspora à se reconnecter à ses racines.
-                </p>
-                <a href="{{ route('teacher.register') }}"
-                    class="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold text-violet-700 bg-white rounded-xl hover:bg-violet-50 transition-colors shadow-lg">
-                    Devenir enseignant
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                </a>
+                <div>
+                    <div style="font-size:12.5px;font-weight:700">Cours confirmé</div>
+                    <div style="font-size:11.5px;color:#78716C">Jeu 24 Sep · 18:00 · Google Meet</div>
+                </div>
             </div>
-        </div>
-    </section>
 
-    {{-- Footer --}}
-    <footer class="border-t border-gray-100 py-10 px-6">
-        <div class="max-w-4xl mx-auto">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-2">
-                    <div class="w-6 h-6 rounded-md bg-gradient-to-br from-violet-600 to-indigo-500 flex-shrink-0"></div>
-                    <span class="text-sm font-bold text-gray-700">{{ config('app.name') }}</span>
-                </div>
-                <div class="flex items-center gap-6">
-                    <a href="{{ route('login') }}" class="text-xs text-gray-400 hover:text-gray-700 transition-colors">Se connecter</a>
-                    <a href="{{ route('register') }}" class="text-xs text-gray-400 hover:text-gray-700 transition-colors">S'inscrire</a>
-                    <a href="{{ route('teacher.register') }}" class="text-xs text-gray-400 hover:text-gray-700 transition-colors">Devenir enseignant</a>
-                </div>
-                <p class="text-xs text-gray-300">© {{ date('Y') }} {{ config('app.name') }}</p>
-            </div>
+            {{-- Azul badge --}}
+            <div style="position:absolute;right:-4px;top:0;background:#1C1917;color:#FAF8F5;border-radius:12px;padding:8px 12px;font-size:12px;font-weight:600;box-shadow:0 12px 24px -10px rgba(28,25,23,.4)">Azul! <span style="color:#A8A29E;font-weight:400">· Bonjour</span></div>
         </div>
-    </footer>
+    </div>
+</section>
+
+{{-- Stats bar --}}
+<section style="border-top:1px solid #EAE4DD;border-bottom:1px solid #EAE4DD;background:#fff">
+    <div style="max-width:1160px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        <div style="padding:28px 20px;border-left:1px solid #F1ECE6">
+            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">40+</div>
+            <div style="font-size:13.5px;color:#78716C;margin-top:4px">Enseignants kabyle natifs</div>
+        </div>
+        <div style="padding:28px 20px;border-left:1px solid #F1ECE6">
+            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">60 min</div>
+            <div style="font-size:13.5px;color:#78716C;margin-top:4px">Cours individuels ciblés</div>
+        </div>
+        <div style="padding:28px 20px;border-left:1px solid #F1ECE6">
+            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">Kabylie</div>
+            <div style="font-size:13.5px;color:#78716C;margin-top:4px">Enseignants basés en Algérie</div>
+        </div>
+        <div style="padding:28px 20px;border-left:1px solid #F1ECE6;border-right:1px solid #F1ECE6">
+            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">24h</div>
+            <div style="font-size:13.5px;color:#78716C;margin-top:4px">Annulation gratuite</div>
+        </div>
+    </div>
+</section>
+
+{{-- Features --}}
+<section id="features" style="max-width:1160px;margin:0 auto;padding:96px 24px 40px">
+    <div style="max-width:560px;margin-bottom:48px">
+        <div style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#9A6A00">Pourquoi Thamazight</div>
+        <h2 style="font-size:clamp(30px,4vw,42px);letter-spacing:-.035em;line-height:1.08;font-weight:800;margin:12px 0 14px">Tout ce qu'il faut pour apprendre, rien de superflu.</h2>
+        <p style="font-size:16.5px;color:#78716C;line-height:1.55;margin:0">Conçu pour les héritiers de la langue, les curieux et les familles qui veulent transmettre.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+        @foreach([
+            ['icon' => '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path>', 'title' => 'Enseignants vérifiés', 'desc' => 'Chaque profil est examiné par notre équipe avant publication. Natifs uniquement.'],
+            ['icon' => '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>', 'title' => 'Réservation instantanée', 'desc' => 'Consultez les créneaux réels et réservez en deux clics. Sans aller-retour email.'],
+            ['icon' => '<rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>', 'title' => 'Paiement sécurisé', 'desc' => 'Achetez des forfaits de séances par carte. Les enseignants sont payés après chaque cours.'],
+            ['icon' => '<path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2"></rect>', 'title' => 'Cours sur Google Meet', 'desc' => 'Rejoignez depuis n\'importe quel appareil avec un lien. Rien à installer, rien à configurer.'],
+            ['icon' => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>', 'title' => 'Profils famille', 'desc' => 'Un compte, un solde, un profil pour chaque enfant, conjoint ou parent.'],
+            ['icon' => '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path>', 'title' => 'Annulation libre', 'desc' => 'Les plans changent. Annulez jusqu\'à 24h avant et la séance revient à votre solde.'],
+        ] as $feature)
+        <div style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:24px;transition:all .2s">
+            <div style="width:40px;height:40px;border-radius:11px;background:#FDF3D6;color:#9A6A00;display:flex;align-items:center;justify-content:center;margin-bottom:18px">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{!! $feature['icon'] !!}</svg>
+            </div>
+            <div style="font-size:16px;font-weight:700;margin-bottom:6px">{{ $feature['title'] }}</div>
+            <div style="font-size:14.5px;color:#78716C;line-height:1.55">{{ $feature['desc'] }}</div>
+        </div>
+        @endforeach
+    </div>
+</section>
+
+{{-- How it works --}}
+<section id="how" style="max-width:1160px;margin:0 auto;padding:72px 24px">
+    <div style="text-align:center;max-width:560px;margin:0 auto 56px">
+        <div style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#9A6A00">Comment ça marche</div>
+        <h2 style="font-size:clamp(30px,4vw,42px);letter-spacing:-.035em;line-height:1.08;font-weight:800;margin:12px 0 0">De l'inscription à votre premier « Azul » en quelques minutes.</h2>
+    </div>
+    <div style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:32px">
+        <div style="position:absolute;top:28px;left:16.66%;right:16.66%;height:2px;background:repeating-linear-gradient(90deg,#EBD69A 0 8px,transparent 8px 14px)"></div>
+        @foreach([
+            ['n' => '1', 'title' => 'Créez votre compte', 'desc' => 'Ajoutez un profil pour vous et tous les membres de votre famille qui souhaitent apprendre.'],
+            ['n' => '2', 'title' => 'Choisissez un enseignant', 'desc' => 'Filtrez par niveau, lisez les biographies et réservez un créneau qui correspond à votre semaine.'],
+            ['n' => '3', 'title' => 'Apprenez sur Google Meet', 'desc' => 'Recevez le lien par email, rejoignez à l\'heure et parlez dès la première minute.'],
+        ] as $step)
+        <div style="text-align:center;position:relative">
+            <div style="width:56px;height:56px;margin:0 auto 20px;border-radius:16px;background:linear-gradient(135deg,#F2B81D,#F9D55C);color:#1C1917;font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -8px rgba(222,165,0,.55),0 0 0 6px #FAF8F5">{{ $step['n'] }}</div>
+            <div style="font-size:17px;font-weight:700;margin-bottom:8px">{{ $step['title'] }}</div>
+            <div style="font-size:14.5px;color:#78716C;line-height:1.55;max-width:280px;margin:0 auto">{{ $step['desc'] }}</div>
+        </div>
+        @endforeach
+    </div>
+</section>
+
+{{-- Teacher CTA --}}
+<section style="max-width:1160px;margin:0 auto;padding:24px 24px 88px">
+    <div style="position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(135deg,#1C1917 0%,#26211C 60%,#3A2E14 100%);padding:clamp(36px,6vw,64px);color:#fff">
+        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(90deg,transparent,#000 60%);-webkit-mask-image:linear-gradient(90deg,transparent,#000 60%)"></div>
+        <div style="position:absolute;right:40px;bottom:-70px;font-size:300px;line-height:1;color:#fff;opacity:.08;font-weight:700">ⵣ</div>
+        <div style="position:relative;max-width:560px">
+            <div style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#F2B81D">Pour les enseignants</div>
+            <h2 style="font-size:clamp(28px,4vw,40px);letter-spacing:-.035em;line-height:1.08;font-weight:800;margin:12px 0 14px">Enseignez le kabyle à des apprenants du monde entier — depuis chez vous.</h2>
+            <p style="font-size:16.5px;line-height:1.55;color:#D6D0C7;margin:0 0 28px">Définissez vos horaires, soyez réservé automatiquement et soyez payé après chaque cours. Nous gérons les paiements, rappels et planification.</p>
+            <a href="{{ route('teacher.register') }}" style="display:inline-flex;background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:14px 22px;border-radius:12px;box-shadow:0 10px 24px -8px rgba(0,0,0,.35);text-decoration:none">Enseigner avec Thamazight →</a>
+        </div>
+    </div>
+</section>
+
+{{-- Footer --}}
+<footer style="border-top:1px solid #EAE4DD">
+    <div style="max-width:1160px;margin:0 auto;padding:32px 24px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#F2B81D,#F9D55C);display:flex;align-items:center;justify-content:center;color:#1C1917;font-size:15px;font-weight:700">ⵣ</div>
+            <span style="font-size:15px;font-weight:700">{{ config('app.name') }}</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:22px;font-size:14px">
+            <a href="#features" style="color:#78716C">Fonctionnalités</a>
+            <a href="#how" style="color:#78716C">Comment ça marche</a>
+            <a href="{{ route('teacher.register') }}" style="color:#78716C">Enseigner</a>
+            <a href="{{ route('login') }}" style="color:#78716C">Se connecter</a>
+        </div>
+        <div style="font-size:13px;color:#A8A29E">© {{ date('Y') }} {{ config('app.name') }}. Tanemmirt.</div>
+    </div>
+</footer>
 
 </body>
 </html>
