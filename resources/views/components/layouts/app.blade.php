@@ -38,6 +38,13 @@
             </div>
 
             <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+                {{-- Language switcher --}}
+                <div style="display:flex;align-items:center;gap:2px;background:#F1ECE6;border-radius:8px;padding:3px">
+                    <a href="{{ route('locale.switch', 'fr') }}"
+                       style="padding:4px 9px;border-radius:6px;font-size:12.5px;font-weight:600;text-decoration:none;{{ app()->getLocale() === 'fr' ? 'background:#fff;color:#1C1917;box-shadow:0 1px 2px rgba(28,25,23,.08)' : 'color:#78716C' }}">FR</a>
+                    <a href="{{ route('locale.switch', 'en') }}"
+                       style="padding:4px 9px;border-radius:6px;font-size:12.5px;font-weight:600;text-decoration:none;{{ app()->getLocale() === 'en' ? 'background:#fff;color:#1C1917;box-shadow:0 1px 2px rgba(28,25,23,.08)' : 'color:#78716C' }}">EN</a>
+                </div>
                 <div style="width:32px;height:32px;border-radius:999px;background:linear-gradient(135deg,#F2B81D,#F9D55C);color:#1C1917;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">
                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                 </div>

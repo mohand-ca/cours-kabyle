@@ -15,6 +15,14 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/locale/{lang}', function (string $lang) {
+    if (in_array($lang, ['fr', 'en'])) {
+        session(['locale' => $lang]);
+    }
+
+    return redirect()->back()->withInput();
+})->name('locale.switch');
+
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');

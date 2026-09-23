@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name') }} — Apprenez le kabyle avec des natifs</title>
-    <meta name="description" content="Cours particuliers de kabyle en ligne avec des enseignants natifs basés en Algérie.">
+    <title>{{ config('app.name') }} — {{ __('welcome.meta_title') }}</title>
+    <meta name="description" content="{{ __('welcome.meta_description') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -29,16 +29,23 @@
             <span style="font-size:17px;font-weight:700;letter-spacing:-.02em;color:#1C1917">{{ config('app.name') }}</span>
         </a>
         <nav style="display:flex;gap:4px;flex:1">
-            <a href="#features" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E;transition:background .15s">Fonctionnalités</a>
-            <a href="#how" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E;transition:background .15s">Comment ça marche</a>
-            <a href="{{ route('teacher.register') }}" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E;transition:background .15s">Enseigner</a>
+            <a href="#features" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E;transition:background .15s">{{ __('welcome.nav.features') }}</a>
+            <a href="#how" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E;transition:background .15s">{{ __('welcome.nav.how_it_works') }}</a>
+            <a href="{{ route('teacher.register') }}" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E;transition:background .15s">{{ __('welcome.nav.teach') }}</a>
         </nav>
         <div style="display:flex;gap:8px;align-items:center">
+            {{-- Language switcher --}}
+            <div style="display:flex;align-items:center;gap:2px;background:#F1ECE6;border-radius:8px;padding:3px">
+                <a href="{{ route('locale.switch', 'fr') }}"
+                   style="padding:4px 9px;border-radius:6px;font-size:12.5px;font-weight:600;text-decoration:none;{{ app()->getLocale() === 'fr' ? 'background:#fff;color:#1C1917;box-shadow:0 1px 2px rgba(28,25,23,.08)' : 'color:#78716C' }}">FR</a>
+                <a href="{{ route('locale.switch', 'en') }}"
+                   style="padding:4px 9px;border-radius:6px;font-size:12.5px;font-weight:600;text-decoration:none;{{ app()->getLocale() === 'en' ? 'background:#fff;color:#1C1917;box-shadow:0 1px 2px rgba(28,25,23,.08)' : 'color:#78716C' }}">EN</a>
+            </div>
             @auth
-                <a href="{{ url('/dashboard') }}" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">Mon espace →</a>
+                <a href="{{ url('/dashboard') }}" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">{{ __('welcome.nav.dashboard') }} →</a>
             @else
-                <a href="{{ route('login') }}" style="background:transparent;border:1px solid #E2DBD3;color:#44403C;font-size:14px;font-weight:600;padding:8px 14px;border-radius:12px">Se connecter</a>
-                <a href="{{ route('register') }}" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">Commencer</a>
+                <a href="{{ route('login') }}" style="background:transparent;border:1px solid #E2DBD3;color:#44403C;font-size:14px;font-weight:600;padding:8px 14px;border-radius:12px">{{ __('welcome.nav.login') }}</a>
+                <a href="{{ route('register') }}" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">{{ __('welcome.nav.get_started') }}</a>
             @endauth
         </div>
     </div>
@@ -56,23 +63,23 @@
                     <span style="position:absolute;inset:0;border-radius:999px;background:#F2B81D;opacity:.7;animation:thzPing 1.5s ease-out infinite"></span>
                     <span style="position:relative;width:10px;height:10px;border-radius:999px;background:#E0A800;display:block"></span>
                 </span>
-                <span><b style="font-weight:700;color:#1C1917">23 enseignants</b> ont des créneaux disponibles cette semaine</span>
+                <span>{{ __('welcome.hero.badge') }}</span>
             </div>
 
             <h1 style="font-size:clamp(40px,6vw,64px);line-height:1.02;letter-spacing:-.045em;font-weight:800;margin:24px 0 20px;text-wrap:balance">
-                Parlez <span style="background:linear-gradient(120deg,#A87200,#D39B12);-webkit-background-clip:text;background-clip:text;color:transparent">kabyle</span><br>avec ceux qui ont grandi avec.
+                {{ __('welcome.hero.h1_plain') }}<span style="background:linear-gradient(120deg,#A87200,#D39B12);-webkit-background-clip:text;background-clip:text;color:transparent">{{ __('welcome.hero.h1_highlight') }}</span>{{ __('welcome.hero.h1_end') }}
             </h1>
 
             <p style="font-size:18px;line-height:1.55;color:#78716C;font-weight:400;margin:0 0 32px;max-width:520px;text-wrap:pretty">
-                Cours particuliers en ligne avec des enseignants natifs en Algérie. Réservez un créneau en quelques secondes, apprenez sur Google Meet.
+                {{ __('welcome.hero.subtitle') }}
             </p>
 
             <div style="display:flex;flex-wrap:wrap;gap:12px">
                 <a href="{{ route('register') }}" style="background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:14px 22px;border-radius:12px;box-shadow:0 10px 24px -8px rgba(222,165,0,.6);display:flex;align-items:center;gap:8px;text-decoration:none">
-                    Commencer gratuitement
+                    {{ __('welcome.hero.cta_primary') }}
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg>
                 </a>
-                <a href="{{ route('teacher.register') }}" style="background:#fff;border:1px solid #E2DBD3;color:#1C1917;font-size:15px;font-weight:600;padding:14px 22px;border-radius:12px;text-decoration:none">Je suis enseignant</a>
+                <a href="{{ route('teacher.register') }}" style="background:#fff;border:1px solid #E2DBD3;color:#1C1917;font-size:15px;font-weight:600;padding:14px 22px;border-radius:12px;text-decoration:none">{{ __('welcome.hero.cta_teacher') }}</a>
             </div>
 
             <div style="display:flex;align-items:center;gap:14px;margin-top:36px">
@@ -82,7 +89,7 @@
                     <div style="width:34px;height:34px;border-radius:999px;border:2px solid #FAF8F5;margin-left:-10px;background:linear-gradient(135deg,#5B4B8A,#A77BB5);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">NB</div>
                     <div style="width:34px;height:34px;border-radius:999px;border:2px solid #FAF8F5;margin-left:-10px;background:linear-gradient(135deg,#7A5C3E,#C49A6C);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">YT</div>
                 </div>
-                <div style="font-size:13px;color:#78716C;line-height:1.4"><b style="color:#1C1917;font-weight:600">2 400+ apprenants</b> dans 31 pays<br>qui se reconnectent à leur langue</div>
+                <div style="font-size:13px;color:#78716C;line-height:1.4">{{ __('welcome.hero.social_proof') }}</div>
             </div>
         </div>
 
@@ -104,8 +111,8 @@
                         <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#F2B81D,#F9D55C);color:#1C1917;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">KA</div>
                         <div style="flex:1;display:flex;flex-direction:column;gap:7px">
                             <div style="display:flex;justify-content:space-between;align-items:center">
-                                <div style="font-size:13px;font-weight:700">Kahina Aït Ali</div>
-                                <div style="font-size:10px;font-weight:600;color:#2F7D5B;background:#E8F3EC;padding:2px 8px;border-radius:99px">4 créneaux</div>
+                                <div style="font-size:13px;font-weight:700">{{ __('welcome.hero.teacher_name') }}</div>
+                                <div style="font-size:10px;font-weight:600;color:#2F7D5B;background:#E8F3EC;padding:2px 8px;border-radius:99px">{{ __('welcome.hero.slots_available', ['count' => 4]) }}</div>
                             </div>
                             <div style="height:6px;width:90%;border-radius:99px;background:#F1ECE6"></div>
                             <div style="height:6px;width:65%;border-radius:99px;background:#F1ECE6"></div>
@@ -119,7 +126,7 @@
                             </div>
                             <div style="width:1px;height:22px;background:#EAE4DD"></div>
                             <div style="flex:1;font-size:12px;font-weight:600">18:00 – 19:00</div>
-                            <div style="font-size:11px;font-weight:700;color:#1C1917;background:#F2B81D;padding:5px 10px;border-radius:8px">Réserver</div>
+                            <div style="font-size:11px;font-weight:700;color:#1C1917;background:#F2B81D;padding:5px 10px;border-radius:8px">{{ __('welcome.hero.cta_primary') }}</div>
                         </div>
                         <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-top:1px solid #F1ECE6">
                             <div style="text-align:center;width:28px">
@@ -128,7 +135,7 @@
                             </div>
                             <div style="width:1px;height:22px;background:#EAE4DD"></div>
                             <div style="flex:1;font-size:12px;font-weight:600">10:00 – 11:00</div>
-                            <div style="font-size:11px;font-weight:600;color:#57534E;border:1px solid #E2DBD3;padding:4px 10px;border-radius:8px">Réserver</div>
+                            <div style="font-size:11px;font-weight:600;color:#57534E;border:1px solid #E2DBD3;padding:4px 10px;border-radius:8px">{{ __('welcome.hero.cta_primary') }}</div>
                         </div>
                     </div>
                     <div style="border:1px solid #EAE4DD;border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;opacity:.6">
@@ -147,13 +154,13 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
                 </div>
                 <div>
-                    <div style="font-size:12.5px;font-weight:700">Cours confirmé</div>
-                    <div style="font-size:11.5px;color:#78716C">Jeu 24 Sep · 18:00 · Google Meet</div>
+                    <div style="font-size:12.5px;font-weight:700">{{ __('welcome.hero.booking_confirmed') }}</div>
+                    <div style="font-size:11.5px;color:#78716C">{{ __('welcome.hero.booking_detail') }}</div>
                 </div>
             </div>
 
             {{-- Azul badge --}}
-            <div style="position:absolute;right:-4px;top:0;background:#1C1917;color:#FAF8F5;border-radius:12px;padding:8px 12px;font-size:12px;font-weight:600;box-shadow:0 12px 24px -10px rgba(28,25,23,.4)">Azul! <span style="color:#A8A29E;font-weight:400">· Bonjour</span></div>
+            <div style="position:absolute;right:-4px;top:0;background:#1C1917;color:#FAF8F5;border-radius:12px;padding:8px 12px;font-size:12px;font-weight:600;box-shadow:0 12px 24px -10px rgba(28,25,23,.4)">{{ __('welcome.hero.greeting') }}</div>
         </div>
     </div>
 </section>
@@ -162,20 +169,19 @@
 <section style="border-top:1px solid #EAE4DD;border-bottom:1px solid #EAE4DD;background:#fff">
     <div style="max-width:1160px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
         <div style="padding:28px 20px;border-left:1px solid #F1ECE6">
-            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">40+</div>
-            <div style="font-size:13.5px;color:#78716C;margin-top:4px">Enseignants kabyle natifs</div>
+            <div style="font-size:18px;font-weight:700;letter-spacing:-.02em;color:#1C1917">{{ __('welcome.stats.verified_label') }}</div>
         </div>
         <div style="padding:28px 20px;border-left:1px solid #F1ECE6">
-            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">60 min</div>
-            <div style="font-size:13.5px;color:#78716C;margin-top:4px">Cours individuels ciblés</div>
+            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">{{ __('welcome.stats.duration_value') }}</div>
+            <div style="font-size:13.5px;color:#78716C;margin-top:4px">{{ __('welcome.stats.duration_label') }}</div>
         </div>
         <div style="padding:28px 20px;border-left:1px solid #F1ECE6">
-            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">Kabylie</div>
-            <div style="font-size:13.5px;color:#78716C;margin-top:4px">Enseignants basés en Algérie</div>
+            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">{{ __('welcome.stats.origin_value') }}</div>
+            <div style="font-size:13.5px;color:#78716C;margin-top:4px">{{ __('welcome.stats.origin_label') }}</div>
         </div>
         <div style="padding:28px 20px;border-left:1px solid #F1ECE6;border-right:1px solid #F1ECE6">
-            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">24h</div>
-            <div style="font-size:13.5px;color:#78716C;margin-top:4px">Annulation gratuite</div>
+            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">{{ __('welcome.stats.cancel_value') }}</div>
+            <div style="font-size:13.5px;color:#78716C;margin-top:4px">{{ __('welcome.stats.cancel_label') }}</div>
         </div>
     </div>
 </section>
@@ -183,22 +189,25 @@
 {{-- Features --}}
 <section id="features" style="max-width:1160px;margin:0 auto;padding:96px 24px 40px">
     <div style="max-width:560px;margin-bottom:48px">
-        <div style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#9A6A00">Pourquoi Thamazight</div>
-        <h2 style="font-size:clamp(30px,4vw,42px);letter-spacing:-.035em;line-height:1.08;font-weight:800;margin:12px 0 14px">Tout ce qu'il faut pour apprendre, rien de superflu.</h2>
-        <p style="font-size:16.5px;color:#78716C;line-height:1.55;margin:0">Conçu pour les héritiers de la langue, les curieux et les familles qui veulent transmettre.</p>
+        <div style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#9A6A00">{{ __('welcome.features.label') }}</div>
+        <h2 style="font-size:clamp(30px,4vw,42px);letter-spacing:-.035em;line-height:1.08;font-weight:800;margin:12px 0 14px">{{ __('welcome.features.h2') }}</h2>
+        <p style="font-size:16.5px;color:#78716C;line-height:1.55;margin:0">{{ __('welcome.features.subtitle') }}</p>
     </div>
+    @php
+        $featureIcons = [
+            '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path>',
+            '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>',
+            '<rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>',
+            '<path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2"></rect>',
+            '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>',
+            '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path>',
+        ];
+    @endphp
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
-        @foreach([
-            ['icon' => '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path>', 'title' => 'Enseignants vérifiés', 'desc' => 'Chaque profil est examiné par notre équipe avant publication. Natifs uniquement.'],
-            ['icon' => '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>', 'title' => 'Réservation instantanée', 'desc' => 'Consultez les créneaux réels et réservez en deux clics. Sans aller-retour email.'],
-            ['icon' => '<rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>', 'title' => 'Paiement sécurisé', 'desc' => 'Achetez des forfaits de séances par carte. Les enseignants sont payés après chaque cours.'],
-            ['icon' => '<path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2"></rect>', 'title' => 'Cours sur Google Meet', 'desc' => 'Rejoignez depuis n\'importe quel appareil avec un lien. Rien à installer, rien à configurer.'],
-            ['icon' => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>', 'title' => 'Profils famille', 'desc' => 'Un compte, un solde, un profil pour chaque enfant, conjoint ou parent.'],
-            ['icon' => '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path>', 'title' => 'Annulation libre', 'desc' => 'Les plans changent. Annulez jusqu\'à 24h avant et la séance revient à votre solde.'],
-        ] as $feature)
+        @foreach(__('welcome.features.items') as $index => $feature)
         <div style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:24px;transition:all .2s">
             <div style="width:40px;height:40px;border-radius:11px;background:#FDF3D6;color:#9A6A00;display:flex;align-items:center;justify-content:center;margin-bottom:18px">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{!! $feature['icon'] !!}</svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{!! $featureIcons[$index] !!}</svg>
             </div>
             <div style="font-size:16px;font-weight:700;margin-bottom:6px">{{ $feature['title'] }}</div>
             <div style="font-size:14.5px;color:#78716C;line-height:1.55">{{ $feature['desc'] }}</div>
@@ -210,18 +219,14 @@
 {{-- How it works --}}
 <section id="how" style="max-width:1160px;margin:0 auto;padding:72px 24px">
     <div style="text-align:center;max-width:560px;margin:0 auto 56px">
-        <div style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#9A6A00">Comment ça marche</div>
-        <h2 style="font-size:clamp(30px,4vw,42px);letter-spacing:-.035em;line-height:1.08;font-weight:800;margin:12px 0 0">De l'inscription à votre premier « Azul » en quelques minutes.</h2>
+        <div style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#9A6A00">{{ __('welcome.how.label') }}</div>
+        <h2 style="font-size:clamp(30px,4vw,42px);letter-spacing:-.035em;line-height:1.08;font-weight:800;margin:12px 0 0">{{ __('welcome.how.h2') }}</h2>
     </div>
     <div style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:32px">
         <div style="position:absolute;top:28px;left:16.66%;right:16.66%;height:2px;background:repeating-linear-gradient(90deg,#EBD69A 0 8px,transparent 8px 14px)"></div>
-        @foreach([
-            ['n' => '1', 'title' => 'Créez votre compte', 'desc' => 'Ajoutez un profil pour vous et tous les membres de votre famille qui souhaitent apprendre.'],
-            ['n' => '2', 'title' => 'Choisissez un enseignant', 'desc' => 'Filtrez par niveau, lisez les biographies et réservez un créneau qui correspond à votre semaine.'],
-            ['n' => '3', 'title' => 'Apprenez sur Google Meet', 'desc' => 'Recevez le lien par email, rejoignez à l\'heure et parlez dès la première minute.'],
-        ] as $step)
+        @foreach(__('welcome.how.steps') as $index => $step)
         <div style="text-align:center;position:relative">
-            <div style="width:56px;height:56px;margin:0 auto 20px;border-radius:16px;background:linear-gradient(135deg,#F2B81D,#F9D55C);color:#1C1917;font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -8px rgba(222,165,0,.55),0 0 0 6px #FAF8F5">{{ $step['n'] }}</div>
+            <div style="width:56px;height:56px;margin:0 auto 20px;border-radius:16px;background:linear-gradient(135deg,#F2B81D,#F9D55C);color:#1C1917;font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px -8px rgba(222,165,0,.55),0 0 0 6px #FAF8F5">{{ $index + 1 }}</div>
             <div style="font-size:17px;font-weight:700;margin-bottom:8px">{{ $step['title'] }}</div>
             <div style="font-size:14.5px;color:#78716C;line-height:1.55;max-width:280px;margin:0 auto">{{ $step['desc'] }}</div>
         </div>
@@ -235,10 +240,10 @@
         <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(90deg,transparent,#000 60%);-webkit-mask-image:linear-gradient(90deg,transparent,#000 60%)"></div>
         <div style="position:absolute;right:40px;bottom:-70px;font-size:300px;line-height:1;color:#fff;opacity:.08;font-weight:700">ⵣ</div>
         <div style="position:relative;max-width:560px">
-            <div style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#F2B81D">Pour les enseignants</div>
-            <h2 style="font-size:clamp(28px,4vw,40px);letter-spacing:-.035em;line-height:1.08;font-weight:800;margin:12px 0 14px">Enseignez le kabyle à des apprenants du monde entier — depuis chez vous.</h2>
-            <p style="font-size:16.5px;line-height:1.55;color:#D6D0C7;margin:0 0 28px">Définissez vos horaires, soyez réservé automatiquement et soyez payé après chaque cours. Nous gérons les paiements, rappels et planification.</p>
-            <a href="{{ route('teacher.register') }}" style="display:inline-flex;background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:14px 22px;border-radius:12px;box-shadow:0 10px 24px -8px rgba(0,0,0,.35);text-decoration:none">Enseigner avec Thamazight →</a>
+            <div style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#F2B81D">{{ __('welcome.teacher_cta.label') }}</div>
+            <h2 style="font-size:clamp(28px,4vw,40px);letter-spacing:-.035em;line-height:1.08;font-weight:800;margin:12px 0 14px">{{ __('welcome.teacher_cta.h2') }}</h2>
+            <p style="font-size:16.5px;line-height:1.55;color:#D6D0C7;margin:0 0 28px">{{ __('welcome.teacher_cta.subtitle') }}</p>
+            <a href="{{ route('teacher.register') }}" style="display:inline-flex;background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:14px 22px;border-radius:12px;box-shadow:0 10px 24px -8px rgba(0,0,0,.35);text-decoration:none">{{ __('welcome.teacher_cta.cta', ['app' => config('app.name')]) }}</a>
         </div>
     </div>
 </section>
@@ -251,12 +256,12 @@
             <span style="font-size:15px;font-weight:700">{{ config('app.name') }}</span>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:22px;font-size:14px">
-            <a href="#features" style="color:#78716C">Fonctionnalités</a>
-            <a href="#how" style="color:#78716C">Comment ça marche</a>
-            <a href="{{ route('teacher.register') }}" style="color:#78716C">Enseigner</a>
-            <a href="{{ route('login') }}" style="color:#78716C">Se connecter</a>
+            <a href="#features" style="color:#78716C">{{ __('welcome.nav.features') }}</a>
+            <a href="#how" style="color:#78716C">{{ __('welcome.nav.how_it_works') }}</a>
+            <a href="{{ route('teacher.register') }}" style="color:#78716C">{{ __('welcome.nav.teach') }}</a>
+            <a href="{{ route('login') }}" style="color:#78716C">{{ __('welcome.nav.login') }}</a>
         </div>
-        <div style="font-size:13px;color:#A8A29E">© {{ date('Y') }} {{ config('app.name') }}. Tanemmirt.</div>
+        <div style="font-size:13px;color:#A8A29E">{{ __('welcome.footer.copyright', ['year' => date('Y'), 'app' => config('app.name')]) }}</div>
     </div>
 </footer>
 
