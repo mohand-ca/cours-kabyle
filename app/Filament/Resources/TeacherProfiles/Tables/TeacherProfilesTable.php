@@ -60,7 +60,7 @@ class TeacherProfilesTable
             ->recordActions([
                 Action::make('approve')
                     ->label(__('teacher.filament.actions.approve'))
-                    ->icon(Heroicon::Check ?? 'heroicon-o-check')
+                    ->icon('heroicon-o-check')
                     ->color('success')
                     ->requiresConfirmation()
                     ->visible(fn ($record) => ! $record->isApproved())
