@@ -14,6 +14,10 @@ return [
         'sessions_remaining' => 'Sessions remaining',
         'buy_sessions' => 'Buy sessions',
         'subtitle' => 'Here\'s an overview of your learning journey.',
+        'stat_sessions_planned' => 'planned sessions',
+        'stat_sessions_balance' => 'sessions in your balance',
+        'stat_points_earned' => 'points earned',
+        'stat_learner_profiles' => 'learner profiles',
     ],
     'learners' => [
         'title' => 'My learners',
@@ -55,6 +59,7 @@ return [
         'session_cancelled' => 'Lesson cancelled.',
         'no_slots' => 'No available slots',
         'with' => 'with',
+        'confirmed' => 'Confirmed',
     ],
     'packages' => [
         'title' => 'Buy sessions',
@@ -76,6 +81,7 @@ return [
         'no_slots' => 'No available slots',
         'view_slots' => 'View availability',
         'no_results' => 'No teachers match your filters.',
+        'location' => 'Algeria · UTC+1',
     ],
 
     'mail' => [

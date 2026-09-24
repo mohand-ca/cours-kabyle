@@ -38,44 +38,44 @@
     {{-- Stats --}}
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px">
 
-        <div style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
+        <div class="thz-card" style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
             <div style="display:flex;justify-content:space-between;align-items:flex-start">
-                <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#78716C">Séances à venir</div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#78716C">{{ __('teacher.dashboard.stat_upcoming') }}</div>
                 <div style="width:36px;height:36px;border-radius:10px;background:#FDF3D6;color:#9A6A00;display:flex;align-items:center;justify-content:center;flex-shrink:0">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
                 </div>
             </div>
             <div style="font-size:32px;font-weight:800;letter-spacing:-.04em;margin-top:2px;color:#1C1917">{{ $upcomingSlots->count() }}</div>
-            <div style="font-size:12.5px;color:#A8A29E">réservées par des apprenants</div>
+            <div style="font-size:12.5px;color:#A8A29E">{{ __('teacher.dashboard.stat_upcoming_sub') }}</div>
         </div>
 
-        <div style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
+        <div class="thz-card" style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
             <div style="display:flex;justify-content:space-between;align-items:flex-start">
-                <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#78716C">Créneaux libres</div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#78716C">{{ __('teacher.dashboard.stat_free_slots') }}</div>
                 <div style="width:36px;height:36px;border-radius:10px;background:{{ $availableSlotsCount > 0 ? '#E8F3EC' : '#F5F5F4' }};color:{{ $availableSlotsCount > 0 ? '#2F7D5B' : '#A8A29E' }};display:flex;align-items:center;justify-content:center;flex-shrink:0">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
                 </div>
             </div>
             <div style="font-size:32px;font-weight:800;letter-spacing:-.04em;margin-top:2px;color:{{ $availableSlotsCount > 0 ? '#2F7D5B' : '#1C1917' }}">{{ $availableSlotsCount }}</div>
-            <div style="font-size:12.5px;color:#A8A29E">disponibles à la réservation</div>
+            <div style="font-size:12.5px;color:#A8A29E">{{ __('teacher.dashboard.stat_free_slots_sub') }}</div>
         </div>
 
-        <div style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
+        <div class="thz-card" style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
             <div style="display:flex;justify-content:space-between;align-items:flex-start">
-                <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#78716C">Profil</div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#78716C">{{ __('teacher.dashboard.stat_profile') }}</div>
                 <div style="width:36px;height:36px;border-radius:10px;background:{{ $profile?->isApproved() ? '#E8F3EC' : '#F5F5F4' }};color:{{ $profile?->isApproved() ? '#2F7D5B' : '#A8A29E' }};display:flex;align-items:center;justify-content:center;flex-shrink:0">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                 </div>
             </div>
             @if($profile?->isApproved())
-                <div style="font-size:20px;font-weight:800;letter-spacing:-.03em;margin-top:2px;color:#2F7D5B">Approuvé</div>
-                <div style="font-size:12.5px;color:#A8A29E">visible dans le catalogue</div>
+                <div style="font-size:20px;font-weight:800;letter-spacing:-.03em;margin-top:2px;color:#2F7D5B">{{ __('teacher.dashboard.status_approved') }}</div>
+                <div style="font-size:12.5px;color:#A8A29E">{{ __('teacher.dashboard.status_approved_sub') }}</div>
             @elseif($profile?->submitted_at)
-                <div style="font-size:20px;font-weight:800;letter-spacing:-.03em;margin-top:2px;color:#9A6A00">En attente</div>
-                <div style="font-size:12.5px;color:#A8A29E">examen sous 48h</div>
+                <div style="font-size:20px;font-weight:800;letter-spacing:-.03em;margin-top:2px;color:#9A6A00">{{ __('teacher.dashboard.status_pending') }}</div>
+                <div style="font-size:12.5px;color:#A8A29E">{{ __('teacher.dashboard.status_pending_sub') }}</div>
             @else
-                <div style="font-size:20px;font-weight:800;letter-spacing:-.03em;margin-top:2px;color:#A8A29E">Incomplet</div>
-                <div style="font-size:12.5px;color:#A8A29E">à compléter pour publier</div>
+                <div style="font-size:20px;font-weight:800;letter-spacing:-.03em;margin-top:2px;color:#A8A29E">{{ __('teacher.dashboard.status_incomplete') }}</div>
+                <div style="font-size:12.5px;color:#A8A29E">{{ __('teacher.dashboard.status_incomplete_sub') }}</div>
             @endif
         </div>
     </div>
@@ -83,25 +83,25 @@
     {{-- Quick links --}}
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px">
         <a href="{{ route('teacher.profile') }}"
-            style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:16px;border:1px solid #EAE4DD;padding:24px;box-shadow:0 1px 2px rgba(28,25,23,.04);text-decoration:none;transition:all .2s">
+            class="thz-card" style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:16px;border:1px solid #EAE4DD;padding:24px;box-shadow:0 1px 2px rgba(28,25,23,.04);text-decoration:none">
             <div style="width:40px;height:40px;border-radius:12px;background:#FDF3D6;color:#9A6A00;display:flex;align-items:center;justify-content:center;flex-shrink:0">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
             </div>
             <div style="flex:1;min-width:0">
                 <div style="font-size:14px;font-weight:700;color:#1C1917">{{ __('teacher.dashboard.my_profile') }}</div>
-                <div style="font-size:13px;color:#A8A29E;margin-top:2px">Bio, niveaux, langues, lien Meet</div>
+                <div style="font-size:13px;color:#A8A29E;margin-top:2px">{{ __('teacher.dashboard.my_profile_sub') }}</div>
             </div>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A8A29E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"></path></svg>
         </a>
 
         <a href="{{ route('teacher.availability') }}"
-            style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:16px;border:1px solid #EAE4DD;padding:24px;box-shadow:0 1px 2px rgba(28,25,23,.04);text-decoration:none;transition:all .2s">
+            class="thz-card" style="display:flex;align-items:center;gap:16px;background:#fff;border-radius:16px;border:1px solid #EAE4DD;padding:24px;box-shadow:0 1px 2px rgba(28,25,23,.04);text-decoration:none">
             <div style="width:40px;height:40px;border-radius:12px;background:#FDF3D6;color:#9A6A00;display:flex;align-items:center;justify-content:center;flex-shrink:0">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
             </div>
             <div style="flex:1;min-width:0">
                 <div style="font-size:14px;font-weight:700;color:#1C1917">{{ __('teacher.dashboard.availability') }}</div>
-                <div style="font-size:13px;color:#A8A29E;margin-top:2px">Ajouter et gérer vos créneaux</div>
+                <div style="font-size:13px;color:#A8A29E;margin-top:2px">{{ __('teacher.dashboard.availability_sub') }}</div>
             </div>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A8A29E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"></path></svg>
         </a>
@@ -111,7 +111,7 @@
     @if($upcomingSlots->isNotEmpty())
         <div style="background:#fff;border-radius:16px;border:1px solid #EAE4DD;overflow:hidden;box-shadow:0 1px 2px rgba(28,25,23,.04)">
             <div style="padding:18px 20px;border-bottom:1px solid #F1ECE6">
-                <div style="font-size:15px;font-weight:700;color:#1C1917">Prochaines séances</div>
+                <div style="font-size:15px;font-weight:700;color:#1C1917">{{ __('teacher.dashboard.upcoming_sessions') }}</div>
             </div>
             @foreach($upcomingSlots as $slot)
                 <div style="display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid #F1ECE6">
@@ -128,7 +128,7 @@
                     </div>
                     <span style="flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:4px 10px;font-size:12px;font-weight:600;background:#EEF2FF;color:#4338CA;border-radius:99px;border:1px solid #C7D2FE">
                         <span style="width:6px;height:6px;border-radius:99px;background:#6366F1;flex-shrink:0"></span>
-                        Réservée
+                        {{ __('teacher.dashboard.booked') }}
                     </span>
                 </div>
             @endforeach

@@ -53,7 +53,9 @@ class PurchaseTest extends TestCase
         Livewire::actingAs($user)
             ->test(PackageCatalog::class)
             ->assertOk()
-            ->assertSee('Pack 5 séances');
+            ->assertSee(__('welcome.pricing.packs.starter.name'))
+            ->assertSee('$49')
+            ->assertSee(__('welcome.pricing.popular_badge'));
     }
 
     public function test_package_catalog_shows_sessions_remaining(): void

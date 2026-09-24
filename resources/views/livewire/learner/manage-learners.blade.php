@@ -88,7 +88,7 @@
     {{-- Learner list --}}
     <div style="display:flex;flex-direction:column;gap:8px">
         @forelse($learners as $learner)
-            <div style="display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:14px;border:1px solid #EAE4DD;padding:16px 20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
+            <div class="thz-row" style="display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:14px;border:1px solid #EAE4DD;padding:16px 20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
                 <div style="display:flex;align-items:center;gap:14px">
                     <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#F2B81D,#F9D55C);color:#1C1917;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">
                         {{ strtoupper(substr($learner->first_name, 0, 1) . substr($learner->last_name, 0, 1)) }}

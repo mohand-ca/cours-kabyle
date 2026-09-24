@@ -12,6 +12,14 @@
     <style>
         body { font-family: 'Geist', system-ui, sans-serif; background: #FAF8F5; color: #1C1917; -webkit-font-smoothing: antialiased; margin: 0; }
         * { box-sizing: border-box; }
+        input, textarea, select { transition: border-color .15s ease, box-shadow .15s ease; }
+        input:focus, textarea:focus, select:focus, .focus-amber:focus { border-color: #F2B81D !important; box-shadow: 0 0 0 3px rgba(242,184,29,.22) !important; }
+        .thz-logout:hover { background: #F1ECE6 !important; color: #1C1917 !important; }
+        .thz-nav:hover { background: #F5F0E9; color: #1C1917; }
+        .thz-card { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+        .thz-card:hover { transform: translateY(-2px); box-shadow: 0 16px 34px -20px rgba(28,25,23,.26); border-color: #E4D8B8; }
+        .thz-row { transition: border-color .15s ease, box-shadow .15s ease, background .15s ease; }
+        .thz-row:hover { border-color: #E4D8B8; box-shadow: 0 8px 20px -14px rgba(28,25,23,.22); }
     </style>
 </head>
 <body>
@@ -51,7 +59,7 @@
                 <span style="font-size:14px;font-weight:600;color:#1C1917">{{ auth()->user()->name }}</span>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" title="{{ __('nav.logout') }}" style="width:34px;height:34px;border-radius:10px;border:1px solid transparent;background:transparent;color:#78716C;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s">
+                    <button type="submit" title="{{ __('nav.logout') }}" class="thz-logout" style="width:34px;height:34px;border-radius:10px;border:1px solid transparent;background:transparent;color:#78716C;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s">
                         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path></svg>
                     </button>
                 </form>

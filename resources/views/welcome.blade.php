@@ -17,6 +17,24 @@
         a{color:#9A6A00;text-decoration:none}
         @keyframes thzFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
         @keyframes thzPing{0%{transform:scale(1);opacity:.7}80%,100%{transform:scale(2.6);opacity:0}}
+        .thz-card{transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+        .thz-card:hover{transform:translateY(-3px);box-shadow:0 20px 44px -22px rgba(28,25,23,.30);border-color:#E4D8B8}
+        .thz-btn-primary{transition:transform .15s ease,box-shadow .2s ease}
+        .thz-btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 32px -10px rgba(222,165,0,.72)}
+        .thz-btn-ghost{transition:background .15s ease,border-color .15s ease}
+        .thz-btn-ghost:hover{background:#F7F2EB;border-color:#D8CDBF}
+        .thz-nav-link{transition:background .15s ease,color .15s ease}
+        .thz-nav-link:hover{background:#F1ECE6;color:#1C1917}
+        .thz-price{transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+        .thz-price:hover{transform:translateY(-4px);box-shadow:0 26px 50px -24px rgba(28,25,23,.32)}
+        .thz-faq{transition:border-color .15s ease,box-shadow .15s ease}
+        .thz-faq:hover{border-color:#E4D8B8}
+        .thz-faq summary{cursor:pointer;list-style:none;outline:none}
+        .thz-faq summary::-webkit-details-marker{display:none}
+        .thz-faq-icon{transition:transform .2s ease;flex-shrink:0}
+        .thz-faq[open] .thz-faq-icon{transform:rotate(45deg)}
+        .thz-faq[open]{box-shadow:0 12px 30px -18px rgba(28,25,23,.22)}
+        @media(max-width:860px){.thz-nav-center{display:none}}
     </style>
 </head>
 <body>
@@ -28,12 +46,13 @@
             <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#F2B81D,#F9D55C);display:flex;align-items:center;justify-content:center;color:#1C1917;font-size:18px;font-weight:700;box-shadow:0 4px 12px -4px rgba(222,165,0,.6)">ⵣ</div>
             <span style="font-size:17px;font-weight:700;letter-spacing:-.02em;color:#1C1917">{{ config('app.name') }}</span>
         </a>
-        <nav style="display:flex;gap:4px;flex:1">
-            <a href="#features" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E;transition:background .15s">{{ __('welcome.nav.features') }}</a>
-            <a href="#how" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E;transition:background .15s">{{ __('welcome.nav.how_it_works') }}</a>
-            <a href="{{ route('teacher.register') }}" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E;transition:background .15s">{{ __('welcome.nav.teach') }}</a>
+        <nav class="thz-nav-center" style="display:flex;gap:4px;flex:1">
+            <a href="#features" class="thz-nav-link" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E">{{ __('welcome.nav.features') }}</a>
+            <a href="#how" class="thz-nav-link" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E">{{ __('welcome.nav.how_it_works') }}</a>
+            <a href="#pricing" class="thz-nav-link" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E">{{ __('welcome.nav.pricing') }}</a>
+            <a href="{{ route('teacher.register') }}" class="thz-nav-link" style="padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:#57534E">{{ __('welcome.nav.teach') }}</a>
         </nav>
-        <div style="display:flex;gap:8px;align-items:center">
+        <div style="display:flex;gap:8px;align-items:center;margin-left:auto">
             {{-- Language switcher --}}
             <div style="display:flex;align-items:center;gap:2px;background:#F1ECE6;border-radius:8px;padding:3px">
                 <a href="{{ route('locale.switch', 'fr') }}"
@@ -42,10 +61,10 @@
                    style="padding:4px 9px;border-radius:6px;font-size:12.5px;font-weight:600;text-decoration:none;{{ app()->getLocale() === 'en' ? 'background:#fff;color:#1C1917;box-shadow:0 1px 2px rgba(28,25,23,.08)' : 'color:#78716C' }}">EN</a>
             </div>
             @auth
-                <a href="{{ url('/dashboard') }}" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">{{ __('welcome.nav.dashboard') }} →</a>
+                <a href="{{ url('/dashboard') }}" class="thz-btn-primary" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">{{ __('welcome.nav.dashboard') }} →</a>
             @else
-                <a href="{{ route('login') }}" style="background:transparent;border:1px solid #E2DBD3;color:#44403C;font-size:14px;font-weight:600;padding:8px 14px;border-radius:12px">{{ __('welcome.nav.login') }}</a>
-                <a href="{{ route('register') }}" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">{{ __('welcome.nav.get_started') }}</a>
+                <a href="{{ route('login') }}" class="thz-btn-ghost" style="background:transparent;border:1px solid #E2DBD3;color:#44403C;font-size:14px;font-weight:600;padding:8px 14px;border-radius:12px">{{ __('welcome.nav.login') }}</a>
+                <a href="{{ route('register') }}" class="thz-btn-primary" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">{{ __('welcome.nav.get_started') }}</a>
             @endauth
         </div>
     </div>
@@ -54,10 +73,10 @@
 {{-- Hero --}}
 <section style="position:relative;overflow:hidden">
     <div style="position:absolute;right:-60px;top:-40px;font-size:520px;line-height:1;color:#9A6A00;opacity:.035;font-weight:700;pointer-events:none;user-select:none">ⵣ</div>
-    <div style="max-width:1160px;margin:0 auto;padding:72px 24px 64px;display:flex;flex-wrap:wrap;gap:56px;align-items:center;position:relative">
+    <div style="max-width:1160px;margin:0 auto;padding:88px 24px 76px;position:relative;text-align:center">
 
-        {{-- Left col --}}
-        <div style="flex:1 1 440px;min-width:0">
+        {{-- Centered hero message --}}
+        <div style="max-width:940px;margin:0 auto">
             <div style="display:inline-flex;align-items:center;gap:10px;padding:6px 12px 6px 10px;border-radius:999px;background:#fff;border:1px solid #EAE4DD;font-size:13px;font-weight:500;color:#44403C;box-shadow:0 1px 2px rgba(28,25,23,.04)">
                 <span style="position:relative;width:10px;height:10px;flex-shrink:0">
                     <span style="position:absolute;inset:0;border-radius:999px;background:#F2B81D;opacity:.7;animation:thzPing 1.5s ease-out infinite"></span>
@@ -66,123 +85,44 @@
                 <span>{{ __('welcome.hero.badge') }}</span>
             </div>
 
-            <h1 style="font-size:clamp(40px,6vw,64px);line-height:1.02;letter-spacing:-.045em;font-weight:800;margin:24px 0 20px;text-wrap:balance">
+            <h1 style="font-size:clamp(44px,7vw,80px);line-height:1.03;letter-spacing:-.045em;font-weight:800;margin:26px auto 22px;text-wrap:balance;max-width:920px">
                 {{ __('welcome.hero.h1_plain') }}<span style="background:linear-gradient(120deg,#A87200,#D39B12);-webkit-background-clip:text;background-clip:text;color:transparent">{{ __('welcome.hero.h1_highlight') }}</span>{{ __('welcome.hero.h1_end') }}
             </h1>
 
-            <p style="font-size:18px;line-height:1.55;color:#78716C;font-weight:400;margin:0 0 32px;max-width:520px;text-wrap:pretty">
+            <p style="font-size:18.5px;line-height:1.55;color:#78716C;font-weight:400;margin:0 auto 34px;max-width:600px;text-wrap:pretty">
                 {{ __('welcome.hero.subtitle') }}
             </p>
 
-            <div style="display:flex;flex-wrap:wrap;gap:12px">
-                <a href="{{ route('register') }}" style="background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:14px 22px;border-radius:12px;box-shadow:0 10px 24px -8px rgba(222,165,0,.6);display:flex;align-items:center;gap:8px;text-decoration:none">
+            <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
+                <a href="{{ route('register') }}" class="thz-btn-primary" style="background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:14px 22px;border-radius:12px;box-shadow:0 10px 24px -8px rgba(222,165,0,.6);display:flex;align-items:center;gap:8px;text-decoration:none">
                     {{ __('welcome.hero.cta_primary') }}
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg>
                 </a>
-                <a href="{{ route('teacher.register') }}" style="background:#fff;border:1px solid #E2DBD3;color:#1C1917;font-size:15px;font-weight:600;padding:14px 22px;border-radius:12px;text-decoration:none">{{ __('welcome.hero.cta_teacher') }}</a>
+                <a href="{{ route('teacher.register') }}" class="thz-btn-ghost" style="background:#fff;border:1px solid #E2DBD3;color:#1C1917;font-size:15px;font-weight:600;padding:14px 22px;border-radius:12px;text-decoration:none">{{ __('welcome.hero.cta_teacher') }}</a>
             </div>
 
-            <div style="display:flex;align-items:center;gap:14px;margin-top:36px">
+            <div style="display:flex;align-items:center;gap:14px;margin-top:34px;justify-content:center;flex-wrap:wrap">
                 <div style="display:flex">
                     <div style="width:34px;height:34px;border-radius:999px;border:2px solid #FAF8F5;background:linear-gradient(135deg,#F2B81D,#F9D55C);color:#1C1917;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">SM</div>
                     <div style="width:34px;height:34px;border-radius:999px;border:2px solid #FAF8F5;margin-left:-10px;background:linear-gradient(135deg,#3F6E5E,#8BAE7C);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">AK</div>
                     <div style="width:34px;height:34px;border-radius:999px;border:2px solid #FAF8F5;margin-left:-10px;background:linear-gradient(135deg,#5B4B8A,#A77BB5);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">NB</div>
                     <div style="width:34px;height:34px;border-radius:999px;border:2px solid #FAF8F5;margin-left:-10px;background:linear-gradient(135deg,#7A5C3E,#C49A6C);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">YT</div>
                 </div>
-                <div style="font-size:13px;color:#78716C;line-height:1.4">{{ __('welcome.hero.social_proof') }}</div>
+                <div style="font-size:13px;color:#78716C;line-height:1.4;max-width:260px">{{ __('welcome.hero.social_proof') }}</div>
             </div>
-        </div>
-
-        {{-- Right col — UI mockup --}}
-        <div style="flex:1 1 400px;min-width:0;position:relative;padding:20px 8px">
-            <div style="background:#fff;border:1px solid #EAE4DD;border-radius:20px;box-shadow:0 30px 60px -24px rgba(28,25,23,.22),0 0 0 6px rgba(255,255,255,.6);overflow:hidden">
-                <div style="display:flex;align-items:center;gap:6px;padding:12px 16px;border-bottom:1px solid #F1ECE6">
-                    <div style="width:9px;height:9px;border-radius:99px;background:#E7E0D8"></div>
-                    <div style="width:9px;height:9px;border-radius:99px;background:#E7E0D8"></div>
-                    <div style="width:9px;height:9px;border-radius:99px;background:#E7E0D8"></div>
-                    <div style="margin-left:12px;height:8px;width:120px;border-radius:99px;background:#F1ECE6"></div>
-                </div>
-                <div style="padding:18px;display:flex;flex-direction:column;gap:12px">
-                    <div style="display:flex;gap:8px">
-                        <div style="height:30px;flex:1;border-radius:10px;border:1px solid #EAE4DD"></div>
-                        <div style="height:30px;width:90px;border-radius:10px;border:1px solid #EAE4DD"></div>
-                    </div>
-                    <div style="border:1px solid #EAE4DD;border-radius:14px;padding:14px;display:flex;gap:12px;align-items:flex-start">
-                        <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#F2B81D,#F9D55C);color:#1C1917;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">KA</div>
-                        <div style="flex:1;display:flex;flex-direction:column;gap:7px">
-                            <div style="display:flex;justify-content:space-between;align-items:center">
-                                <div style="font-size:13px;font-weight:700">{{ __('welcome.hero.teacher_name') }}</div>
-                                <div style="font-size:10px;font-weight:600;color:#2F7D5B;background:#E8F3EC;padding:2px 8px;border-radius:99px">{{ __('welcome.hero.slots_available', ['count' => 4]) }}</div>
-                            </div>
-                            <div style="height:6px;width:90%;border-radius:99px;background:#F1ECE6"></div>
-                            <div style="height:6px;width:65%;border-radius:99px;background:#F1ECE6"></div>
-                        </div>
-                    </div>
-                    <div style="border-radius:12px;background:#FCFAF8;border:1px solid #F1ECE6;overflow:hidden">
-                        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px">
-                            <div style="text-align:center;width:28px">
-                                <div style="font-size:14px;font-weight:700;color:#9A6A00;line-height:1">24</div>
-                                <div style="font-size:9px;color:#A8A29E;text-transform:uppercase">Sep</div>
-                            </div>
-                            <div style="width:1px;height:22px;background:#EAE4DD"></div>
-                            <div style="flex:1;font-size:12px;font-weight:600">18:00 – 19:00</div>
-                            <div style="font-size:11px;font-weight:700;color:#1C1917;background:#F2B81D;padding:5px 10px;border-radius:8px">{{ __('welcome.hero.cta_primary') }}</div>
-                        </div>
-                        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-top:1px solid #F1ECE6">
-                            <div style="text-align:center;width:28px">
-                                <div style="font-size:14px;font-weight:700;color:#9A6A00;line-height:1">26</div>
-                                <div style="font-size:9px;color:#A8A29E;text-transform:uppercase">Sep</div>
-                            </div>
-                            <div style="width:1px;height:22px;background:#EAE4DD"></div>
-                            <div style="flex:1;font-size:12px;font-weight:600">10:00 – 11:00</div>
-                            <div style="font-size:11px;font-weight:600;color:#57534E;border:1px solid #E2DBD3;padding:4px 10px;border-radius:8px">{{ __('welcome.hero.cta_primary') }}</div>
-                        </div>
-                    </div>
-                    <div style="border:1px solid #EAE4DD;border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;opacity:.6">
-                        <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#3F6E5E,#8BAE7C);flex-shrink:0"></div>
-                        <div style="flex:1;display:flex;flex-direction:column;gap:7px">
-                            <div style="height:7px;width:40%;border-radius:99px;background:#E7E0D8"></div>
-                            <div style="height:6px;width:80%;border-radius:99px;background:#F1ECE6"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Floating badge --}}
-            <div style="position:absolute;left:-12px;bottom:-4px;background:#fff;border:1px solid #EAE4DD;border-radius:14px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 16px 32px -12px rgba(28,25,23,.25);animation:thzFloat 5s ease-in-out infinite">
-                <div style="width:30px;height:30px;border-radius:9px;background:#E8F3EC;color:#2F7D5B;display:flex;align-items:center;justify-content:center">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
-                </div>
-                <div>
-                    <div style="font-size:12.5px;font-weight:700">{{ __('welcome.hero.booking_confirmed') }}</div>
-                    <div style="font-size:11.5px;color:#78716C">{{ __('welcome.hero.booking_detail') }}</div>
-                </div>
-            </div>
-
-            {{-- Azul badge --}}
-            <div style="position:absolute;right:-4px;top:0;background:#1C1917;color:#FAF8F5;border-radius:12px;padding:8px 12px;font-size:12px;font-weight:600;box-shadow:0 12px 24px -10px rgba(28,25,23,.4)">{{ __('welcome.hero.greeting') }}</div>
         </div>
     </div>
 </section>
 
-{{-- Stats bar --}}
+{{-- Trust bar --}}
 <section style="border-top:1px solid #EAE4DD;border-bottom:1px solid #EAE4DD;background:#fff">
     <div style="max-width:1160px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
-        <div style="padding:28px 20px;border-left:1px solid #F1ECE6">
-            <div style="font-size:18px;font-weight:700;letter-spacing:-.02em;color:#1C1917">{{ __('welcome.stats.verified_label') }}</div>
+        @foreach(__('welcome.trust.items') as $item)
+        <div style="padding:26px 20px;border-left:1px solid #F1ECE6;{{ $loop->last ? 'border-right:1px solid #F1ECE6' : '' }}">
+            <div style="font-size:clamp(24px,3vw,32px);font-weight:800;letter-spacing:-.035em;line-height:1;color:#1C1917">{{ $item['value'] }}</div>
+            <div style="font-size:13.5px;color:#78716C;margin-top:8px;line-height:1.4">{{ $item['label'] }}</div>
         </div>
-        <div style="padding:28px 20px;border-left:1px solid #F1ECE6">
-            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">{{ __('welcome.stats.duration_value') }}</div>
-            <div style="font-size:13.5px;color:#78716C;margin-top:4px">{{ __('welcome.stats.duration_label') }}</div>
-        </div>
-        <div style="padding:28px 20px;border-left:1px solid #F1ECE6">
-            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">{{ __('welcome.stats.origin_value') }}</div>
-            <div style="font-size:13.5px;color:#78716C;margin-top:4px">{{ __('welcome.stats.origin_label') }}</div>
-        </div>
-        <div style="padding:28px 20px;border-left:1px solid #F1ECE6;border-right:1px solid #F1ECE6">
-            <div style="font-size:34px;font-weight:800;letter-spacing:-.04em">{{ __('welcome.stats.cancel_value') }}</div>
-            <div style="font-size:13.5px;color:#78716C;margin-top:4px">{{ __('welcome.stats.cancel_label') }}</div>
-        </div>
+        @endforeach
     </div>
 </section>
 
@@ -205,7 +145,7 @@
     @endphp
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
         @foreach(__('welcome.features.items') as $index => $feature)
-        <div style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:24px;transition:all .2s">
+        <div class="thz-card" style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:24px">
             <div style="width:40px;height:40px;border-radius:11px;background:#FDF3D6;color:#9A6A00;display:flex;align-items:center;justify-content:center;margin-bottom:18px">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{!! $featureIcons[$index] !!}</svg>
             </div>
@@ -234,6 +174,80 @@
     </div>
 </section>
 
+{{-- Pricing --}}
+@php
+    $pricingCtaUrl = auth()->check() ? url('/dashboard') : route('register');
+@endphp
+<section id="pricing" style="background:#fff;border-top:1px solid #EAE4DD;border-bottom:1px solid #EAE4DD">
+    <div style="max-width:1160px;margin:0 auto;padding:88px 24px">
+        <div style="text-align:center;max-width:600px;margin:0 auto 52px">
+            <div style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#9A6A00">{{ __('welcome.pricing.label') }}</div>
+            <h2 style="font-size:clamp(30px,4vw,42px);letter-spacing:-.035em;line-height:1.08;font-weight:800;margin:12px 0 14px">{{ __('welcome.pricing.h2') }}</h2>
+            <p style="font-size:16.5px;color:#78716C;line-height:1.55;margin:0">{{ __('welcome.pricing.subtitle') }}</p>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;align-items:stretch;max-width:960px;margin:0 auto">
+            @foreach(config('packages') as $key => $pack)
+                @php
+                    $featured = $key === 'standard';
+                    $price = $pack['price_cents'] / 100;
+                    $perSession = $pack['price_cents'] / 100 / $pack['sessions_count'];
+                    $priceLabel = '$'.rtrim(rtrim(number_format($price, 2, '.', ''), '0'), '.');
+                    $perSessionLabel = '$'.number_format($perSession, 2, '.', '');
+                @endphp
+                <div class="thz-price" style="position:relative;background:{{ $featured ? '#FFFDF8' : '#fff' }};border:{{ $featured ? '2px solid #F2B81D' : '1px solid #EAE4DD' }};border-radius:20px;padding:{{ $featured ? '30px 26px' : '28px 26px' }};display:flex;flex-direction:column;box-shadow:{{ $featured ? '0 24px 48px -22px rgba(222,165,0,.45)' : '0 1px 2px rgba(28,25,23,.04)' }}">
+                    @if($featured)
+                        <div style="position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:#F2B81D;color:#1C1917;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:5px 14px;border-radius:999px;box-shadow:0 8px 18px -6px rgba(222,165,0,.7);white-space:nowrap">{{ __('welcome.pricing.popular_badge') }}</div>
+                    @endif
+                    <div style="font-size:18px;font-weight:800;letter-spacing:-.02em">{{ __('welcome.pricing.packs.'.$key.'.name') }}</div>
+                    <div style="font-size:13.5px;color:#78716C;line-height:1.45;margin-top:6px;min-height:38px">{{ __('welcome.pricing.packs.'.$key.'.tagline') }}</div>
+
+                    <div style="display:flex;align-items:baseline;gap:4px;margin:20px 0 4px">
+                        <span style="font-size:44px;font-weight:800;letter-spacing:-.045em;line-height:1">{{ $priceLabel }}</span>
+                    </div>
+                    <div style="font-size:13px;color:#9A6A00;font-weight:600">{{ __('welcome.pricing.sessions_count', ['count' => $pack['sessions_count']]) }} · {{ __('welcome.pricing.per_session', ['price' => $perSessionLabel]) }}</div>
+
+                    <a href="{{ $pricingCtaUrl }}" class="{{ $featured ? 'thz-btn-primary' : 'thz-btn-ghost' }}" style="margin-top:24px;text-align:center;{{ $featured ? 'background:#F2B81D;color:#1C1917;box-shadow:0 10px 24px -8px rgba(222,165,0,.6)' : 'background:#fff;border:1px solid #E2DBD3;color:#1C1917' }};font-size:15px;font-weight:700;padding:12px 18px;border-radius:12px;text-decoration:none">{{ __('welcome.pricing.cta') }}</a>
+                </div>
+            @endforeach
+        </div>
+
+        {{-- Included in every pack --}}
+        <div style="max-width:960px;margin:36px auto 0;background:#FCFAF8;border:1px solid #F1ECE6;border-radius:16px;padding:24px 26px">
+            <div style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9A6A00;margin-bottom:16px">{{ __('welcome.pricing.included_title') }}</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+                @foreach(__('welcome.pricing.included') as $item)
+                <div style="display:flex;align-items:flex-start;gap:10px">
+                    <div style="width:20px;height:20px;border-radius:99px;background:#E8F3EC;color:#2F7D5B;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>
+                    </div>
+                    <span style="font-size:14px;color:#44403C;line-height:1.45">{{ $item }}</span>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- FAQ --}}
+<section id="faq" style="max-width:760px;margin:0 auto;padding:88px 24px 40px">
+    <div style="text-align:center;margin-bottom:44px">
+        <div style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#9A6A00">{{ __('welcome.faq.label') }}</div>
+        <h2 style="font-size:clamp(28px,4vw,40px);letter-spacing:-.035em;line-height:1.08;font-weight:800;margin:12px 0 0">{{ __('welcome.faq.h2') }}</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+        @foreach(__('welcome.faq.items') as $item)
+        <details class="thz-faq" style="background:#fff;border:1px solid #EAE4DD;border-radius:14px;padding:0">
+            <summary style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;font-size:16px;font-weight:600;color:#1C1917">
+                <span>{{ $item['q'] }}</span>
+                <svg class="thz-faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A6A00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>
+            </summary>
+            <div style="padding:0 20px 20px;font-size:15px;color:#78716C;line-height:1.6">{{ $item['a'] }}</div>
+        </details>
+        @endforeach
+    </div>
+</section>
+
 {{-- Teacher CTA --}}
 <section style="max-width:1160px;margin:0 auto;padding:24px 24px 88px">
     <div style="position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(135deg,#1C1917 0%,#26211C 60%,#3A2E14 100%);padding:clamp(36px,6vw,64px);color:#fff">
@@ -243,21 +257,25 @@
             <div style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#F2B81D">{{ __('welcome.teacher_cta.label') }}</div>
             <h2 style="font-size:clamp(28px,4vw,40px);letter-spacing:-.035em;line-height:1.08;font-weight:800;margin:12px 0 14px">{{ __('welcome.teacher_cta.h2') }}</h2>
             <p style="font-size:16.5px;line-height:1.55;color:#D6D0C7;margin:0 0 28px">{{ __('welcome.teacher_cta.subtitle') }}</p>
-            <a href="{{ route('teacher.register') }}" style="display:inline-flex;background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:14px 22px;border-radius:12px;box-shadow:0 10px 24px -8px rgba(0,0,0,.35);text-decoration:none">{{ __('welcome.teacher_cta.cta', ['app' => config('app.name')]) }}</a>
+            <a href="{{ route('teacher.register') }}" class="thz-btn-primary" style="display:inline-flex;background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:14px 22px;border-radius:12px;box-shadow:0 10px 24px -8px rgba(0,0,0,.35);text-decoration:none">{{ __('welcome.teacher_cta.cta', ['app' => config('app.name')]) }}</a>
         </div>
     </div>
 </section>
 
 {{-- Footer --}}
 <footer style="border-top:1px solid #EAE4DD">
-    <div style="max-width:1160px;margin:0 auto;padding:32px 24px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:10px">
+    <div style="max-width:1160px;margin:0 auto;padding:36px 24px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
             <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#F2B81D,#F9D55C);display:flex;align-items:center;justify-content:center;color:#1C1917;font-size:15px;font-weight:700">ⵣ</div>
-            <span style="font-size:15px;font-weight:700">{{ config('app.name') }}</span>
+            <div>
+                <div style="font-size:15px;font-weight:700;line-height:1.2">{{ config('app.name') }}</div>
+                <div style="font-size:12.5px;color:#A8A29E;line-height:1.3">{{ __('welcome.footer.tagline') }}</div>
+            </div>
         </div>
         <div style="display:flex;flex-wrap:wrap;gap:22px;font-size:14px">
             <a href="#features" style="color:#78716C">{{ __('welcome.nav.features') }}</a>
             <a href="#how" style="color:#78716C">{{ __('welcome.nav.how_it_works') }}</a>
+            <a href="#pricing" style="color:#78716C">{{ __('welcome.nav.pricing') }}</a>
             <a href="{{ route('teacher.register') }}" style="color:#78716C">{{ __('welcome.nav.teach') }}</a>
             <a href="{{ route('login') }}" style="color:#78716C">{{ __('welcome.nav.login') }}</a>
         </div>

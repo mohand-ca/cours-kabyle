@@ -44,7 +44,7 @@
     {{-- Teacher list --}}
     <div style="display:flex;flex-direction:column;gap:12px">
         @forelse($teachers as $teacher)
-            <div style="background:#fff;border-radius:16px;border:1px solid {{ $expandedTeacherId === $teacher->id ? '#EBD69A' : '#EAE4DD' }};box-shadow:{{ $expandedTeacherId === $teacher->id ? '0 8px 24px -8px rgba(28,25,23,.12)' : '0 1px 2px rgba(28,25,23,.04)' }};overflow:hidden;transition:all .2s">
+            <div @class(['thz-row' => $expandedTeacherId !== $teacher->id]) style="background:#fff;border-radius:16px;border:1px solid {{ $expandedTeacherId === $teacher->id ? '#EBD69A' : '#EAE4DD' }};box-shadow:{{ $expandedTeacherId === $teacher->id ? '0 8px 24px -8px rgba(28,25,23,.12)' : '0 1px 2px rgba(28,25,23,.04)' }};overflow:hidden;transition:all .2s">
 
                 {{-- Teacher row --}}
                 <div style="padding:20px;display:flex;gap:16px">
@@ -56,7 +56,7 @@
                         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
                             <div>
                                 <div style="font-size:15px;font-weight:700;color:#1C1917">{{ $teacher->user->name }}</div>
-                                <div style="font-size:12.5px;color:#78716C;margin-top:2px">Algérie · UTC+1</div>
+                                <div style="font-size:12.5px;color:#78716C;margin-top:2px">{{ __('learner.catalog.location') }}</div>
                             </div>
                             @if($teacher->available_slots_count > 0)
                                 <span style="flex-shrink:0;display:inline-flex;align-items:center;gap:5px;padding:3px 10px;font-size:12px;font-weight:600;background:#E8F3EC;color:#2F7D5B;border-radius:99px;border:1px solid #C5E4CF">

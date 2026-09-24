@@ -14,6 +14,10 @@ return [
         'sessions_remaining' => 'Séances restantes',
         'buy_sessions' => 'Acheter des séances',
         'subtitle' => 'Voici un aperçu de ton apprentissage.',
+        'stat_sessions_planned' => 'séances planifiées',
+        'stat_sessions_balance' => 'séances dans votre solde',
+        'stat_points_earned' => 'points accumulés',
+        'stat_learner_profiles' => 'profils apprenants',
     ],
     'learners' => [
         'title' => 'Mes apprenants',
@@ -55,6 +59,7 @@ return [
         'session_cancelled' => 'Séance annulée.',
         'no_slots' => 'Aucun créneau disponible',
         'with' => 'avec',
+        'confirmed' => 'Confirmé',
     ],
     'packages' => [
         'title' => 'Acheter des séances',
@@ -76,6 +81,7 @@ return [
         'no_slots' => 'Aucun créneau disponible',
         'view_slots' => 'Voir les disponibilités',
         'no_results' => 'Aucun enseignant ne correspond à vos filtres.',
+        'location' => 'Algérie · UTC+1',
     ],
 
     'mail' => [

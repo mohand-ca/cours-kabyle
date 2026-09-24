@@ -14,7 +14,7 @@
     {{-- Stats --}}
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:24px">
 
-        <div style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
+        <div class="thz-card" style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
             <div style="display:flex;justify-content:space-between;align-items:flex-start">
                 <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#78716C">{{ __('learner.dashboard.upcoming_sessions') }}</div>
                 <div style="width:36px;height:36px;border-radius:10px;background:#FDF3D6;color:#9A6A00;display:flex;align-items:center;justify-content:center;flex-shrink:0">
@@ -22,10 +22,10 @@
                 </div>
             </div>
             <div style="font-size:32px;font-weight:800;letter-spacing:-.04em;margin-top:2px;color:#1C1917">{{ $upcomingSessions->count() }}</div>
-            <div style="font-size:12.5px;color:#A8A29E">séances planifiées</div>
+            <div style="font-size:12.5px;color:#A8A29E">{{ __('learner.dashboard.stat_sessions_planned') }}</div>
         </div>
 
-        <div style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
+        <div class="thz-card" style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
             <div style="display:flex;justify-content:space-between;align-items:flex-start">
                 <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#78716C">{{ __('learner.dashboard.sessions_remaining') }}</div>
                 <div style="width:36px;height:36px;border-radius:10px;background:#FDF3D6;color:#9A6A00;display:flex;align-items:center;justify-content:center;flex-shrink:0">
@@ -34,14 +34,14 @@
             </div>
             @if($sessionsRemaining > 0)
                 <div style="font-size:32px;font-weight:800;letter-spacing:-.04em;margin-top:2px;color:#9A6A00">{{ $sessionsRemaining }}</div>
-                <div style="font-size:12.5px;color:#A8A29E">séances dans votre solde</div>
+                <div style="font-size:12.5px;color:#A8A29E">{{ __('learner.dashboard.stat_sessions_balance') }}</div>
             @else
                 <div style="font-size:32px;font-weight:800;letter-spacing:-.04em;margin-top:2px;color:#1C1917">0</div>
                 <a href="{{ route('learner.packages') }}" style="font-size:12.5px;font-weight:600;color:#9A6A00">{{ __('learner.dashboard.buy_sessions') }} →</a>
             @endif
         </div>
 
-        <div style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
+        <div class="thz-card" style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
             <div style="display:flex;justify-content:space-between;align-items:flex-start">
                 <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#78716C">{{ __('learner.dashboard.points') }}</div>
                 <div style="width:36px;height:36px;border-radius:10px;background:#FDF3D6;color:#9A6A00;display:flex;align-items:center;justify-content:center;flex-shrink:0">
@@ -49,10 +49,10 @@
                 </div>
             </div>
             <div style="font-size:32px;font-weight:800;letter-spacing:-.04em;margin-top:2px;color:#1C1917">{{ $totalPoints }}</div>
-            <div style="font-size:12.5px;color:#A8A29E">points accumulés</div>
+            <div style="font-size:12.5px;color:#A8A29E">{{ __('learner.dashboard.stat_points_earned') }}</div>
         </div>
 
-        <div style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
+        <div class="thz-card" style="background:#fff;border:1px solid #EAE4DD;border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(28,25,23,.04)">
             <div style="display:flex;justify-content:space-between;align-items:flex-start">
                 <div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#78716C">{{ __('learner.dashboard.learners') }}</div>
                 <div style="width:36px;height:36px;border-radius:10px;background:#FDF3D6;color:#9A6A00;display:flex;align-items:center;justify-content:center;flex-shrink:0">
@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div style="font-size:32px;font-weight:800;letter-spacing:-.04em;margin-top:2px;color:#1C1917">{{ $learners->count() }}</div>
-            <div style="font-size:12.5px;color:#A8A29E">profils apprenants</div>
+            <div style="font-size:12.5px;color:#A8A29E">{{ __('learner.dashboard.stat_learner_profiles') }}</div>
         </div>
     </div>
 
@@ -86,7 +86,7 @@
                     </div>
                     <span style="flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:4px 10px;font-size:12px;font-weight:600;background:#E8F3EC;color:#2F7D5B;border-radius:99px;border:1px solid #C5E4CF">
                         <span style="width:6px;height:6px;border-radius:99px;background:#3A9A6E;flex-shrink:0"></span>
-                        Confirmé
+                        {{ __('learner.booking.confirmed') }}
                     </span>
 
                     @if($cancelSessionId === $session->id)

@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'tagline' => 'La langue kabyle, transmise par ceux qui la vivent.',
+
     'login' => [
         'title' => 'Se connecter',
         'subtitle' => 'Bon retour sur la plateforme.',
