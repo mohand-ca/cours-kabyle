@@ -43,6 +43,11 @@ return [
             'completed' => 'Completed',
             'refunded' => 'Refunded',
         ],
+        'packages' => [
+            'starter' => '5-session pack',
+            'standard' => '10-session pack',
+            'premium' => '20-session pack',
+        ],
         'filters' => [
             'status' => 'Status',
         ],

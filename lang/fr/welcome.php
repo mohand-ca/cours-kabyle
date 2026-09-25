@@ -68,6 +68,7 @@ return [
         'h2' => 'Un tarif clair. Des séances qui ne périment pas.',
         'subtitle' => 'Achetez un forfait, réservez quand vous voulez. Plus le forfait est grand, moins la séance coûte.',
         'popular_badge' => 'Le plus choisi',
+        'amount' => ':value $',
         'per_session' => 'soit :price / séance',
         'sessions_count' => ':count séances',
         'cta' => 'Commencer',

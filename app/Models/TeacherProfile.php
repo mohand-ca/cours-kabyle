@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['user_id', 'bio', 'levels', 'languages', 'meet_link', 'status', 'submitted_at'])]
+#[Fillable(['user_id', 'bio', 'levels', 'languages', 'meet_link', 'status', 'submitted_at', 'default_slot_duration', 'slot_buffer', 'booking_horizon_weeks'])]
 class TeacherProfile extends Model
 {
     /** @use HasFactory<TeacherProfileFactory> */
@@ -21,12 +21,28 @@ class TeacherProfile extends Model
             'levels' => 'array',
             'languages' => 'array',
             'submitted_at' => 'datetime',
+            'default_slot_duration' => 'integer',
+            'slot_buffer' => 'integer',
+            'booking_horizon_weeks' => 'integer',
         ];
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function timeOffs(): HasMany
+    {
+        return $this->hasMany(TimeOff::class);
+    }
+
+    /**
+     * The teacher's own timezone (e.g. Africa/Algiers). Patterns are expressed in this timezone.
+     */
+    public function timezone(): string
+    {
+        return $this->user->timezone ?? config('app.timezone');
     }
 
     public function availabilityPatterns(): HasMany

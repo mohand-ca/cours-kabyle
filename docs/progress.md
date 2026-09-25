@@ -5,8 +5,8 @@
 ---
 
 ## Statut général
-**Phase : MVP — Production Readiness (phases 6–7 partiellement couvertes)**
-68/68 tests passent. App nommée **Azul**.
+**Phase : MVP complet + disponibilités enseignant v2**
+97/97 tests passent. App nommée **Azul**. Stripe en **CAD**. Palette **amber/warm** (Geist).
 
 ---
 
@@ -69,10 +69,10 @@
 ### Phase 3 — Design ✅ (Claude Design)
 
 - Projet Claude Design créé sur claude.ai (privé, account Samir)
-- 11 composants HTML générés : foundations/colors, foundations/typography, components/buttons, components/forms, components/badges, components/cards, learner/teacher-card, learner/session-card, learner/dashboard, public/hero, public/how-it-works
-- Palette : violet-600 primaire, indigo-500 accent, fond blanc app / fond `#1e1b4b` vitrine
-- Typographie : Inter, gradient headline violet-400→indigo-300
-- Inspiration : SavvyCal (layout bold dark hero, minimaliste) — couleurs violet/indigo propres au projet
+- **Palette retenue : amber/warm** — fond `#FAF8F5`, primaire `#F2B81D`, texte accent `#9A6A00`
+- Typographie : **Geist**
+- Implémentée dans toutes les vues Blade + panel Filament (thème amber/Geist)
+- (Historique : une première direction violet/indigo a été abandonnée au profit de l'amber/warm)
 
 ---
 
@@ -252,10 +252,20 @@ STRIPE_PRICE_PREMIUM=price_...
 
 ---
 
-## Dernière session — 23 septembre 2026
+## Disponibilités enseignant v2 ✅ (session 25 septembre 2026)
 
-- **Production readiness** : renommage Azul, vérif email, mot de passe oublié, timezone enseignant, pages 404/500, config packages CAD
-- **Admin Filament** : UserResource, PurchaseResource, StatsOverview (sparklines), LatestBookings, traductions FR/EN
-- **DemoSeeder** : 50 apprenants + 5 enseignants avec créneaux, achats et séances — `php artisan migrate:fresh --seed`
-- **68/68 tests passent**
-- **Prochain** : Phase 8 — Site vitrine public (homepage, pricing, FAQ)
+Refonte complète de `Teacher/AvailabilityCalendar` (~1 690 lignes sur 19 fichiers).
+
+- **Backend** : `App\Services\AvailabilitySlotGenerator` (idempotent, TZ-aware, skip congés/passé, inserts par batch de 500) ; migrations récurrence sur `availability_patterns` (`slot_duration`, `buffer`, `starts_on`, `until`), réglages sur `teacher_profiles` (`default_slot_duration`, `slot_buffer`, `booking_horizon_weeks`), table `time_offs` + modèle `TimeOff`.
+- **Front** : vues Semaine/Mois/Agenda + version mobile, clic-pour-créer, ponctuel + récurrent (copier-vers-jours, presets, publication), congés, réglages, aperçu multi-fuseaux. Vues sous `resources/views/livewire/teacher/availability/`. Forms `OneOffSlotForm`, `TimeOffForm`.
+- **Convention** : `day_of_week` = 0=lundi…6=dimanche ; patterns en heure LOCALE prof, slots stockés UTC.
+- **Scheduling** : commande `availability:generate` planifiée daily 02:00 dans `routes/console.php`.
+- **Tests** : `AvailabilitySlotGeneratorTest` (6) + `AvailabilitySlotTest` (15) — dont régression fuseau Alger.
+
+---
+
+## Dernière session — 25 septembre 2026
+
+- **Disponibilités enseignant v2** livrées et commitées (voir section ci-dessus)
+- **97/97 tests passent**
+- **Prochain** : Phase 8 — Site vitrine public + config Stripe prod + déploiement Laravel Cloud

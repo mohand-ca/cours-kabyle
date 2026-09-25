@@ -54,7 +54,8 @@ class PurchaseTest extends TestCase
             ->test(PackageCatalog::class)
             ->assertOk()
             ->assertSee(__('welcome.pricing.packs.starter.name'))
-            ->assertSee('$49')
+            ->assertSee(__('welcome.pricing.amount', ['value' => '49']))
+            ->assertSee(strtoupper(config('cashier.currency')))
             ->assertSee(__('welcome.pricing.popular_badge'));
     }
 

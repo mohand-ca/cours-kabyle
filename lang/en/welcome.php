@@ -68,6 +68,7 @@ return [
         'h2' => 'Clear pricing. Sessions that never expire.',
         'subtitle' => 'Buy a pack, book whenever you want. The bigger the pack, the less each session costs.',
         'popular_badge' => 'Most chosen',
+        'amount' => '$:value',
         'per_session' => ':price / session',
         'sessions_count' => ':count sessions',
         'cta' => 'Get started',

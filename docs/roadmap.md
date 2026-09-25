@@ -20,9 +20,9 @@ Périmètre volontairement réduit — livrer vite, apprendre du marché.
 
 ### Phase 3 — Design ✅
 - [x] Projet Claude Design créé (privé, account Samir)
-- [x] 11 composants HTML : foundations, components, learner, public
-- [x] Palette violet/indigo définie, hero dark `#1e1b4b`, fond blanc app
-- [x] Typographie Inter, gradients, système de badges et cards
+- [x] **Palette amber/warm** : fond `#FAF8F5`, primaire `#F2B81D`, accent `#9A6A00`
+- [x] Typographie **Geist**, système de badges et cards
+- [x] Implémentée sur toutes les vues + panel Filament
 
 ### Phase 4 — Espace apprenant + réservations ✅
 - [x] Dashboard apprenant (séances à venir, apprenants, sessions restantes)
@@ -43,32 +43,35 @@ Périmètre volontairement réduit — livrer vite, apprendre du marché.
 - [x] Décrément `sessions_remaining` à la réservation, re-crédit à l'annulation
 - [x] CSRF exclu pour `stripe/*`
 
-### Phase 6 — Emails ← PROCHAINE ÉTAPE
-- [ ] Email de confirmation réservation : apprenant (+ `notification_email` si défini) + enseignant
-- [ ] Rappel automatique 24h avant la séance (job planifié)
-- [ ] Email de bienvenue enseignant après approbation admin
-- [ ] Choix provider : Mailgun ou Resend (à décider — Resend recommandé pour sa DX)
+### Phase 6 — Emails ✅
+- [x] Email de confirmation réservation : apprenant (+ `notification_email` si défini) + enseignant
+- [x] Rappel automatique 24h avant la séance (`sessions:send-reminders`, hourly, idempotent)
+- [x] Email de bienvenue enseignant après approbation admin
+- [x] Mailables `ShouldQueue` (driver `database`) — provider à configurer en prod (Resend recommandé)
 
-### Phase 7 — Admin Filament complet
-- [ ] Filament : gestion des paquets (créer/modifier prix + stripe_price_id)
-- [ ] Filament : vue des bookings (LessonSessions) avec filtres
-- [ ] Filament : vue des purchases avec statut
-- [ ] Filament : statistiques basiques (revenus, séances, inscriptions)
-- [ ] Filament : gestion des utilisateurs (tous rôles)
+### Phase 7 — Admin Filament complet ✅
+- [x] Filament : UserResource (tous rôles, filtre + badge)
+- [x] Filament : PurchaseResource (statut, sessions restantes)
+- [x] Filament : TeacherProfileResource (approve/suspend)
+- [x] Filament : StatsOverview (sparklines, poll 60s) + LatestBookings
+- [x] Thème amber/Geist aligné sur la marque
 
-### Phase 8 — Site vitrine
-- [ ] Page d'accueil (hero, problème, solution, comment ça marche, tarifs)
-- [ ] Page "Devenir enseignant"
-- [ ] Page FAQ
+### Disponibilités enseignant v2 ✅
+- [x] `AvailabilitySlotGenerator` (idempotent, TZ-aware, skip congés/passé)
+- [x] Patterns récurrents enrichis + réglages profil + table `time_offs`
+- [x] Vues Semaine/Mois/Agenda + mobile, clic-pour-créer, congés, aperçu multi-fuseaux
+- [x] Commande `availability:generate` planifiée daily 02:00
+
+### Phase 8 — Site vitrine ← PROCHAINE ÉTAPE
+- [x] Page d'accueil premium (hero, comment ça marche, tarifs, FAQ) — `welcome.blade.php`
+- [x] Page "Devenir enseignant" (`/become-a-teacher`)
 - [ ] Page politique de confidentialité + mentions légales (RGPD / PIPEDA)
-- [ ] Remplace `welcome.blade.php`
 
-### Phase 9 — Intégration design + déploiement
-- [ ] Appliquer le design Claude Design sur toutes les vues (auth, enseignant, apprenant)
-- [ ] Configurer Stripe en prod (clés + `php artisan cashier:webhook`)
+### Phase 9 — Déploiement
+- [ ] Configurer Stripe en prod (clés + price IDs + `php artisan cashier:webhook`)
+- [ ] Configurer un provider email (Resend/Mailgun) + queue worker
 - [ ] Configurer MySQL 8 sur Laravel Cloud (EU)
-- [ ] Variables d'env prod : `APP_URL`, `STRIPE_KEY`, `STRIPE_SECRET`, `STRIPE_WEBHOOK_SECRET`
-- [ ] `PackageSeeder` avec les vrais `stripe_price_id` du dashboard Stripe
+- [ ] Variables d'env prod : `APP_URL`, `STRIPE_KEY`, `STRIPE_SECRET`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_*`
 
 ---
 

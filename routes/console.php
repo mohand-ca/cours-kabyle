@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('sessions:send-reminders')->hourly();
+Schedule::command('availability:generate')->dailyAt('02:00');

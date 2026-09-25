@@ -190,10 +190,11 @@
             @foreach(config('packages') as $key => $pack)
                 @php
                     $featured = $key === 'standard';
-                    $price = $pack['price_cents'] / 100;
-                    $perSession = $pack['price_cents'] / 100 / $pack['sessions_count'];
-                    $priceLabel = '$'.rtrim(rtrim(number_format($price, 2, '.', ''), '0'), '.');
-                    $perSessionLabel = '$'.number_format($perSession, 2, '.', '');
+                    $currency = strtoupper(config('cashier.currency'));
+                    $priceValue = rtrim(rtrim(number_format($pack['price_cents'] / 100, 2, '.', ''), '0'), '.');
+                    $priceLabel = __('welcome.pricing.amount', ['value' => $priceValue]);
+                    $perSessionValue = number_format($pack['price_cents'] / 100 / $pack['sessions_count'], 2, '.', '');
+                    $perSessionLabel = __('welcome.pricing.amount', ['value' => $perSessionValue]);
                 @endphp
                 <div class="thz-price" style="position:relative;background:{{ $featured ? '#FFFDF8' : '#fff' }};border:{{ $featured ? '2px solid #F2B81D' : '1px solid #EAE4DD' }};border-radius:20px;padding:{{ $featured ? '30px 26px' : '28px 26px' }};display:flex;flex-direction:column;box-shadow:{{ $featured ? '0 24px 48px -22px rgba(222,165,0,.45)' : '0 1px 2px rgba(28,25,23,.04)' }}">
                     @if($featured)
@@ -202,8 +203,9 @@
                     <div style="font-size:18px;font-weight:800;letter-spacing:-.02em">{{ __('welcome.pricing.packs.'.$key.'.name') }}</div>
                     <div style="font-size:13.5px;color:#78716C;line-height:1.45;margin-top:6px;min-height:38px">{{ __('welcome.pricing.packs.'.$key.'.tagline') }}</div>
 
-                    <div style="display:flex;align-items:baseline;gap:4px;margin:20px 0 4px">
+                    <div style="display:flex;align-items:baseline;gap:6px;margin:20px 0 4px">
                         <span style="font-size:44px;font-weight:800;letter-spacing:-.045em;line-height:1">{{ $priceLabel }}</span>
+                        <span style="font-size:15px;font-weight:700;color:#9A6A00">{{ $currency }}</span>
                     </div>
                     <div style="font-size:13px;color:#9A6A00;font-weight:600">{{ __('welcome.pricing.sessions_count', ['count' => $pack['sessions_count']]) }} · {{ __('welcome.pricing.per_session', ['price' => $perSessionLabel]) }}</div>
 

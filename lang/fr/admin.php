@@ -43,6 +43,11 @@ return [
             'completed' => 'Complété',
             'refunded' => 'Remboursé',
         ],
+        'packages' => [
+            'starter' => 'Pack 5 séances',
+            'standard' => 'Pack 10 séances',
+            'premium' => 'Pack 20 séances',
+        ],
         'filters' => [
             'status' => 'Statut',
         ],

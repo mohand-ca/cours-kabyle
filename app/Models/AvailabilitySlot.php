@@ -58,4 +58,14 @@ class AvailabilitySlot extends Model
     {
         return $this->status === 'booked';
     }
+
+    public function isCancelled(): bool
+    {
+        return $this->status === 'cancelled';
+    }
+
+    public function durationMinutes(): int
+    {
+        return (int) $this->starts_at->diffInMinutes($this->ends_at);
+    }
 }

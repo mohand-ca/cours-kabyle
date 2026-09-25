@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Purchases\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Lang;
 
 class PurchasesTable
 {
@@ -24,7 +25,7 @@ class PurchasesTable
 
                 TextColumn::make('package_key')
                     ->label(__('admin.purchases.columns.package'))
-                    ->formatStateUsing(fn (string $state): string => config('packages.'.$state.'.name', $state))
+                    ->formatStateUsing(fn (string $state): string => Lang::has('admin.purchases.packages.'.$state) ? __('admin.purchases.packages.'.$state) : $state)
                     ->badge()
                     ->color('warning'),
 
