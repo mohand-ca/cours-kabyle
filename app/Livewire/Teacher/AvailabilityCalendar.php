@@ -946,7 +946,7 @@ class AvailabilityCalendar extends Component
     {
         $teacher = $this->teacher();
         $today = $now->copy()->setTimezone($displayTz)->startOfDay();
-        $end = $today->copy()->addDays(21);
+        $end = $today->copy()->addWeeks($this->horizonWeeks);
 
         $slots = collect();
         if ($teacher) {
