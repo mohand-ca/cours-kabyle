@@ -102,6 +102,13 @@
         </nav>
     </div>
 </header>
+<script>
+    document.querySelectorAll('.nav-dropdown a').forEach(function (link) {
+        link.addEventListener('click', function () {
+            document.getElementById('navtoggle').checked = false;
+        });
+    });
+</script>
 
 {{-- Hero --}}
 <section style="position:relative;overflow:hidden">
