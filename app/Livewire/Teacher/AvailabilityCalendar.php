@@ -219,6 +219,11 @@ class AvailabilityCalendar extends Component
         $this->modal = ['type' => 'leave'];
     }
 
+    public function openLeaveDetail(int $id): void
+    {
+        $this->modal = ['type' => 'del-leave', 'id' => $id];
+    }
+
     public function openBlock(int $slotId): void
     {
         $slot = $this->teacher()?->availabilitySlots()->find($slotId);
@@ -533,6 +538,28 @@ class AvailabilityCalendar extends Component
         $this->flashSuccess(trans_choice('teacher.availability.toast_leave_added', $cancelled, ['count' => $cancelled]));
     }
 
+    public function deleteTimeOff(): void
+    {
+        if (! $this->canEdit()) {
+            return;
+        }
+
+        $teacher = $this->teacher();
+        $off = $teacher?->timeOffs()->find($this->modal['id'] ?? null);
+        if (! $off) {
+            $this->modal = null;
+
+            return;
+        }
+
+        $off->delete();
+
+        $restored = app(AvailabilitySlotGenerator::class)->generate($teacher);
+
+        $this->modal = null;
+        $this->flashSuccess(__('teacher.availability.toast_leave_deleted', ['count' => $restored]));
+    }
+
     // ---------------------------------------------------------------- Deletion
 
     public function deleteSlot(): void
@@ -786,6 +813,7 @@ class AvailabilityCalendar extends Component
                 'hasNow' => $pastMin > 0 && $pastMin < 1440,
                 'nowTop' => $pastMin * self::PX - 1,
                 'leaveReason' => $leave?->reason ?: ($leave ? __('teacher.availability.leave_default') : null),
+                'leaveId' => $leave?->id,
                 'hasLeave' => (bool) $leave,
                 'hasOpen' => $colHasOpen,
                 'hasBooked' => $colHasBooked,
@@ -927,6 +955,7 @@ class AvailabilityCalendar extends Component
                 'isToday' => $dateStr === $todayStr,
                 'isPast' => $date->lt($now->copy()->setTimezone($displayTz)->startOfDay()),
                 'isLeave' => (bool) $leave,
+                'leaveId' => $leave?->id,
                 'open' => $open,
                 'booked' => $booked,
                 'past' => $past,
@@ -1006,7 +1035,7 @@ class AvailabilityCalendar extends Component
                 for ($d = $today->copy(); $d->lt($end); $d->addDay()) {
                     $ds = $d->toDateString();
                     if ($ds >= $off->starts_on->toDateString() && $ds <= $off->ends_on->toDateString() && ! isset($groups[$ds])) {
-                        $groups[$ds] = ['leave' => $off->reason ?: __('teacher.availability.leave_default'), 'rows' => []];
+                        $groups[$ds] = ['leave' => $off->reason ?: __('teacher.availability.leave_default'), 'leaveId' => $off->id, 'rows' => []];
                     }
                 }
             }
@@ -1103,6 +1132,7 @@ class AvailabilityCalendar extends Component
             'bookedData' => null,
             'slotData' => null,
             'deleteData' => null,
+            'leaveData' => null,
         ];
 
         // One-off live preview.
@@ -1153,6 +1183,18 @@ class AvailabilityCalendar extends Component
                 'when' => $when->translatedFormat('D j M').' · '.$when->format('H:i'),
                 'rec' => (bool) $slot->availability_pattern_id,
             ];
+        }
+
+        $leaveId = ($this->modal['type'] ?? null) === 'del-leave' ? ($this->modal['id'] ?? null) : null;
+        if ($leaveId) {
+            $off = $this->teacher()?->timeOffs()->find($leaveId);
+            if ($off) {
+                $data['leaveData'] = [
+                    'from' => $off->starts_on->translatedFormat('D j M Y'),
+                    'to' => $off->ends_on->translatedFormat('D j M Y'),
+                    'reason' => $off->reason,
+                ];
+            }
         }
 
         return $data;

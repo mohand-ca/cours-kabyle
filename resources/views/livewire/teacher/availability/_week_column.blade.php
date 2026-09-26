@@ -12,10 +12,12 @@
     @endif
 
     @if($col['leaveReason'])
-        <div style="position:absolute;left:3px;right:3px;top:0;bottom:0;border-radius:10px;background:repeating-linear-gradient(135deg,#FBF1DE 0,#FBF1DE 8px,#F7E8C8 8px,#F7E8C8 16px);border:1px solid #F1DDB4;color:#7A4F0C;padding:10px 8px;z-index:1">
+        <div @if($canEdit && $col['leaveId']) wire:click.stop="openLeaveDetail({{ $col['leaveId'] }})" style="cursor:pointer" @endif
+            style="position:absolute;left:3px;right:3px;top:0;bottom:0;border-radius:10px;background:repeating-linear-gradient(135deg,#FBF1DE 0,#FBF1DE 8px,#F7E8C8 8px,#F7E8C8 16px);border:1px solid #F1DDB4;color:#7A4F0C;padding:10px 8px;z-index:1">
             <div style="position:sticky;top:84px;display:flex;flex-direction:column;gap:2px">
                 <span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:800"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><path d="M4.9 4.9l14.2 14.2"></path></svg>{{ __('teacher.availability.status_leave') }}</span>
                 <span style="font-size:11.5px;font-weight:500">{{ $col['leaveReason'] }}</span>
+                @if($canEdit && $col['leaveId'])<span style="font-size:10.5px;font-weight:700;margin-top:4px;text-decoration:underline">{{ __('teacher.availability.leave_delete_hint') }}</span>@endif
             </div>
         </div>
     @endif

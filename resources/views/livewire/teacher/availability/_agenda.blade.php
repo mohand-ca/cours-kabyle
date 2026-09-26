@@ -8,7 +8,10 @@
         </div>
 
         @if($group['leave'])
-            <div style="display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid #F1ECE6;background:repeating-linear-gradient(135deg,#FFFDF8 0,#FFFDF8 8px,#FBF1DE 8px,#FBF1DE 16px);color:#7A4F0C;font-size:14px;font-weight:600"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><path d="M4.9 4.9l14.2 14.2"></path></svg>{{ __('teacher.availability.status_leave') }} · {{ $group['leave'] }}</div>
+            <div @if($canEdit && ($group['leaveId'] ?? null)) wire:click="openLeaveDetail({{ $group['leaveId'] }})" @endif
+                style="display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid #F1ECE6;background:repeating-linear-gradient(135deg,#FFFDF8 0,#FFFDF8 8px,#FBF1DE 8px,#FBF1DE 16px);color:#7A4F0C;font-size:14px;font-weight:600;{{ $canEdit && ($group['leaveId'] ?? null) ? 'cursor:pointer;' : '' }}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><path d="M4.9 4.9l14.2 14.2"></path></svg>{{ __('teacher.availability.status_leave') }} · {{ $group['leave'] }}
+            </div>
         @endif
 
         @foreach($group['rows'] as $row)

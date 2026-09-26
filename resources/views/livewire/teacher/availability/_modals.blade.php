@@ -7,6 +7,7 @@
         'slot'    => [__('teacher.availability.modal.slot_title'), ''],
         'leave'   => [__('teacher.availability.modal.leave_title'), __('teacher.availability.modal.leave_sub')],
         'del'     => [__('teacher.availability.modal.del_title'), __('teacher.availability.modal.del_sub')],
+        'del-leave' => [__('teacher.availability.modal.del_leave_title'), __('teacher.availability.modal.del_leave_sub')],
         'pub'     => [__('teacher.availability.modal.pub_title'), __('teacher.availability.modal.pub_sub')],
     ];
     $pill = fn($on) => $on ? 'background:#FDF3D6;color:#7A5300;border:1px solid #F2B81D' : 'background:#fff;color:#57534E;border:1px solid #E2DBD3';
@@ -180,6 +181,18 @@
                 </div>
             @endif
 
+            {{-- F. Delete leave --}}
+            @if($mType === 'del-leave' && $leaveData)
+                <div style="display:flex;flex-direction:column;gap:12px">
+                    <div style="border:1px solid #EAE4DD;border-radius:14px;overflow:hidden">
+                        <div style="display:flex;justify-content:space-between;gap:12px;padding:12px 14px;font-size:14px"><span style="color:#78716C">{{ __('teacher.availability.field_from') }}</span><span style="font-weight:700">{{ $leaveData['from'] }}</span></div>
+                        <div style="display:flex;justify-content:space-between;gap:12px;padding:12px 14px;font-size:14px;border-top:1px solid #F1ECE6"><span style="color:#78716C">{{ __('teacher.availability.field_to') }}</span><span style="font-weight:700">{{ $leaveData['to'] }}</span></div>
+                        @if($leaveData['reason'])<div style="display:flex;justify-content:space-between;gap:12px;padding:12px 14px;font-size:14px;border-top:1px solid #F1ECE6"><span style="color:#78716C">{{ __('teacher.availability.field_reason') }}</span><span style="font-weight:600">{{ $leaveData['reason'] }}</span></div>@endif
+                    </div>
+                    <div style="display:flex;gap:10px;align-items:flex-start;background:#FEF2F2;border:1px solid #FECACA;color:#B91C1C;border-radius:12px;padding:12px 14px;font-size:13.5px">{{ __('teacher.availability.del_leave_warning') }}</div>
+                </div>
+            @endif
+
             {{-- Publish confirm --}}
             @if($mType === 'pub')
                 <div style="display:flex;flex-direction:column;gap:14px">
@@ -211,6 +224,9 @@
             @elseif($mType === 'del')
                 <button wire:click="closeModal" style="background:#fff;border:1px solid #E2DBD3;color:#1C1917;font:inherit;font-size:14.5px;font-weight:600;min-height:46px;padding:0 18px;border-radius:12px;cursor:pointer">{{ __('teacher.availability.cancel') }}</button>
                 <button wire:click="deleteSlot" style="background:#DC2626;color:#fff;border:none;font:inherit;font-size:14.5px;font-weight:700;min-height:46px;padding:0 20px;border-radius:12px;cursor:pointer">{{ $deleteData['rec'] && $delMode === 'series' ? __('teacher.availability.delete_series') : __('teacher.availability.delete') }}</button>
+            @elseif($mType === 'del-leave')
+                <button wire:click="closeModal" style="background:#fff;border:1px solid #E2DBD3;color:#1C1917;font:inherit;font-size:14.5px;font-weight:600;min-height:46px;padding:0 18px;border-radius:12px;cursor:pointer">{{ __('teacher.availability.cancel') }}</button>
+                <button wire:click="deleteTimeOff" style="background:#DC2626;color:#fff;border:none;font:inherit;font-size:14.5px;font-weight:700;min-height:46px;padding:0 20px;border-radius:12px;cursor:pointer">{{ __('teacher.availability.delete') }}</button>
             @elseif($mType === 'pub')
                 <button wire:click="backToRecurrence" style="background:#fff;border:1px solid #E2DBD3;color:#1C1917;font:inherit;font-size:14.5px;font-weight:600;min-height:46px;padding:0 18px;border-radius:12px;cursor:pointer">{{ __('teacher.availability.back') }}</button>
                 <button wire:click="publishRecurrence" style="background:#F2B81D;color:#1C1917;border:none;font:inherit;font-size:14.5px;font-weight:700;min-height:46px;padding:0 20px;border-radius:12px;cursor:pointer;box-shadow:0 10px 24px -8px rgba(222,165,0,.6)">{{ __('teacher.availability.publish') }}</button>
