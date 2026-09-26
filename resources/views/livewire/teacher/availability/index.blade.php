@@ -20,16 +20,21 @@
             <h1 style="font-size:30px;font-weight:800;letter-spacing:-.035em;margin:0;line-height:1.05">{{ __('teacher.availability.title') }}</h1>
             <p style="font-size:15px;color:#78716C;margin:6px 0 0">{{ __('teacher.availability.subtitle') }}</p>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
             <button wire:click="openLeave" @style(['opacity:.45;cursor:not-allowed' => !$canEdit]) @disabled(!$canEdit)
-                style="background:#fff;border:1px solid #E2DBD3;color:#1C1917;font:inherit;font-size:14px;font-weight:600;min-height:44px;padding:0 15px;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;gap:8px">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M4.9 4.9l14.2 14.2"></path></svg>
-                {{ __('teacher.availability.block_leave') }}
+                style="background:#fff;border:1px solid #E2DBD3;color:#78716C;font:inherit;font-size:13.5px;font-weight:600;min-height:40px;padding:0 13px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;gap:7px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18M10 14l2 2 4-4"></path></svg>
+                {{ __('teacher.availability.btn_leave') }}
             </button>
             <button wire:click="openAdd('one')" @style(['opacity:.45;cursor:not-allowed' => !$canEdit]) @disabled(!$canEdit)
+                style="background:#fff;border:1px solid #E2DBD3;color:#1C1917;font:inherit;font-size:13.5px;font-weight:600;min-height:40px;padding:0 13px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;gap:7px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                {{ __('teacher.availability.btn_one_off') }}
+            </button>
+            <button wire:click="openAdd('rec')" @style(['opacity:.45;cursor:not-allowed' => !$canEdit]) @disabled(!$canEdit)
                 style="background:#F2B81D;color:#1C1917;border:none;font:inherit;font-size:14px;font-weight:700;min-height:44px;padding:0 18px;border-radius:12px;cursor:pointer;box-shadow:0 10px 24px -8px rgba(222,165,0,.6);display:inline-flex;align-items:center;gap:8px">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
-                {{ __('teacher.availability.add_availability') }}
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                {{ __('teacher.availability.btn_recurring') }}
             </button>
         </div>
     </div>
