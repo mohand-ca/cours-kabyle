@@ -12,6 +12,7 @@ return [
         'login' => 'Sign in',
         'dashboard' => 'My space',
         'get_started' => 'Get started',
+        'menu' => 'Menu',
     ],
 
     'hero' => [

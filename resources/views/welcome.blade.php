@@ -34,14 +34,26 @@
         .thz-faq-icon{transition:transform .2s ease;flex-shrink:0}
         .thz-faq[open] .thz-faq-icon{transform:rotate(45deg)}
         .thz-faq[open]{box-shadow:0 12px 30px -18px rgba(28,25,23,.22)}
-        @media(max-width:860px){.thz-nav-center{display:none}}
+        .nav-toggle-cb{position:absolute;opacity:0;pointer-events:none}
+        .nav-burger{display:none;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;border:1px solid #E2DBD3;background:#fff;color:#44403C;cursor:pointer;flex-shrink:0}
+        .nav-burger .ic-close{display:none}
+        .nav-dropdown{display:none}
+        @media(max-width:860px){
+            .thz-nav-center{display:none!important}
+            .nav-desktop-actions{display:none!important}
+            .nav-burger{display:flex!important}
+            #navtoggle:checked~.thz-bar .nav-burger .ic-open{display:none}
+            #navtoggle:checked~.thz-bar .nav-burger .ic-close{display:block}
+            #navtoggle:checked~.nav-dropdown{display:flex}
+        }
     </style>
 </head>
 <body>
 
 {{-- Navbar --}}
 <header style="position:sticky;top:0;z-index:40;background:rgba(250,248,245,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #EAE4DD">
-    <div style="max-width:1160px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:24px">
+    <input type="checkbox" id="navtoggle" class="nav-toggle-cb" aria-hidden="true" tabindex="-1">
+    <div class="thz-bar" style="max-width:1160px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:24px">
         <a href="{{ route('welcome') }}" style="display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0">
             <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#F2B81D,#F9D55C);display:flex;align-items:center;justify-content:center;color:#1C1917;font-size:18px;font-weight:700;box-shadow:0 4px 12px -4px rgba(222,165,0,.6)">ⵣ</div>
             <span style="font-size:17px;font-weight:700;letter-spacing:-.02em;color:#1C1917">{{ config('app.name') }}</span>
@@ -60,13 +72,34 @@
                 <a href="{{ route('locale.switch', 'en') }}"
                    style="padding:4px 9px;border-radius:6px;font-size:12.5px;font-weight:600;text-decoration:none;{{ app()->getLocale() === 'en' ? 'background:#fff;color:#1C1917;box-shadow:0 1px 2px rgba(28,25,23,.08)' : 'color:#78716C' }}">EN</a>
             </div>
-            @auth
-                <a href="{{ url('/dashboard') }}" class="thz-btn-primary" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">{{ __('welcome.nav.dashboard') }} →</a>
-            @else
-                <a href="{{ route('login') }}" class="thz-btn-ghost" style="background:transparent;border:1px solid #E2DBD3;color:#44403C;font-size:14px;font-weight:600;padding:8px 14px;border-radius:12px">{{ __('welcome.nav.login') }}</a>
-                <a href="{{ route('register') }}" class="thz-btn-primary" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">{{ __('welcome.nav.get_started') }}</a>
-            @endauth
+            <div class="nav-desktop-actions" style="display:flex;gap:8px;align-items:center">
+                @auth
+                    <a href="{{ url('/dashboard') }}" class="thz-btn-primary" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">{{ __('welcome.nav.dashboard') }} →</a>
+                @else
+                    <a href="{{ route('login') }}" class="thz-btn-ghost" style="background:transparent;border:1px solid #E2DBD3;color:#44403C;font-size:14px;font-weight:600;padding:8px 14px;border-radius:12px">{{ __('welcome.nav.login') }}</a>
+                    <a href="{{ route('register') }}" class="thz-btn-primary" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">{{ __('welcome.nav.get_started') }}</a>
+                @endauth
+            </div>
+            <label for="navtoggle" class="nav-burger" role="button" aria-label="{{ __('welcome.nav.menu') }}" aria-controls="navtoggle">
+                <svg class="ic-open" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                <svg class="ic-close" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </label>
         </div>
+    </div>
+    {{-- Mobile dropdown --}}
+    <div class="nav-dropdown" style="flex-direction:column;border-top:1px solid #EAE4DD;background:rgba(250,248,245,.98)">
+        <nav style="max-width:1160px;margin:0 auto;width:100%;padding:8px 16px 16px;display:flex;flex-direction:column;gap:2px">
+            <a href="#features" style="padding:11px 14px;border-radius:10px;font-size:15px;font-weight:600;color:#57534E">{{ __('welcome.nav.features') }}</a>
+            <a href="#how" style="padding:11px 14px;border-radius:10px;font-size:15px;font-weight:600;color:#57534E">{{ __('welcome.nav.how_it_works') }}</a>
+            <a href="#pricing" style="padding:11px 14px;border-radius:10px;font-size:15px;font-weight:600;color:#57534E">{{ __('welcome.nav.pricing') }}</a>
+            <a href="{{ route('teacher.register') }}" style="padding:11px 14px;border-radius:10px;font-size:15px;font-weight:600;color:#57534E">{{ __('welcome.nav.teach') }}</a>
+            @auth
+                <a href="{{ url('/dashboard') }}" class="thz-btn-primary" style="margin-top:8px;text-align:center;background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:13px 15px;border-radius:12px">{{ __('welcome.nav.dashboard') }} →</a>
+            @else
+                <a href="{{ route('login') }}" style="margin-top:8px;text-align:center;background:transparent;border:1px solid #E2DBD3;color:#44403C;font-size:15px;font-weight:600;padding:12px 15px;border-radius:12px">{{ __('welcome.nav.login') }}</a>
+                <a href="{{ route('register') }}" class="thz-btn-primary" style="text-align:center;background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:13px 15px;border-radius:12px">{{ __('welcome.nav.get_started') }}</a>
+            @endauth
+        </nav>
     </div>
 </header>
 

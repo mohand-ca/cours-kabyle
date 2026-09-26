@@ -8,4 +8,5 @@ return [
     'my_profile' => 'My profile',
     'availability' => 'Availability',
     'logout' => 'Log out',
+    'menu' => 'Menu',
 ];

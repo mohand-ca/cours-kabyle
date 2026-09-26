@@ -12,6 +12,7 @@ return [
         'login' => 'Se connecter',
         'dashboard' => 'Mon espace',
         'get_started' => 'Commencer',
+        'menu' => 'Menu',
     ],
 
     'hero' => [
