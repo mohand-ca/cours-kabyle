@@ -31,13 +31,26 @@ class AvailabilitySlotGenerator
 
         $timeOffs = $teacher->timeOffs()->get();
 
-        $existing = $teacher->availabilitySlots()
-            ->where('starts_at', '>=', $today->copy()->utc())
+        $future = $today->copy()->utc();
+
+        // Booked and available slots block generation — they already exist and must not be duplicated.
+        $blocked = $teacher->availabilitySlots()
+            ->where('starts_at', '>=', $future)
+            ->whereIn('status', ['booked', 'available'])
             ->pluck('starts_at')
             ->map(fn (Carbon $date): string => $date->format('Y-m-d H:i'))
             ->flip();
 
+        // Cancelled slots are reactivated when a pattern covers their time, rather than leaving
+        // them stranded after the teacher publishes a new or replacement pattern.
+        $cancelledByKey = $teacher->availabilitySlots()
+            ->where('starts_at', '>=', $future)
+            ->where('status', 'cancelled')
+            ->get()
+            ->keyBy(fn (AvailabilitySlot $s): string => $s->starts_at->format('Y-m-d H:i'));
+
         $rows = [];
+        $reactivateIds = [];
 
         foreach ($teacher->availabilityPatterns()->where('is_active', true)->get() as $pattern) {
             // Work with date strings to stay in the teacher's timezone: `starts_on`/`until`
@@ -78,10 +91,20 @@ class AvailabilitySlotGenerator
                     }
 
                     $key = $startsAt->format('Y-m-d H:i');
-                    if ($existing->has($key)) {
+
+                    if ($blocked->has($key)) {
                         continue;
                     }
-                    $existing->put($key, true);
+
+                    // Mark as blocked so later patterns don't process the same time twice.
+                    $blocked->put($key, true);
+
+                    if ($cancelledByKey->has($key)) {
+                        $reactivateIds[] = $cancelledByKey->get($key)->id;
+                        $cancelledByKey->forget($key);
+
+                        continue;
+                    }
 
                     $rows[] = [
                         'teacher_profile_id' => $teacher->id,
@@ -96,11 +119,15 @@ class AvailabilitySlotGenerator
             }
         }
 
+        foreach (array_chunk($reactivateIds, 500) as $chunk) {
+            AvailabilitySlot::whereIn('id', $chunk)->update(['status' => 'available', 'updated_at' => $now]);
+        }
+
         foreach (array_chunk($rows, 500) as $chunk) {
             AvailabilitySlot::insert($chunk);
         }
 
-        return count($rows);
+        return count($rows) + count($reactivateIds);
     }
 
     /**
