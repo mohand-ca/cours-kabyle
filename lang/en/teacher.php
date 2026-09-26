@@ -128,6 +128,7 @@ return [
         'err_overlap' => 'This slot overlaps an existing slot.',
         'err_leave_order' => 'The end date must be after the start date.',
         'err_range_order' => 'The end time must be after the start.',
+        'err_duration_exceeds_window' => 'The slot duration (:duration min) exceeds the configured time window (:window min). Reduce the duration or widen the range.',
         'err_delete_booked' => 'This slot is booked and cannot be deleted.',
         'slot_past' => 'This slot is in the past.',
 

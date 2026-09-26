@@ -114,6 +114,12 @@
                         <div><div style="font-size:13px;font-weight:600;margin-bottom:6px">{{ __('teacher.availability.buffer') }}</div><div style="display:flex;gap:6px">@foreach([0,15,30] as $v)<button wire:click="setRecBuffer({{ $v }})" style="flex:1;{{ $pill($recBuffer === $v) }};font:inherit;font-size:13px;font-weight:700;min-height:40px;border-radius:10px;cursor:pointer">{{ $v ? $v.' min' : __('teacher.availability.buffer_none') }}</button>@endforeach</div></div>
                         <div><div style="font-size:13px;font-weight:600;margin-bottom:6px">{{ __('teacher.availability.horizon') }}</div><div style="display:flex;gap:6px">@foreach([4,8,12] as $v)<button wire:click="setRecHorizon({{ $v }})" style="flex:1;{{ $pill($recHorizon === $v) }};font:inherit;font-size:13px;font-weight:700;min-height:40px;border-radius:10px;cursor:pointer">{{ $v }} {{ __('teacher.availability.weeks_short') }}</button>@endforeach</div></div>
                     </div>
+                    @if(!empty($recDays) && $recErrors['total'] === 0 && $recErrors['maxWindow'] > 0 && $recDuration > $recErrors['maxWindow'])
+                        <div role="alert" style="display:flex;gap:10px;align-items:flex-start;background:#FEF2F2;border:1px solid #FECACA;color:#DC2626;border-radius:12px;padding:12px 14px">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4M12 16h.01"></path></svg>
+                            <div style="font-size:13.5px;font-weight:600">{{ __('teacher.availability.err_duration_exceeds_window', ['duration' => $recDuration, 'window' => $recErrors['maxWindow']]) }}</div>
+                        </div>
+                    @endif
                     <div style="background:#FFFDF8;border:1px solid #F1DDB4;border-radius:14px;padding:16px">
                         <div style="font-size:20px;font-weight:800;letter-spacing:-.03em">{{ trans_choice('teacher.availability.rec_total', $recErrors['total'], ['count' => $recErrors['total']]) }}</div>
                         @foreach($recErrors['summary'] as $line)<div style="font-size:13.5px;color:#57534E;margin-top:6px">{{ $line }}</div>@endforeach

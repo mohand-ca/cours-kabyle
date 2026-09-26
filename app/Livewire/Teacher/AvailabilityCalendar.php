@@ -630,13 +630,14 @@ class AvailabilityCalendar extends Component
     }
 
     /**
-     * @return array{blocked:bool, perWeek:int, total:int, summary:array<int,string>}
+     * @return array{blocked:bool, perWeek:int, total:int, summary:array<int,string>, maxWindow:int}
      */
     private function recurrenceErrors(): array
     {
         $perWeek = 0;
         $blocked = false;
         $summary = [];
+        $maxWindow = 0;
 
         foreach ($this->recDays as $dow => $ranges) {
             foreach ($ranges as $i => $range) {
@@ -652,6 +653,10 @@ class AvailabilityCalendar extends Component
                         $blocked = true;
                     }
                 }
+                $window = $to - $from;
+                if ($window > $maxWindow) {
+                    $maxWindow = $window;
+                }
                 $step = $this->recDuration + $this->recBuffer;
                 $perWeek += $step > 0 ? max(0, intdiv($to - $from + $this->recBuffer, $step)) : 0;
                 $summary[] = __('teacher.availability.days.'.$dow).' · '.$range[0].'–'.$range[1].' · '.$this->recDuration.' min';
@@ -665,6 +670,7 @@ class AvailabilityCalendar extends Component
             'perWeek' => $perWeek,
             'total' => $total,
             'summary' => $summary,
+            'maxWindow' => $maxWindow,
         ];
     }
 

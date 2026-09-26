@@ -128,6 +128,7 @@ return [
         'err_overlap' => 'Ce créneau chevauche un créneau existant.',
         'err_leave_order' => 'La date de fin doit être après la date de début.',
         'err_range_order' => 'L\'heure de fin doit être après le début.',
+        'err_duration_exceeds_window' => 'La durée du créneau (:duration min) dépasse la fenêtre horaire configurée (:window min). Réduisez la durée ou élargissez la plage.',
         'err_delete_booked' => 'Ce créneau est réservé et ne peut pas être supprimé.',
         'slot_past' => 'Ce créneau est passé.',
 
