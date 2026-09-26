@@ -42,7 +42,7 @@ class TeacherProfilesTable
                     ->dateTime('d M Y H:i')
                     ->sortable(),
 
-                TextColumn::make('availabilitySlots_count')
+                TextColumn::make('availability_slots_count')
                     ->label(__('teacher.filament.columns.slots_count'))
                     ->counts('availabilitySlots')
                     ->sortable(),

@@ -90,8 +90,10 @@
                             @endif
                             <div style="display:flex;flex-direction:column;gap:8px">
                                 @foreach($ranges as $ri => $range)
-                                    @php($from = (int)explode(':',$range[0])[0]*60 + (int)explode(':',$range[0])[1])
-                                    @php($to = (int)explode(':',$range[1])[0]*60 + (int)explode(':',$range[1])[1])
+                                    @php([$fh,$fm] = array_pad(explode(':', $range[0] ?? ''), 2, '0'))
+                                    @php($from = (int)$fh * 60 + (int)$fm)
+                                    @php([$th,$tm] = array_pad(explode(':', $range[1] ?? ''), 2, '0'))
+                                    @php($to = (int)$th * 60 + (int)$tm)
                                     @php($bad = $to <= $from)
                                     <div wire:key="recrange-{{ $dow }}-{{ $ri }}">
                                         <div style="display:flex;align-items:center;gap:8px">
