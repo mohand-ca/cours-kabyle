@@ -1,3 +1,11 @@
+@php
+    $dashboardUrl = match(true) {
+        auth()->check() && auth()->user()->hasRole('admin')   => route('filament.admin.pages.dashboard'),
+        auth()->check() && auth()->user()->hasRole('teacher') => route('teacher.dashboard'),
+        auth()->check()                                        => route('learner.dashboard'),
+        default                                                => null,
+    };
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
@@ -74,7 +82,7 @@
             </div>
             <div class="nav-desktop-actions" style="display:flex;gap:8px;align-items:center">
                 @auth
-                    <a href="{{ url('/dashboard') }}" class="thz-btn-primary" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">{{ __('welcome.nav.dashboard') }} →</a>
+                    <a href="{{ $dashboardUrl }}" class="thz-btn-primary" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">{{ __('welcome.nav.dashboard') }} →</a>
                 @else
                     <a href="{{ route('login') }}" class="thz-btn-ghost" style="background:transparent;border:1px solid #E2DBD3;color:#44403C;font-size:14px;font-weight:600;padding:8px 14px;border-radius:12px">{{ __('welcome.nav.login') }}</a>
                     <a href="{{ route('register') }}" class="thz-btn-primary" style="background:#F2B81D;color:#1C1917;font-size:14px;font-weight:700;padding:9px 15px;border-radius:12px;box-shadow:0 6px 16px -6px rgba(222,165,0,.6)">{{ __('welcome.nav.get_started') }}</a>
@@ -94,7 +102,7 @@
             <a href="#pricing" style="padding:11px 14px;border-radius:10px;font-size:15px;font-weight:600;color:#57534E">{{ __('welcome.nav.pricing') }}</a>
             <a href="{{ route('teacher.register') }}" style="padding:11px 14px;border-radius:10px;font-size:15px;font-weight:600;color:#57534E">{{ __('welcome.nav.teach') }}</a>
             @auth
-                <a href="{{ url('/dashboard') }}" class="thz-btn-primary" style="margin-top:8px;text-align:center;background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:13px 15px;border-radius:12px">{{ __('welcome.nav.dashboard') }} →</a>
+                <a href="{{ $dashboardUrl }}" class="thz-btn-primary" style="margin-top:8px;text-align:center;background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:13px 15px;border-radius:12px">{{ __('welcome.nav.dashboard') }} →</a>
             @else
                 <a href="{{ route('login') }}" style="margin-top:8px;text-align:center;background:transparent;border:1px solid #E2DBD3;color:#44403C;font-size:15px;font-weight:600;padding:12px 15px;border-radius:12px">{{ __('welcome.nav.login') }}</a>
                 <a href="{{ route('register') }}" class="thz-btn-primary" style="text-align:center;background:#F2B81D;color:#1C1917;font-size:15px;font-weight:700;padding:13px 15px;border-radius:12px">{{ __('welcome.nav.get_started') }}</a>
@@ -216,7 +224,7 @@
 
 {{-- Pricing --}}
 @php
-    $pricingCtaUrl = auth()->check() ? url('/dashboard') : route('register');
+    $pricingCtaUrl = auth()->check() ? $dashboardUrl : route('register');
 @endphp
 <section id="pricing" style="background:#fff;border-top:1px solid #EAE4DD;border-bottom:1px solid #EAE4DD">
     <div style="max-width:1160px;margin:0 auto;padding:88px 24px">
