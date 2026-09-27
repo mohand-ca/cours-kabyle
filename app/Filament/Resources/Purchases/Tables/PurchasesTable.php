@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Purchases\Tables;
 
+use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -38,6 +40,12 @@ class PurchasesTable
                     ->alignCenter()
                     ->color(fn (int $state): string => $state === 0 ? 'danger' : 'success'),
 
+                TextColumn::make('sessions_used')
+                    ->label(__('admin.purchases.columns.sessions_used'))
+                    ->getStateUsing(fn ($record): int => $record->sessions_total - $record->sessions_remaining)
+                    ->alignCenter()
+                    ->color(fn (int $state): string => $state > 0 ? 'primary' : 'gray'),
+
                 TextColumn::make('status')
                     ->label(__('admin.purchases.columns.status'))
                     ->badge()
@@ -67,6 +75,25 @@ class PurchasesTable
                         'completed' => __('admin.purchases.statuses.completed'),
                         'refunded' => __('admin.purchases.statuses.refunded'),
                     ]),
+
+                SelectFilter::make('package_key')
+                    ->label(__('admin.purchases.filters.package'))
+                    ->options([
+                        'starter' => __('admin.purchases.packages.starter'),
+                        'standard' => __('admin.purchases.packages.standard'),
+                        'premium' => __('admin.purchases.packages.premium'),
+                    ]),
+            ])
+            ->recordActions([
+                ViewAction::make(),
+
+                Action::make('refund')
+                    ->label(__('admin.purchases.actions.refund'))
+                    ->icon('heroicon-o-arrow-uturn-left')
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->visible(fn ($record): bool => $record->status === 'completed')
+                    ->action(fn ($record) => $record->update(['status' => 'refunded'])),
             ])
             ->defaultSort('created_at', 'desc');
     }

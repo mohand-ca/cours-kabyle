@@ -55,6 +55,23 @@ class TeacherProfile extends Model
         return $this->hasMany(AvailabilitySlot::class);
     }
 
+    public function lessonSessions(): HasMany
+    {
+        return $this->hasMany(LessonSession::class);
+    }
+
+    public function confirmedLessonSessions(): HasMany
+    {
+        return $this->hasMany(LessonSession::class)->where('status', 'confirmed');
+    }
+
+    public function upcomingAvailableSlots(): HasMany
+    {
+        return $this->hasMany(AvailabilitySlot::class)
+            ->where('status', 'available')
+            ->where('starts_at', '>', now());
+    }
+
     public function isPending(): bool
     {
         return $this->status === 'pending';

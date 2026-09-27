@@ -7,6 +7,7 @@ use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -42,10 +43,23 @@ class TeacherProfilesTable
                     ->dateTime('d M Y H:i')
                     ->sortable(),
 
+                TextColumn::make('confirmed_lesson_sessions_count')
+                    ->label(__('teacher.filament.columns.sessions_count'))
+                    ->counts('confirmedLessonSessions')
+                    ->sortable()
+                    ->alignCenter(),
+
+                TextColumn::make('upcoming_available_slots_count')
+                    ->label(__('teacher.filament.columns.upcoming_slots'))
+                    ->counts('upcomingAvailableSlots')
+                    ->sortable()
+                    ->alignCenter(),
+
                 TextColumn::make('availability_slots_count')
                     ->label(__('teacher.filament.columns.slots_count'))
                     ->counts('availabilitySlots')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 SelectFilter::make('status')
@@ -58,6 +72,8 @@ class TeacherProfilesTable
             ])
             ->defaultSort('submitted_at', 'asc')
             ->recordActions([
+                ViewAction::make(),
+
                 Action::make('approve')
                     ->label(__('teacher.filament.actions.approve'))
                     ->icon('heroicon-o-check')

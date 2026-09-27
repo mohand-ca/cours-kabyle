@@ -38,6 +38,11 @@ class LessonSession extends Model
         return $this->belongsTo(TeacherProfile::class);
     }
 
+    public function purchase(): BelongsTo
+    {
+        return $this->belongsTo(Purchase::class);
+    }
+
     public function scopeUpcoming(Builder $query): Builder
     {
         return $query

@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -40,6 +42,19 @@ class UsersTable
                     ->boolean()
                     ->getStateUsing(fn ($record): bool => $record->hasVerifiedEmail()),
 
+                TextColumn::make('learners_count')
+                    ->label(__('admin.users.columns.learners_count'))
+                    ->counts('learners')
+                    ->sortable()
+                    ->alignCenter(),
+
+                TextColumn::make('sessions_remaining')
+                    ->label(__('admin.users.columns.sessions_remaining'))
+                    ->getStateUsing(fn ($record): int => $record->sessionsRemaining())
+                    ->alignCenter()
+                    ->badge()
+                    ->color(fn (int $state): string => $state > 0 ? 'success' : 'gray'),
+
                 TextColumn::make('timezone')
                     ->label(__('admin.users.columns.timezone'))
                     ->placeholder('—')
@@ -60,6 +75,16 @@ class UsersTable
                     ]),
             ])
             ->defaultSort('created_at', 'desc')
+            ->recordActions([
+                ViewAction::make(),
+
+                Action::make('verify_email')
+                    ->label(__('admin.users.actions.verify_email'))
+                    ->icon('heroicon-o-check-badge')
+                    ->color('success')
+                    ->visible(fn ($record): bool => ! $record->hasVerifiedEmail())
+                    ->action(fn ($record) => $record->markEmailAsVerified()),
+            ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
